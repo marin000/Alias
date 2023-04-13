@@ -2,8 +2,8 @@ import React from 'react';
 import { View } from 'react-native';
 import { createStackNavigator } from 'react-navigation-stack';
 import { createAppContainer } from "react-navigation";
-import Home from "../screens/home";
-import HowToPlay from '../screens/howToPlay';
+import Home from "../screens/home/home";
+import HowToPlay from '../screens/home/howToPlay';
 
 const CustomHeader = () => {
 	return (
