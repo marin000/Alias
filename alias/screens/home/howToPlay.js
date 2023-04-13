@@ -3,12 +3,13 @@ import { View, StyleSheet, ImageBackground } from 'react-native';
 import { Text, Card } from '@rneui/themed';
 import { LanguageContext } from '../../utils/language';
 import { howToPlay } from '../../constants';
+import backgroundImage from '../../assets/blurred-background.jpeg';
 
 export default function HowToPlay() {
 	const { language } = useContext(LanguageContext);
 	const { title, instructions } = howToPlay;
 	return (
-		<ImageBackground source={require('../../assets/blurred-background.jpeg')} style={styles.container} resizeMode={'cover'}>
+		<ImageBackground source={backgroundImage} style={styles.container} resizeMode={'cover'}>
 			<View>
 				<Text style={styles.title}>{title[language]}</Text>
 				<Card>
@@ -34,7 +35,3 @@ const styles = StyleSheet.create({
 		fontSize: 18
 	}
 });
-
-HowToPlay.navigationOptions = {
-  headerShown: false,
-};

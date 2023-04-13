@@ -3,17 +3,18 @@ import { View, StyleSheet, ImageBackground } from 'react-native';
 import { Button, Text } from '@rneui/themed';
 import { LanguageContext } from '../../utils/language';
 import { home } from '../../constants';
+import backgroundImage from '../../assets/blurred-background.jpeg';
 
 export default function Home({ navigation }) {
 	const { language } = useContext(LanguageContext);
-	const { newGame, instructions,  lang,login } = home;
+	const { newGame, instructions, lang, login } = home;
 
-	const pressHandler = () => {
-		navigation.navigate('HowToPlay');
+	const pressHandler = (screen) => {
+		navigation.navigate(screen);
 	}
 
 	return (
-		<ImageBackground source={require('../../assets/blurred-background.jpeg')} style={styles.container} resizeMode={'cover'}>
+		<ImageBackground source={backgroundImage} style={styles.container} resizeMode={'cover'}>
 			<View style={styles.header}>
 				<Text style={styles.headerText}>Alias</Text>
 			</View>
@@ -28,13 +29,14 @@ export default function Home({ navigation }) {
 					<Button
 						title={instructions[language]}
 						color='#0000cc'
-						onPress={pressHandler}
+						onPress={() => pressHandler('HowToPlay')}
 					/>
 				</View>
 				<View style={styles.button}>
 					<Button
 						title={lang[language]}
 						color='#0000cc'
+						onPress={() => pressHandler('ChooseLang')}
 					/>
 				</View>
 				<View style={styles.button}>
@@ -71,5 +73,5 @@ const styles = StyleSheet.create({
 });
 
 Home.navigationOptions = {
-  headerShown: false,
+	headerShown: false,
 };

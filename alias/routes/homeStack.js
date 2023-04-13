@@ -4,14 +4,15 @@ import { createStackNavigator } from 'react-navigation-stack';
 import { createAppContainer } from "react-navigation";
 import Home from "../screens/home/home";
 import HowToPlay from '../screens/home/howToPlay';
+import ChooseLang from '../screens/home/chooseLang';
 
 const CustomHeader = () => {
 	return (
-	  <View style={{backgroundColor: 'transparent'}}>
-		{/* Empty view */}
-	  </View>
+		<View style={{ backgroundColor: 'transparent' }}>
+			{/* Empty view */}
+		</View>
 	);
-  };
+};
 
 const screens = {
 	Home: {
@@ -19,6 +20,12 @@ const screens = {
 	},
 	HowToPlay: {
 		screen: HowToPlay,
+		navigationOptions: {
+			headerTitle: () => <CustomHeader />
+		}
+	},
+	ChooseLang: {
+		screen: ChooseLang,
 		navigationOptions: {
 			headerTitle: () => <CustomHeader />
 		}
