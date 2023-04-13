@@ -63,3 +63,7 @@ const styles = StyleSheet.create({
 		marginTop: 20
 	}
 });
+
+Home.navigationOptions = {
+  headerShown: false,
+};

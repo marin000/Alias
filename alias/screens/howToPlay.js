@@ -21,7 +21,8 @@ export default function HowToPlay() {
 
 const styles = StyleSheet.create({
 	container: {
-		flex: 1
+		flex: 1,
+		padding: 20
 	},
 	title: {
 		textAlign: 'center',
@@ -33,3 +34,7 @@ const styles = StyleSheet.create({
 		fontSize: 18
 	}
 });
+
+HowToPlay.navigationOptions = {
+  headerShown: false,
+};

@@ -15,10 +15,7 @@ const CustomHeader = () => {
 
 const screens = {
 	Home: {
-		screen: Home,
-		navigationOptions: {
-			headerTitle: () => <CustomHeader />
-		}
+		screen: Home
 	},
 	HowToPlay: {
 		screen: HowToPlay,
