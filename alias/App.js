@@ -1,5 +1,4 @@
-import { StyleSheet } from 'react-native';
-import Navigator from './routes/homeStack';
+import AppNavigator from './routes/appNavigator';
 import { LanguageProvider } from './utils/language';
 import { ThemeProvider, createTheme } from '@rneui/themed';
 
@@ -15,7 +14,7 @@ export default function App() {
 	return (
 		<LanguageProvider>
 			<ThemeProvider theme={theme}>
-				<Navigator />
+				<AppNavigator />
 			</ThemeProvider>
 		</LanguageProvider>
 	);

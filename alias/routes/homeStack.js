@@ -1,7 +1,6 @@
 import React from 'react';
 import { View } from 'react-native';
 import { createStackNavigator } from 'react-navigation-stack';
-import { createAppContainer } from "react-navigation";
 import Home from "../screens/home/home";
 import HowToPlay from '../screens/home/howToPlay';
 import ChooseLang from '../screens/home/chooseLang';
@@ -34,4 +33,8 @@ const screens = {
 
 const HomeStack = createStackNavigator(screens);
 
-export default createAppContainer(HomeStack);
+HomeStack.navigationOptions = {
+	headerShown: false,
+};
+
+export default HomeStack;

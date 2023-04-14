@@ -10,7 +10,7 @@ export default function Home({ navigation }) {
 	const { newGame, instructions, lang, login } = home;
 
 	const pressHandler = (screen) => {
-		navigation.navigate(screen);
+		navigation.navigate(screen, { language });
 	}
 
 	return (
@@ -23,6 +23,7 @@ export default function Home({ navigation }) {
 					<Button
 						title={newGame[language]}
 						color='#0000cc'
+						onPress={() => pressHandler('NewGame')}
 					/>
 				</View>
 				<View style={styles.button}>
