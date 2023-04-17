@@ -34,3 +34,54 @@ export const chooseLang = {
 		en: 'Choose Language'
 	}
 }
+
+export const newGame = {
+	headerTitle: {
+		hr: 'Nova igra',
+		en: 'New game'
+	}, 
+	title: {
+		hr: 'Timovi',
+		en: 'Teams'
+	},
+	newTeam: {
+		hr: 'Novi Tim',
+		en: 'New Team'
+	},
+	teamInput: {
+		hr: 'Ime Tima',
+		en: 'Team Name'
+	},
+	playerInput: {
+		hr: 'Igrac',
+		en: 'Player'
+	},
+	buttonSaveTeam: {
+		hr: 'Sacuvaj',
+		en: 'Save'
+	},
+	buttonAddPlayer: {
+		hr: 'Dodaj igraca',
+		en: 'Add player'
+	}, 
+	buttonReset: {
+		hr: 'Ponisti',
+		en: 'Reset'
+	},
+	buttonDelete: {
+		hr: 'Izbrisi tim',
+		en: 'Delete team'
+	},
+	alertTeam: {
+		hr: 'Ime tima je obavezno!',
+		en: 'Team name is required!'
+	},
+	alertTeamName: {
+		hr: 'Tim s ovim imenom vec postoji!',
+		en: 'Team with this name already exists!'
+	},
+	alertPlayer: {
+		hr: 'Potrebna su najmanje 2 igraca!',
+		en: 'At least 2 players are required!'
+	},
+}
