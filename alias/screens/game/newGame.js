@@ -2,16 +2,16 @@ import React, { useContext, useState } from 'react';
 import { View, StyleSheet, ImageBackground, ScrollView, Alert, TouchableHighlight } from 'react-native';
 import { Text, ListItem, Button, Dialog } from '@rneui/themed';
 import { LinearGradient } from 'expo-linear-gradient';
-import { LanguageContext } from '../../utils/language';
+import { SettingsContext } from '../../utils/settings';
 import { Formik } from 'formik';
 import { newGame } from '../../constants';
 import backgroundImage from '../../assets/blurred-background.jpeg';
 import { TextInput } from 'react-native-gesture-handler';
 import { validateTeamInput } from '../../utils/helper';
 
-export default function NewGame() {
-  const { language } = useContext(LanguageContext);
-  const { title, newTeam, teamInput, playerInput, buttonSaveTeam, buttonAddPlayer, buttonReset, buttonDelete, alertPlayer, alertTeam, alertTeamName } = newGame;
+export default function NewGame({ navigation }) {
+  const { language } = useContext(SettingsContext);
+  const { title, newTeam, teamInput, playerInput, buttonSaveTeam, buttonAddPlayer, buttonReset, buttonDelete, buttonStart } = newGame;
   const [teams, setTeams] = useState([]);
   const [addTeamDialog, setAddTeamDialog] = useState(false);
   const [selectedTeam, setSelectedTeam] = useState(null);
@@ -32,7 +32,8 @@ export default function NewGame() {
   return (
     <ImageBackground source={backgroundImage} style={styles.container} resizeMode={'cover'}>
       {/* List of teams */}
-      <View>
+      <View style={styles.containerData}>
+        <View style={styles.teamList} >
         <Text style={styles.title}>{title[language]}</Text>
         <ScrollView>
           {teams ? teams.map((team, index) => (
@@ -59,14 +60,24 @@ export default function NewGame() {
               </ListItem>
             </TouchableHighlight>
           )) : null}
-          <View>
-            <Button
-              title={newTeam[language]}
-              color='#0000cc'
-              onPress={() => setAddTeamDialog(true)}
-            />
-          </View>
         </ScrollView>
+        </View>
+        <View style={styles.startGame}>
+          <Button
+            title={newTeam[language]}
+            color='#0000cc'
+            onPress={() => setAddTeamDialog(true)}
+          />
+          {
+            teams.length >= 2 &&
+            <Button
+              containerStyle={styles.buttonSaveTeam}
+              title={buttonStart[language]}
+              color='success'
+              onPress={() => navigation.navigate('PlayGame', { teams: teams })}
+            />
+          }
+        </View>
 
         {/* Add new team */}
         <Dialog
@@ -77,7 +88,7 @@ export default function NewGame() {
             <Formik
               initialValues={{ teamName: '', players: [] }}
               onSubmit={(values) => {
-                if(!validateTeamInput(teams, values, language)){
+                if (!validateTeamInput(teams, values, language)) {
                   return;
                 }
                 const newTeam = {
@@ -222,6 +233,15 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20
+  },
+  containerData: {
+    flex: 1
+  },
+  teamList: {
+    flex: 1
+  },  
+  startGame: {
+    padding: 15
   },
   title: {
     textAlign: 'center',

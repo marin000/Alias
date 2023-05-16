@@ -1,13 +1,13 @@
 import React, { useContext } from 'react';
 import { View, StyleSheet, ImageBackground } from 'react-native';
 import { Button, Text } from '@rneui/themed';
-import { LanguageContext } from '../../utils/language';
+import { SettingsContext } from '../../utils/settings';
 import { home } from '../../constants';
 import backgroundImage from '../../assets/blurred-background.jpeg';
 
 export default function Home({ navigation }) {
-	const { language } = useContext(LanguageContext);
-	const { newGame, instructions, lang, login } = home;
+	const { language } = useContext(SettingsContext);
+	const { newGame, instructions, settings, login } = home;
 
 	const pressHandler = (screen) => {
 		navigation.navigate(screen, { language });
@@ -35,9 +35,9 @@ export default function Home({ navigation }) {
 				</View>
 				<View style={styles.button}>
 					<Button
-						title={lang[language]}
+						title={settings[language]}
 						color='#0000cc'
-						onPress={() => pressHandler('ChooseLang')}
+						onPress={() => pressHandler('Settings')}
 					/>
 				</View>
 				<View style={styles.button}>

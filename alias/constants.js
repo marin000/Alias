@@ -7,9 +7,9 @@ export const home = {
 		hr: 'Kako se igra?',
 		en: 'How to play'
 	},
-	lang: {
-		hr: 'Jezik',
-		en: 'Language'
+	settings: {
+		hr: 'Postavke',
+		en: 'Settings'
 	},
 	login: {
 		hr: 'Prijava',
@@ -28,10 +28,18 @@ export const howToPlay = {
 	}
 }
 
-export const chooseLang = {
+export const settings = {
 	title: {
-		hr: 'Izaberite Jezik',
-		en: 'Choose Language'
+		hr: 'Postavke Igre',
+		en: 'Settings'
+	}, 
+	roundTime: {
+		hr: 'Vrijeme runde',
+		en: 'Round time'
+	},
+	targetScore: {
+		hr: 'Ciljni rezultat',
+		en: 'Target result'
 	}
 }
 
@@ -71,6 +79,10 @@ export const newGame = {
 	buttonDelete: {
 		hr: 'Izbrisi tim',
 		en: 'Delete team'
+	},
+	buttonStart: {
+		hr: 'Pokreni Igru',
+		en: 'Start Game'
 	},
 	alertTeam: {
 		hr: 'Ime tima je obavezno!',

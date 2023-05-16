@@ -3,7 +3,7 @@ import { View } from 'react-native';
 import { createStackNavigator } from 'react-navigation-stack';
 import Home from "../screens/home/home";
 import HowToPlay from '../screens/home/howToPlay';
-import ChooseLang from '../screens/home/chooseLang';
+import Settings from '../screens/home/settings';
 
 const CustomHeader = () => {
 	return (
@@ -23,8 +23,8 @@ const screens = {
 			headerTitle: () => <CustomHeader />
 		}
 	},
-	ChooseLang: {
-		screen: ChooseLang,
+	Settings: {
+		screen: Settings,
 		navigationOptions: {
 			headerTitle: () => <CustomHeader />
 		}

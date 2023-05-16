@@ -1,5 +1,5 @@
 import AppNavigator from './routes/appNavigator';
-import { LanguageProvider } from './utils/language';
+import { SettingsProvider } from './utils/settings';
 import { ThemeProvider, createTheme } from '@rneui/themed';
 
 const theme = createTheme({
@@ -12,10 +12,10 @@ const theme = createTheme({
 
 export default function App() {
 	return (
-		<LanguageProvider>
+		<SettingsProvider>
 			<ThemeProvider theme={theme}>
 				<AppNavigator />
 			</ThemeProvider>
-		</LanguageProvider>
+		</SettingsProvider>
 	);
 }

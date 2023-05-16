@@ -1,12 +1,12 @@
 import React, { useContext } from 'react';
 import { View, StyleSheet, ImageBackground } from 'react-native';
 import { Text, Card } from '@rneui/themed';
-import { LanguageContext } from '../../utils/language';
+import { SettingsContext } from '../../utils/settings';
 import { howToPlay } from '../../constants';
 import backgroundImage from '../../assets/blurred-background.jpeg';
 
 export default function HowToPlay() {
-	const { language } = useContext(LanguageContext);
+	const { language } = useContext(SettingsContext);
 	const { title, instructions } = howToPlay;
 	return (
 		<ImageBackground source={backgroundImage} style={styles.container} resizeMode={'cover'}>
