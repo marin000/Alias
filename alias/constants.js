@@ -97,3 +97,34 @@ export const newGame = {
 		en: 'At least 2 players are required!'
 	},
 }
+
+export const playGame = {
+	buttonSave: {
+		hr: 'Tocno',
+		en: 'Correct'
+	}, 
+	buttonSkip: {
+		hr: 'Preskoci',
+		en: 'Skip'
+	},
+	correctAnswersTxt: {
+		hr: 'Tocnih',
+		en: 'Correct'
+	},
+	skippedAnswersTxt: {
+		hr: 'Preskocenih',
+		en: 'Skipped'
+	},
+	team: {
+		hr: 'Tim',
+		en: 'Team'
+	},
+	finalScore: {
+		hr: 'Ukupno',
+		en: 'Total'
+	},
+	dialogNextButton: {
+		hr: 'Dalje',
+		en: 'Next'
+	}
+}
