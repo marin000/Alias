@@ -1,13 +1,14 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { View, StyleSheet, ImageBackground, ScrollView } from 'react-native';
-import { Text, Dialog, Button } from '@rneui/themed';
+import { Text, Button } from '@rneui/themed';
 import { SettingsContext } from '../../utils/settings';
 import { playGame } from '../../constants';
 import backgroundImage from '../../assets/blurred-background.jpeg';
+import TeamResultDialog from '../../components/teamResultDialog';
 
 export default function PlayGame({ navigation }) {
   const { language, timer, maxScore } = useContext(SettingsContext);
-  const { buttonSave, buttonSkip, correctAnswersTxt, skippedAnswersTxt, team, finalScore, dialogNextButton } = playGame;
+  const { buttonSave, buttonSkip, correctAnswersTxt, skippedAnswersTxt } = playGame;
   const [gameTimer, setGameTimer] = useState(timer);
   const [currentWord, setCurrentWord] = useState('');
   const [currentTeam, setCurrentTeam] = useState('');
@@ -44,25 +45,21 @@ export default function PlayGame({ navigation }) {
     };
   }, [gameTimer]);
 
-  function resetStates() {
+  const resetStates = () => {
     setCurrentWord('');
     setCorrectAnswers(0);
     setSkippedAnswers(0);
   }
 
-  function getRandomWord() {
+  const getRandomWord = () => {
     const randomIndex = Math.floor(Math.random() * gameWordList.length);
     const word = gameWordList[randomIndex];
     gameWordList.splice(randomIndex, 1);
     return word.charAt(0).toUpperCase() + word.slice(1);
   }
 
-  function getNextTeam() {
+  const getNextTeam = () => {
     currentTeamIndex = (currentTeamIndex + 1) % teams.length;
-  }
-  
-  function handleTeamDialog() {
-    setTeamDialog(false);
   }
 
   function playRound() {
@@ -90,14 +87,18 @@ export default function PlayGame({ navigation }) {
     }
   }
 
-  function handleSave() {
+  const handleSave = () => {
     setCurrentWord(getRandomWord());
     setCorrectAnswers(correctAnswers + 1);
   }
 
-  function handleSkip() {
+  const handleSkip = () => {
     setCurrentWord(getRandomWord());
     setSkippedAnswers(skippedAnswers + 1);
+  }
+
+  const handleCloseTeamDialog = () => {
+    setTeamDialog(false);
   }
 
   return (
@@ -134,28 +135,14 @@ export default function PlayGame({ navigation }) {
         />
       </View>
       {/* Show current team results */}
-      <Dialog
+      <TeamResultDialog
         isVisible={teamDialog}
-      >
-        <ScrollView keyboardShouldPersistTaps='handled'>
-          <Text style={styles.dialogTitle}>{team[language]}: {currentTeam.name}</Text>
-          <View style={styles.dialogAnswers}>
-            <View style={styles.dialogCorrect}>
-              <Text>{correctAnswersTxt[language]}: {correctAnswers}</Text>
-            </View>
-            <View style={styles.dialogSkipped}>
-              <Text>{skippedAnswersTxt[language]}: {skippedAnswers}</Text>
-            </View>
-          </View>
-          <Text>{finalScore[language]}: {currentTeam.score}</Text>
-          <Button
-            containerStyle={styles.dialogButton}
-            title={dialogNextButton[language]}
-            color='success'
-            onPress={handleTeamDialog}
-          />
-        </ScrollView>
-      </Dialog>
+        onClose={handleCloseTeamDialog}
+        language={language}
+        currentTeam={currentTeam}
+        correctAnswers={correctAnswers}
+        skippedAnswers={skippedAnswers}
+      />
     </ImageBackground>
   )
 }
@@ -223,23 +210,5 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 10
-  },
-  dialogAnswers: {
-    flexDirection: 'row',
-    marginBottom: 10
-  },
-  dialogCorrect: {
-    flex: 1,
-    marginRight: 5
-  },
-  dialogSkipped: {
-    flex: 1,
-    marginLeft: 5
-  },
-  dialogButton: {
-    alignSelf: 'center',
-    marginTop: 20,
-    width: 120,
-    height: 60
   }
 });
