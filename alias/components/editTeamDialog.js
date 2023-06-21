@@ -26,6 +26,7 @@ export default function EditTeamDialog({ isVisible, onClose, teams, selectedTeam
               return;
             }
             const updatedTeam = {
+              id: selectedTeam.id,
               name: values.teamName,
               players: values.players,
               score: 0

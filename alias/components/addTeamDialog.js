@@ -5,6 +5,7 @@ import { Formik } from 'formik';
 import { TextInput } from 'react-native-gesture-handler';
 import { validateTeamInput } from '../utils/helper';
 import { newGame } from '../constants';
+import shortid from 'shortid';
 
 export default function AddTeamDialog({ isVisible, onClose, teams, language, onAddTeam }) {
   const { teamInput, playerInput, buttonSaveTeam, buttonAddPlayer, buttonReset } = newGame;
@@ -19,6 +20,7 @@ export default function AddTeamDialog({ isVisible, onClose, teams, language, onA
               return;
             }
             const newTeam = {
+              id: shortid.generate(),
               name: values.teamName,
               players: values.players,
               score: 0

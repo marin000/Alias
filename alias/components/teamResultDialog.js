@@ -24,7 +24,7 @@ export default function TeamResultDialog({ isVisible, onClose, language, current
             <Text>{skippedAnswersTxt[language]}: {skippedAnswers}</Text>
           </View>
         </View>
-        <Text>{finalScore[language]}: {currentTeam.score}</Text>
+        <Text>{finalScore[language]}: {correctAnswers - skippedAnswers}</Text>
         <Button
           containerStyle={styles.dialogButton}
           title={dialogNextButton[language]}
