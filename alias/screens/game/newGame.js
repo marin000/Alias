@@ -2,16 +2,17 @@ import React, { useContext, useState } from 'react';
 import { View, StyleSheet, ImageBackground, ScrollView, TouchableHighlight } from 'react-native';
 import { Text, ListItem, Button, Dialog } from '@rneui/themed';
 import { LinearGradient } from 'expo-linear-gradient';
+import { connect } from 'react-redux';
+import { addTeam, updateTeam, deleteTeam } from '../../redux/actions';
 import { SettingsContext } from '../../utils/settings';
 import { newGame } from '../../constants';
 import backgroundImage from '../../assets/blurred-background.jpeg';
 import AddTeamDialog from '../../components/addTeamDialog';
 import EditTeamDialog from '../../components/editTeamDialog';
 
-export default function NewGame({ navigation }) {
+const NewGame = ({ teams, addTeam, updateTeam, deleteTeam, navigation }) => {
   const { language } = useContext(SettingsContext);
   const { title, newTeam, buttonStart } = newGame;
-  const [teams, setTeams] = useState([]);
   const [addTeamDialog, setAddTeamDialog] = useState(false);
   const [selectedTeam, setSelectedTeam] = useState(null);
   const [editTeamDialog, setEditTeamDialog] = useState(false);
@@ -22,16 +23,12 @@ export default function NewGame({ navigation }) {
   }
 
   const handleUpdateTeam = (updatedTeam) => {
-    const updatedTeams = [...teams];
-    const oldTeamIndex = teams.findIndex((team) => team.name === selectedTeam.name);
-    updatedTeams[oldTeamIndex] = updatedTeam;
-    setTeams(updatedTeams);
+    updateTeam(updatedTeam);
     setSelectedTeam(null);
   }
 
   const handleDeleteTeam = () => {
-    const updatedTeams = teams.filter(team => team.name !== selectedTeam.name);
-    setTeams(updatedTeams);
+    deleteTeam(selectedTeam);
     setSelectedTeam(null);
     setEditTeamDialog(false);
   }
@@ -81,7 +78,7 @@ export default function NewGame({ navigation }) {
               containerStyle={styles.buttonSaveTeam}
               title={buttonStart[language]}
               color='success'
-              onPress={() => navigation.navigate('PlayGame', { teams: teams })}
+              onPress={() => navigation.navigate('PlayGame')}
             />
           }
         </View>
@@ -93,7 +90,7 @@ export default function NewGame({ navigation }) {
           teams={teams}
           language={language}
           onAddTeam={(newTeam) => {
-            setTeams([...teams, newTeam]);
+            addTeam(newTeam);
           }}
         />
         {/* Edit team */}
@@ -140,3 +137,15 @@ const styles = StyleSheet.create({
     marginTop: 15
   }
 });
+
+const mapStateToProps = (state) => ({
+  teams: state.teamReducer.teams
+});
+
+const mapDispatchToProps = {
+  addTeam,
+  updateTeam,
+  deleteTeam
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(NewGame);

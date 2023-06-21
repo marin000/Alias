@@ -1,12 +1,14 @@
 import React, { useContext, useState, useEffect } from 'react';
-import { View, StyleSheet, ImageBackground, ScrollView } from 'react-native';
+import { View, StyleSheet, ImageBackground } from 'react-native';
 import { Text, Button } from '@rneui/themed';
+import { connect } from 'react-redux';
+import { updateTeam } from '../../redux/actions';
 import { SettingsContext } from '../../utils/settings';
 import { playGame } from '../../constants';
 import backgroundImage from '../../assets/blurred-background.jpeg';
 import TeamResultDialog from '../../components/teamResultDialog';
 
-export default function PlayGame({ navigation }) {
+const PlayGame = ({ teams, updateTeam, navigation }) => {
   const { language, timer, maxScore } = useContext(SettingsContext);
   const { buttonSave, buttonSkip, correctAnswersTxt, skippedAnswersTxt } = playGame;
   const [gameTimer, setGameTimer] = useState(timer);
@@ -15,10 +17,10 @@ export default function PlayGame({ navigation }) {
   const [correctAnswers, setCorrectAnswers] = useState(0);
   const [skippedAnswers, setSkippedAnswers] = useState(0);
   const [teamDialog, setTeamDialog] = useState(false);
+  console.log(currentTeam)
 
   let gameWordList = [];
   let currentTeamIndex = 0;
-  const teams = navigation.getParam('teams');
 
   if (language === 'hr') {
     gameWordList = require('../../assets/words/hr.json');
@@ -37,7 +39,8 @@ export default function PlayGame({ navigation }) {
       }, 1000);
     } else {
       clearInterval(interval);
-      teams[currentTeamIndex].score = correctAnswers - skippedAnswers;
+      const newScore = currentTeam.score + correctAnswers - skippedAnswers;
+      updateTeam({...currentTeam, score: newScore});
       setTeamDialog(true);
     }
     return () => {
@@ -212,3 +215,13 @@ const styles = StyleSheet.create({
     marginBottom: 10
   }
 });
+
+const mapStateToProps = (state) => ({
+  teams: state.teamReducer.teams
+});
+
+const mapDispatchToProps = {
+  updateTeam,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(PlayGame);
