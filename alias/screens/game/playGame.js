@@ -1,9 +1,10 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { View, StyleSheet, ImageBackground } from 'react-native';
-import { Text, Button } from '@rneui/themed';
+import { Text, Button, Icon } from '@rneui/themed';
 import { connect } from 'react-redux';
 import { updateTeam, gameStartEnd } from '../../redux/actions';
 import { SettingsContext } from '../../utils/settings';
+import { getRandomWord } from '../../utils/helper';
 import { playGame } from '../../constants';
 import backgroundImage from '../../assets/blurred-background.jpeg';
 import TeamResultDialog from '../../components/teamResultDialog';
@@ -17,6 +18,7 @@ const PlayGame = ({ teams, gameStarted, updateTeam, navigation }) => {
   const [correctAnswers, setCorrectAnswers] = useState(0);
   const [skippedAnswers, setSkippedAnswers] = useState(0);
   const [teamDialog, setTeamDialog] = useState(false);
+  const [paused, setPaused] = useState(false);
 
   let gameWordList = [];
   let currentTeamIndex = 0;
@@ -26,13 +28,13 @@ const PlayGame = ({ teams, gameStarted, updateTeam, navigation }) => {
   }
 
   useEffect(() => {
-    setCurrentWord(getRandomWord());
+    setCurrentWord(getRandomWord(gameWordList));
     setCurrentTeam(teams[currentTeamIndex]);
   }, []);
 
   useEffect(() => {
     let interval = null;
-    if (gameTimer > 0) {
+    if (gameTimer > 0 && !paused) {
       interval = setInterval(() => {
         setGameTimer((prevTimer) => prevTimer - 1);
       }, 1000);
@@ -45,19 +47,12 @@ const PlayGame = ({ teams, gameStarted, updateTeam, navigation }) => {
     return () => {
       clearInterval(interval);
     };
-  }, [gameTimer]);
+  }, [gameTimer, paused]);
 
   const resetStates = () => {
     setCurrentWord('');
     setCorrectAnswers(0);
     setSkippedAnswers(0);
-  }
-
-  const getRandomWord = () => {
-    const randomIndex = Math.floor(Math.random() * gameWordList.length);
-    const word = gameWordList[randomIndex];
-    gameWordList.splice(randomIndex, 1);
-    return word.charAt(0).toUpperCase() + word.slice(1);
   }
 
   const getNextTeam = () => {
@@ -66,7 +61,7 @@ const PlayGame = ({ teams, gameStarted, updateTeam, navigation }) => {
 
   function playRound() {
     // const currentTeam = teams[currentTeamIndex];
-    const word = getRandomWord();
+    const word = getRandomWord(gameWordList);
 
     // Show the word to the current team and start the timer
 
@@ -90,17 +85,23 @@ const PlayGame = ({ teams, gameStarted, updateTeam, navigation }) => {
   }
 
   const handleSave = () => {
-    setCurrentWord(getRandomWord());
+    setCurrentWord(getRandomWord(gameWordList));
     setCorrectAnswers(correctAnswers + 1);
   }
 
   const handleSkip = () => {
-    setCurrentWord(getRandomWord());
+    setCurrentWord(getRandomWord(gameWordList));
     setSkippedAnswers(skippedAnswers + 1);
   }
 
   const handleCloseTeamDialog = () => {
     setTeamDialog(false);
+    setPaused(false);
+  }
+
+  const handlePauseButton = () => {
+    setTeamDialog(true);
+    setPaused(true);
   }
 
   return (
@@ -114,9 +115,16 @@ const PlayGame = ({ teams, gameStarted, updateTeam, navigation }) => {
         <View style={styles.correctAnswersContainer}>
           <Text style={styles.correctAnswersText}>{correctAnswersTxt[language]}: {correctAnswers}</Text>
         </View>
-        <View>
+        <View style={styles.skippedAnswersContainer}>
           <Text style={styles.skippedAnswersText}>{skippedAnswersTxt[language]}: {skippedAnswers}</Text>
         </View>
+        <Button
+          radius={'sm'}
+          type="solid"
+          onPress={() => handlePauseButton()}
+        >
+          <Icon name="pause" color="white" />
+        </Button>
       </View>
       <Text style={styles.word}>{currentWord}</Text>
       <View style={styles.timerContainer}>
@@ -146,6 +154,7 @@ const PlayGame = ({ teams, gameStarted, updateTeam, navigation }) => {
         currentTeam={currentTeam}
         correctAnswers={correctAnswers}
         skippedAnswers={skippedAnswers}
+        gameTimer={gameTimer}
       />
     </ImageBackground>
   )
@@ -211,6 +220,9 @@ const styles = StyleSheet.create({
   correctAnswersText: {
     fontSize: 20,
     color: 'white'
+  },
+  skippedAnswersContainer: {
+    paddingRight: 15
   },
   skippedAnswersText: {
     fontSize: 20,

@@ -19,6 +19,14 @@ const validateTeamInput = (teams, values, language) => {
   return true;
 }
 
+const getRandomWord = (gameWordList) => {
+  const randomIndex = Math.floor(Math.random() * gameWordList.length);
+  const word = gameWordList[randomIndex];
+  gameWordList.splice(randomIndex, 1);
+  return word.charAt(0).toUpperCase() + word.slice(1);
+}
+
 export {
-  validateTeamInput
+  validateTeamInput,
+  getRandomWord
 }

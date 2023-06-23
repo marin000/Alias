@@ -130,5 +130,9 @@ export const playGame = {
 	dialogNextButton: {
 		hr: 'Dalje',
 		en: 'Next'
+	},
+	dialogContinueButton: {
+		hr: 'Nastavi',
+		en: 'Continue'
 	}
 }

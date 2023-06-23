@@ -3,8 +3,8 @@ import { ScrollView, View, StyleSheet } from 'react-native';
 import { Button, Dialog, Text } from '@rneui/themed';
 import { playGame } from '../constants';
 
-export default function TeamResultDialog({ isVisible, onClose, language, currentTeam, correctAnswers, skippedAnswers }) {
-  const { correctAnswersTxt, skippedAnswersTxt, team, finalScore, dialogNextButton } = playGame;
+export default function TeamResultDialog({ isVisible, onClose, language, currentTeam, correctAnswers, skippedAnswers, gameTimer }) {
+  const { correctAnswersTxt, skippedAnswersTxt, team, finalScore, dialogNextButton, dialogContinueButton } = playGame;
 
   const handleNextButton = () => {
     onClose();
@@ -27,7 +27,7 @@ export default function TeamResultDialog({ isVisible, onClose, language, current
         <Text>{finalScore[language]}: {correctAnswers - skippedAnswers}</Text>
         <Button
           containerStyle={styles.dialogButton}
-          title={dialogNextButton[language]}
+          title={gameTimer > 0 ? dialogContinueButton[language] : dialogNextButton[language]}
           color='success'
           onPress={handleNextButton}
         />
