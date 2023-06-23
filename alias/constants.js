@@ -3,6 +3,10 @@ export const home = {
 		hr: 'Nova Igra',
 		en: 'New Game'
 	},
+	continueGame: {
+		hr: 'Nastavi',
+		en: 'Continue'
+	},
 	instructions: {
 		hr: 'Kako se igra?',
 		en: 'How to play'

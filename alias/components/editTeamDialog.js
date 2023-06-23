@@ -6,7 +6,7 @@ import { TextInput } from 'react-native-gesture-handler';
 import { validateTeamInput } from '../utils/helper';
 import { newGame } from '../constants';
 
-export default function EditTeamDialog({ isVisible, onClose, teams, selectedTeam, language, onDeleteTeam, onUpdateTeam }) {
+export default function EditTeamDialog({ gameStarted, isVisible, onClose, teams, selectedTeam, language, onDeleteTeam, onUpdateTeam }) {
   const { teamInput, playerInput, buttonSaveTeam, buttonAddPlayer, buttonDelete } = newGame;
 
   return (
@@ -18,18 +18,27 @@ export default function EditTeamDialog({ isVisible, onClose, teams, selectedTeam
         <Formik
           initialValues={{
             teamName: selectedTeam ? selectedTeam.name : '',
-            players: selectedTeam ? selectedTeam.players : []
+            players: selectedTeam ? selectedTeam.players.map(player => { return player.name }) : []
           }}
           onSubmit={(values) => {
             const tempTeams = teams.filter(team => team.name !== selectedTeam.name);
+
             if (!validateTeamInput(tempTeams, values, language)) {
               return;
             }
+            const playersArray = values.players.map(player => {
+              return {
+                name: player,
+                score: 0,
+                explains: false
+              }
+            });
             const updatedTeam = {
               id: selectedTeam.id,
               name: values.teamName,
-              players: values.players,
-              score: 0
+              players: playersArray,
+              score: 0,
+              explains: false
             }
             onUpdateTeam(updatedTeam);
             onClose();
@@ -38,47 +47,55 @@ export default function EditTeamDialog({ isVisible, onClose, teams, selectedTeam
           {(props) => (
             <View>
               {props.values.teamName ? (
-                <Text style={styles.label}>{teamInput[language]}</Text>
+                <Text style={gameStarted ? styles.labelNonEditable : styles.label}>{teamInput[language]}</Text>
               ) : null}
               <TextInput
-                style={styles.teamInput}
+                style={gameStarted ? styles.teamInputNonEditable : styles.teamInput}
                 placeholder={props.values.teamName}
                 onChangeText={props.handleChange('teamName')}
                 value={props.values.teamName}
+                editable={!gameStarted}
               />
               {props.values.players.map((player, index) => (
                 <View key={index}>
-                  <Text style={styles.label}>{`${playerInput[language]} ${index + 1}`}</Text>
+                  <Text style={gameStarted ? styles.labelNonEditable : styles.label}>{`${playerInput[language]} ${index + 1}`}</Text>
                   <TextInput
-                    style={styles.playerInput}
+                    style={gameStarted ? styles.playerInputNonEditable : styles.playerInput}
                     placeholder={player}
                     onChangeText={props.handleChange(`players.${index}`)}
                     value={player}
+                    editable={!gameStarted}
                   />
                 </View>
               ))}
-              <View style={styles.buttonsAddResetContainer}>
+              {
+                !gameStarted &&
+                <View style={styles.buttonsAddResetContainer}>
+                  <Button
+                    containerStyle={styles.buttonAdd}
+                    title={buttonAddPlayer[language]}
+                    color='primary'
+                    onPress={() => {
+                      props.setFieldValue(`players.${props.values.players.length}`, '');
+                    }}
+                  />
+                  <Button
+                    containerStyle={styles.buttonResetDel}
+                    title={buttonDelete[language]}
+                    color='error'
+                    onPress={() => onDeleteTeam()}
+                  />
+                </View>
+              }
+              {
+                !gameStarted &&
                 <Button
-                  containerStyle={styles.buttonAdd}
-                  title={buttonAddPlayer[language]}
-                  color='primary'
-                  onPress={() => {
-                    props.setFieldValue(`players.${props.values.players.length}`, '');
-                  }}
+                  containerStyle={styles.buttonSaveTeam}
+                  title={buttonSaveTeam[language]}
+                  color='success'
+                  onPress={props.handleSubmit}
                 />
-                <Button
-                  containerStyle={styles.buttonResetDel}
-                  title={buttonDelete[language]}
-                  color='error'
-                  onPress={() => onDeleteTeam()}
-                />
-              </View>
-              <Button
-                containerStyle={styles.buttonSaveTeam}
-                title={buttonSaveTeam[language]}
-                color='success'
-                onPress={props.handleSubmit}
-              />
+              }
             </View>
           )}
         </Formik>
@@ -92,6 +109,11 @@ const styles = StyleSheet.create({
     fontSize: 14,
     marginBottom: 5,
   },
+  labelNonEditable: {
+    fontSize: 14,
+    marginBottom: 5,
+    fontWeight: 'bold'
+  },
   teamInput: {
     borderWidth: 4,
     borderColor: '#ddd',
@@ -100,6 +122,15 @@ const styles = StyleSheet.create({
     borderRadius: 6,
     marginBottom: 18
   },
+  teamInputNonEditable: {
+    borderWidth: 4,
+    borderColor: '#ddd',
+    padding: 10,
+    fontSize: 14,
+    borderRadius: 6,
+    marginBottom: 18,
+    color: 'black'
+  },
   playerInput: {
     borderWidth: 1,
     borderColor: '#ddd',
@@ -107,6 +138,15 @@ const styles = StyleSheet.create({
     fontSize: 14,
     borderRadius: 6,
     marginBottom: 7
+  },
+  playerInputNonEditable: {
+    borderWidth: 1,
+    borderColor: '#ddd',
+    padding: 10,
+    fontSize: 14,
+    borderRadius: 6,
+    marginBottom: 7,
+    color: 'black'
   },
   buttonsAddResetContainer: {
     flexDirection: 'row',

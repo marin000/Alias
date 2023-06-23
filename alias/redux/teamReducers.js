@@ -26,6 +26,11 @@ const teamReducer = (state = initialState, action) => {
         ...state,
         teams: filteredTeams
       };
+    case 'DELETE_ALL_TEAMS':
+      return {
+        ...state,
+        teams: []
+      };
     default:
       return state;
   }

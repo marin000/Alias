@@ -1,9 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit';
-import teamReducer from './reducers';
+import teamReducer from './teamReducers';
+import gameReducer from './gameReducers';
 
 const store = configureStore({
   reducer: {
-    teamReducer
+    teamReducer,
+    gameReducer
   }
 });
 

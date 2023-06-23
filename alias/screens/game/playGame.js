@@ -2,13 +2,13 @@ import React, { useContext, useState, useEffect } from 'react';
 import { View, StyleSheet, ImageBackground } from 'react-native';
 import { Text, Button } from '@rneui/themed';
 import { connect } from 'react-redux';
-import { updateTeam } from '../../redux/actions';
+import { updateTeam, gameStartEnd } from '../../redux/actions';
 import { SettingsContext } from '../../utils/settings';
 import { playGame } from '../../constants';
 import backgroundImage from '../../assets/blurred-background.jpeg';
 import TeamResultDialog from '../../components/teamResultDialog';
 
-const PlayGame = ({ teams, updateTeam, navigation }) => {
+const PlayGame = ({ teams, gameStarted, updateTeam, navigation }) => {
   const { language, timer, maxScore } = useContext(SettingsContext);
   const { buttonSave, buttonSkip, correctAnswersTxt, skippedAnswersTxt } = playGame;
   const [gameTimer, setGameTimer] = useState(timer);
@@ -17,7 +17,6 @@ const PlayGame = ({ teams, updateTeam, navigation }) => {
   const [correctAnswers, setCorrectAnswers] = useState(0);
   const [skippedAnswers, setSkippedAnswers] = useState(0);
   const [teamDialog, setTeamDialog] = useState(false);
-  console.log(currentTeam)
 
   let gameWordList = [];
   let currentTeamIndex = 0;
@@ -40,7 +39,7 @@ const PlayGame = ({ teams, updateTeam, navigation }) => {
     } else {
       clearInterval(interval);
       const newScore = currentTeam.score + correctAnswers - skippedAnswers;
-      updateTeam({...currentTeam, score: newScore});
+      updateTeam({ ...currentTeam, score: newScore });
       setTeamDialog(true);
     }
     return () => {
@@ -110,6 +109,8 @@ const PlayGame = ({ teams, updateTeam, navigation }) => {
         <View style={styles.teamNameContainer}>
           <Text style={styles.teamNameText}>{currentTeam.name}</Text>
         </View>
+      </View>
+      <View style={styles.answersContainer}>
         <View style={styles.correctAnswersContainer}>
           <Text style={styles.correctAnswersText}>{correctAnswersTxt[language]}: {correctAnswers}</Text>
         </View>
@@ -198,6 +199,12 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: 'white'
   },
+  answersContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    position: 'absolute',
+    top: 80
+  },
   correctAnswersContainer: {
     paddingRight: 15
   },
@@ -217,11 +224,13 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = (state) => ({
-  teams: state.teamReducer.teams
+  teams: state.teamReducer.teams,
+  gameStarted: state.gameReducer.gameStarted
 });
 
 const mapDispatchToProps = {
   updateTeam,
+  gameStartEnd
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(PlayGame);

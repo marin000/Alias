@@ -3,14 +3,14 @@ import { View, StyleSheet, ImageBackground, ScrollView, TouchableHighlight } fro
 import { Text, ListItem, Button, Dialog } from '@rneui/themed';
 import { LinearGradient } from 'expo-linear-gradient';
 import { connect } from 'react-redux';
-import { addTeam, updateTeam, deleteTeam } from '../../redux/actions';
+import { addTeam, updateTeam, deleteTeam, gameStartEnd } from '../../redux/actions';
 import { SettingsContext } from '../../utils/settings';
 import { newGame } from '../../constants';
 import backgroundImage from '../../assets/blurred-background.jpeg';
 import AddTeamDialog from '../../components/addTeamDialog';
 import EditTeamDialog from '../../components/editTeamDialog';
 
-const NewGame = ({ teams, addTeam, updateTeam, deleteTeam, navigation }) => {
+const NewGame = ({ teams, gameStarted, addTeam, updateTeam, deleteTeam, gameStartEnd, navigation }) => {
   const { language } = useContext(SettingsContext);
   const { title, newTeam, buttonStart } = newGame;
   const [addTeamDialog, setAddTeamDialog] = useState(false);
@@ -31,6 +31,11 @@ const NewGame = ({ teams, addTeam, updateTeam, deleteTeam, navigation }) => {
     deleteTeam(selectedTeam);
     setSelectedTeam(null);
     setEditTeamDialog(false);
+  }
+
+  const handleButtonStart = () => {
+    navigation.navigate('PlayGame');
+    gameStartEnd(true);
   }
 
   return (
@@ -67,18 +72,21 @@ const NewGame = ({ teams, addTeam, updateTeam, deleteTeam, navigation }) => {
           </ScrollView>
         </View>
         <View style={styles.startGame}>
-          <Button
-            title={newTeam[language]}
-            color='#0000cc'
-            onPress={() => setAddTeamDialog(true)}
-          />
+          {
+            !gameStarted &&
+            <Button
+              title={newTeam[language]}
+              color='#0000cc'
+              onPress={() => setAddTeamDialog(true)}
+            />
+          }
           {
             teams.length >= 2 &&
             <Button
               containerStyle={styles.buttonSaveTeam}
               title={buttonStart[language]}
               color='success'
-              onPress={() => navigation.navigate('PlayGame')}
+              onPress={() => handleButtonStart()}
             />
           }
         </View>
@@ -95,6 +103,7 @@ const NewGame = ({ teams, addTeam, updateTeam, deleteTeam, navigation }) => {
         />
         {/* Edit team */}
         <EditTeamDialog
+          gameStarted={gameStarted}
           isVisible={editTeamDialog}
           onClose={() => setEditTeamDialog(false)}
           teams={teams}
@@ -139,13 +148,15 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = (state) => ({
-  teams: state.teamReducer.teams
+  teams: state.teamReducer.teams,
+  gameStarted: state.gameReducer.gameStarted
 });
 
 const mapDispatchToProps = {
   addTeam,
   updateTeam,
-  deleteTeam
+  deleteTeam,
+  gameStartEnd
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(NewGame);
