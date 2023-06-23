@@ -19,13 +19,15 @@ export default function AddTeamDialog({ isVisible, onClose, teams, language, onA
             if (!validateTeamInput(teams, values, language)) {
               return;
             }
-            const playersArray = values.players.map(player => {
-              return {
-                name: player,
-                score: 0,
-                explains: false
-              }
-            });
+            const playersArray = values.players
+              .filter(player => player.length > 0)
+              .map(player => {
+                return {
+                  name: player,
+                  score: 0,
+                  explains: false
+                }
+              });
             const newTeam = {
               id: shortid.generate(),
               name: values.teamName,

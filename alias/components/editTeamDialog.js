@@ -26,13 +26,15 @@ export default function EditTeamDialog({ gameStarted, isVisible, onClose, teams,
             if (!validateTeamInput(tempTeams, values, language)) {
               return;
             }
-            const playersArray = values.players.map(player => {
-              return {
-                name: player,
-                score: 0,
-                explains: false
-              }
-            });
+            const playersArray = values.players
+              .filter(player => player.length > 0)
+              .map(player => {
+                return {
+                  name: player,
+                  score: 0,
+                  explains: false
+                }
+              });
             const updatedTeam = {
               id: selectedTeam.id,
               name: values.teamName,

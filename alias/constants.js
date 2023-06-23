@@ -100,6 +100,10 @@ export const newGame = {
 		hr: 'Potrebna su najmanje 2 igraca!',
 		en: 'At least 2 players are required!'
 	},
+	score: {
+		hr: 'Rezultat:',
+		en: 'Result:'
+	}
 }
 
 export const playGame = {
