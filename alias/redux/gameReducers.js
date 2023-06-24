@@ -1,5 +1,6 @@
 const initialState = {
-  gameStarted: false
+  gameStarted: false,
+  currentTeamIndex: 0
 };
 
 const gameReducer = (state = initialState, action) => {
@@ -9,6 +10,11 @@ const gameReducer = (state = initialState, action) => {
         ...state,
         gameStarted: action.payload
       }
+      case 'UPDATE_INDEX':
+        return {
+          ...state,
+          currentTeamIndex: action.payload
+        }
     default:
       return state;
   }

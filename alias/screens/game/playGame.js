@@ -2,14 +2,15 @@ import React, { useContext, useState, useEffect } from 'react';
 import { View, StyleSheet, ImageBackground } from 'react-native';
 import { Text, Button, Icon } from '@rneui/themed';
 import { connect } from 'react-redux';
-import { updateTeam, gameStartEnd } from '../../redux/actions';
+import { updateTeam, updateTeamIndex, updatePlayerExplains } from '../../redux/actions';
+import { useDispatch } from 'react-redux';
 import { SettingsContext } from '../../utils/settings';
 import { getRandomWord } from '../../utils/helper';
 import { playGame } from '../../constants';
 import backgroundImage from '../../assets/blurred-background.jpeg';
 import TeamResultDialog from '../../components/teamResultDialog';
 
-const PlayGame = ({ teams, gameStarted, updateTeam, navigation }) => {
+const PlayGame = ({ teams, currentTeamIndex, gameStarted, updateTeam, navigation }) => {
   const { language, timer, maxScore } = useContext(SettingsContext);
   const { buttonSave, buttonSkip, correctAnswersTxt, skippedAnswersTxt } = playGame;
   const [gameTimer, setGameTimer] = useState(timer);
@@ -19,9 +20,8 @@ const PlayGame = ({ teams, gameStarted, updateTeam, navigation }) => {
   const [skippedAnswers, setSkippedAnswers] = useState(0);
   const [teamDialog, setTeamDialog] = useState(false);
   const [paused, setPaused] = useState(false);
-
+  const dispatch = useDispatch();
   let gameWordList = [];
-  let currentTeamIndex = 0;
 
   if (language === 'hr') {
     gameWordList = require('../../assets/words/hr.json');
@@ -39,50 +39,19 @@ const PlayGame = ({ teams, gameStarted, updateTeam, navigation }) => {
         setGameTimer((prevTimer) => prevTimer - 1);
       }, 1000);
     } else {
-      clearInterval(interval);
-      const newScore = currentTeam.score + correctAnswers - skippedAnswers;
-      updateTeam({ ...currentTeam, score: newScore });
+      if (gameTimer === 0) {
+        clearInterval(interval);
+        const newScore = currentTeam.score + correctAnswers - skippedAnswers;
+        dispatch(updateTeam({ ...currentTeam, score: newScore }));
+        dispatch(updatePlayerExplains(currentTeam.id, correctAnswers - skippedAnswers));
+        dispatch(updateTeamIndex((currentTeamIndex + 1) % teams.length));
+      }
       setTeamDialog(true);
     }
     return () => {
       clearInterval(interval);
     };
   }, [gameTimer, paused]);
-
-  const resetStates = () => {
-    setCurrentWord('');
-    setCorrectAnswers(0);
-    setSkippedAnswers(0);
-  }
-
-  const getNextTeam = () => {
-    currentTeamIndex = (currentTeamIndex + 1) % teams.length;
-  }
-
-  function playRound() {
-    // const currentTeam = teams[currentTeamIndex];
-    const word = getRandomWord(gameWordList);
-
-    // Show the word to the current team and start the timer
-
-    // When the timer ends, update the score and check if the target score is reached
-    teams[currentTeamIndex].score++;
-    if (teams[currentTeamIndex].score < maxScore) {
-      // Display the updated score
-    } else {
-      // The current team has reached the target score and won the game
-      // Display the winner and end the game
-    }
-
-    // Move to the next team for the next round
-    getNextTeam();
-  }
-
-  function startGame() {
-    while (teams[currentTeamIndex].score < maxScore) {
-      playRound();
-    }
-  }
 
   const handleSave = () => {
     setCurrentWord(getRandomWord(gameWordList));
@@ -95,8 +64,13 @@ const PlayGame = ({ teams, gameStarted, updateTeam, navigation }) => {
   }
 
   const handleCloseTeamDialog = () => {
-    setTeamDialog(false);
-    setPaused(false);
+    if (gameTimer > 0) {
+      setTeamDialog(false);
+      setPaused(false);
+    } else {
+      setTeamDialog(false);
+      navigation.navigate('NewGame');
+    }
   }
 
   const handlePauseButton = () => {
@@ -237,12 +211,16 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = (state) => ({
   teams: state.teamReducer.teams,
-  gameStarted: state.gameReducer.gameStarted
+  gameStarted: state.gameReducer.gameStarted,
+  currentTeamIndex: state.gameReducer.currentTeamIndex
 });
 
-const mapDispatchToProps = {
-  updateTeam,
-  gameStartEnd
+const mapDispatchToProps = (dispatch) => {
+  return {
+    updateTeam: (team) => dispatch(updateTeam(team)),
+    updateTeamIndex: (index) => dispatch(updateTeamIndex(index)),
+    updatePlayerExplains: (teamId, playerScore) => dispatch(updatePlayerExplains(teamId, playerScore))
+  };
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(PlayGame);

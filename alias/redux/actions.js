@@ -21,3 +21,13 @@ export const gameStartEnd = (boolean) => ({
   type: 'START_END_GAME',
   payload: boolean
 });
+
+export const updateTeamIndex = (newIndex) => ({
+  type: 'UPDATE_INDEX',
+  payload: newIndex
+});
+
+export const updatePlayerExplains = (teamId, playerScore) => ({
+  type: 'UPDATE_PLAYER_EXPLAINS',
+  payload: { teamId, playerScore }
+})

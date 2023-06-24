@@ -9,13 +9,17 @@ import { newGame } from '../../constants';
 import backgroundImage from '../../assets/blurred-background.jpeg';
 import AddTeamDialog from '../../components/addTeamDialog';
 import EditTeamDialog from '../../components/editTeamDialog';
+import PreStartDialog from '../../components/preStartDialog';
+import ShowTeamResultDialog from '../../components/showTeamResultDialog';
 
-const NewGame = ({ teams, gameStarted, addTeam, updateTeam, deleteTeam, gameStartEnd, navigation }) => {
+const NewGame = ({ teams, currentTeamIndex, gameStarted, addTeam, updateTeam, deleteTeam, gameStartEnd, navigation }) => {
   const { language } = useContext(SettingsContext);
   const { title, newTeam, buttonStart, score } = newGame;
   const [addTeamDialog, setAddTeamDialog] = useState(false);
   const [selectedTeam, setSelectedTeam] = useState(null);
   const [editTeamDialog, setEditTeamDialog] = useState(false);
+  const [preStartDialog, setPreStartDialog] = useState(false);
+  const [showTeamResultDialog, setShowTeamResultDialog] = useState(false);
 
   const handleTeamToEdit = (team) => {
     setSelectedTeam(team);
@@ -33,9 +37,15 @@ const NewGame = ({ teams, gameStarted, addTeam, updateTeam, deleteTeam, gameStar
     setEditTeamDialog(false);
   }
 
-  const handleButtonStart = () => {
+  const startGame = () => {
+    setPreStartDialog(false);
     navigation.navigate('PlayGame');
     gameStartEnd(true);
+  }
+
+  const showTeamResult = (team) => {
+    setSelectedTeam(team);
+    setShowTeamResultDialog(true);
   }
 
   return (
@@ -51,7 +61,7 @@ const NewGame = ({ teams, gameStarted, addTeam, updateTeam, deleteTeam, gameStar
               .map((team, index) => (
                 <TouchableHighlight
                   key={index}
-                  onPress={() => handleTeamToEdit(team)}
+                  onPress={() => gameStarted ? showTeamResult(team) : handleTeamToEdit(team)}
                   underlayColor="transparent"
                 >
                   <ListItem
@@ -101,7 +111,7 @@ const NewGame = ({ teams, gameStarted, addTeam, updateTeam, deleteTeam, gameStar
               containerStyle={styles.buttonSaveTeam}
               title={buttonStart[language]}
               color='success'
-              onPress={() => handleButtonStart()}
+              onPress={() => setPreStartDialog(true)}
             />
           }
         </View>
@@ -118,7 +128,6 @@ const NewGame = ({ teams, gameStarted, addTeam, updateTeam, deleteTeam, gameStar
         />
         {/* Edit team */}
         <EditTeamDialog
-          gameStarted={gameStarted}
           isVisible={editTeamDialog}
           onClose={() => setEditTeamDialog(false)}
           teams={teams}
@@ -128,6 +137,27 @@ const NewGame = ({ teams, gameStarted, addTeam, updateTeam, deleteTeam, gameStar
           onUpdateTeam={(updatedTeam) => { handleUpdateTeam(updatedTeam) }
           }
         />
+        {/* Pre start dialog */}
+        {
+          teams.length >= 2 &&
+          <PreStartDialog
+            isVisible={preStartDialog}
+            onClose={() => setPreStartDialog(false)}
+            startGame={() => startGame()}
+            language={language}
+            currentTeam={teams[currentTeamIndex]}
+          />
+        }
+        {/* Show team result didalog */}
+        {
+          teams.length >= 2 && gameStarted &&
+          <ShowTeamResultDialog
+            isVisible={showTeamResultDialog}
+            onClose={() => setShowTeamResultDialog(false)}
+            language={language}
+            selectedTeam={selectedTeam}
+          />
+        }
       </View>
     </ImageBackground>
   );
@@ -176,7 +206,8 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = (state) => ({
   teams: state.teamReducer.teams,
-  gameStarted: state.gameReducer.gameStarted
+  gameStarted: state.gameReducer.gameStarted,
+  currentTeamIndex: state.gameReducer.currentTeamIndex
 });
 
 const mapDispatchToProps = {

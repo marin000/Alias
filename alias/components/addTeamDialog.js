@@ -21,11 +21,11 @@ export default function AddTeamDialog({ isVisible, onClose, teams, language, onA
             }
             const playersArray = values.players
               .filter(player => player.length > 0)
-              .map(player => {
+              .map((player, index) => {
                 return {
                   name: player,
                   score: 0,
-                  explains: false
+                  explains: index === 0 ? true : false
                 }
               });
             const newTeam = {
@@ -33,7 +33,6 @@ export default function AddTeamDialog({ isVisible, onClose, teams, language, onA
               name: values.teamName,
               players: playersArray,
               score: 0,
-              explains: false
             };
 
             onAddTeam(newTeam);

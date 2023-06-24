@@ -103,6 +103,18 @@ export const newGame = {
 	score: {
 		hr: 'Rezultat:',
 		en: 'Result:'
+	},
+	startGameButton: {
+		hr: 'Pokreni',
+		en: 'Start'
+	},
+	totalPoints: {
+		hr: 'Ukupno Bodova:',
+		en: 'Total Points:'
+	},
+	closeButton: {
+		hr: 'Zatvori',
+		en: 'Close'
 	}
 }
 
@@ -138,5 +150,9 @@ export const playGame = {
 	dialogContinueButton: {
 		hr: 'Nastavi',
 		en: 'Continue'
+	},
+	explains: {
+		hr: 'Objasnjava:',
+		en: 'Explains:'
 	}
 }
