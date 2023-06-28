@@ -89,7 +89,7 @@ export default function Settings() {
               value={parseInt(maxScoreValue)}
               onValueChange={setMaxScore}
               maximumValue={150}
-              minimumValue={40}
+              minimumValue={20}
               step={10}
               allowTouchTrack
               trackStyle={{ height: 5, backgroundColor: 'transparent' }}

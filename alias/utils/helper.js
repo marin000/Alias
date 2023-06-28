@@ -26,7 +26,18 @@ const getRandomWord = (gameWordList) => {
   return word.charAt(0).toUpperCase() + word.slice(1);
 }
 
+const teamWithHighestScore = (allTeams, currentTeam) => {
+  let teamWithHighestScore = allTeams[0];
+  for (const team of [...allTeams, currentTeam]) {
+    if (team.score > teamWithHighestScore.score) {
+      teamWithHighestScore = team;
+    }
+  }
+  return teamWithHighestScore;
+}
+
 export {
   validateTeamInput,
-  getRandomWord
+  getRandomWord,
+  teamWithHighestScore
 }

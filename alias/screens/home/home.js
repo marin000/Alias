@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { connect } from 'react-redux';
-import { deleteAllTeams, gameStartEnd } from '../../redux/actions';
+import { deleteAllTeams, gameStartEnd, updateMaxScoreReached, updateTeamIndex } from '../../redux/actions';
 import { useDispatch } from 'react-redux';
 import { View, StyleSheet, ImageBackground } from 'react-native';
 import { Button, Text } from '@rneui/themed';
@@ -19,6 +19,8 @@ const Home = ({ teams, navigation }) => {
 		} else {
 			dispatch(deleteAllTeams());
 			dispatch(gameStartEnd(false));
+			dispatch(updateMaxScoreReached(false));
+			dispatch(updateTeamIndex(0));
 			navigation.navigate(screen, { language });
 		}
 	}
@@ -104,7 +106,9 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => {
   return {
     deleteAllTeams: () => dispatch(deleteAllTeams()),
-    gameStartEnd: () => dispatch(gameStartEnd(false))
+    gameStartEnd: () => dispatch(gameStartEnd(false)),
+		updateMaxScoreReached: () => dispatch(updateMaxScoreReached(false)),
+		updateTeamIndex: () => dispatch(updateTeamIndex(index))
   };
 };
 

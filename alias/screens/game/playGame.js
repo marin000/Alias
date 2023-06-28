@@ -2,15 +2,16 @@ import React, { useContext, useState, useEffect } from 'react';
 import { View, StyleSheet, ImageBackground } from 'react-native';
 import { Text, Button, Icon } from '@rneui/themed';
 import { connect } from 'react-redux';
-import { updateTeam, updateTeamIndex, updatePlayerExplains } from '../../redux/actions';
+import { updateTeam, updateTeamIndex, updatePlayerExplains, updateMaxScoreReached } from '../../redux/actions';
 import { useDispatch } from 'react-redux';
 import { SettingsContext } from '../../utils/settings';
-import { getRandomWord } from '../../utils/helper';
+import { getRandomWord, teamWithHighestScore } from '../../utils/helper';
 import { playGame } from '../../constants';
 import backgroundImage from '../../assets/blurred-background.jpeg';
 import TeamResultDialog from '../../components/teamResultDialog';
+import WinnerDialog from '../../components/winnerDialog';
 
-const PlayGame = ({ teams, currentTeamIndex, gameStarted, updateTeam, navigation }) => {
+const PlayGame = ({ teams, currentTeamIndex, gameStarted, maxScoreReached, updateTeam, navigation }) => {
   const { language, timer, maxScore } = useContext(SettingsContext);
   const { buttonSave, buttonSkip, correctAnswersTxt, skippedAnswersTxt } = playGame;
   const [gameTimer, setGameTimer] = useState(timer);
@@ -20,8 +21,12 @@ const PlayGame = ({ teams, currentTeamIndex, gameStarted, updateTeam, navigation
   const [skippedAnswers, setSkippedAnswers] = useState(0);
   const [teamDialog, setTeamDialog] = useState(false);
   const [paused, setPaused] = useState(false);
+  const [winnerDialog, setWinnerDialog] = useState(false);
+  const [winnerTeam, setWinnerTeam] = useState('');
+
   const dispatch = useDispatch();
   let gameWordList = [];
+  const initialTeamIndex = currentTeamIndex;
 
   if (language === 'hr') {
     gameWordList = require('../../assets/words/hr.json');
@@ -34,19 +39,33 @@ const PlayGame = ({ teams, currentTeamIndex, gameStarted, updateTeam, navigation
 
   useEffect(() => {
     let interval = null;
+    let maxScoreFlag = false;
     if (gameTimer > 0 && !paused) {
       interval = setInterval(() => {
         setGameTimer((prevTimer) => prevTimer - 1);
       }, 1000);
-    } else {
-      if (gameTimer === 0) {
-        clearInterval(interval);
-        const newScore = currentTeam.score + correctAnswers - skippedAnswers;
-        dispatch(updateTeam({ ...currentTeam, score: newScore }));
-        dispatch(updatePlayerExplains(currentTeam.id, correctAnswers - skippedAnswers));
-        dispatch(updateTeamIndex((currentTeamIndex + 1) % teams.length));
-      }
+    } else if (paused) {
       setTeamDialog(true);
+    } else {
+      const newScore = currentTeam.score + correctAnswers - skippedAnswers;
+      dispatch(updateTeam({ ...currentTeam, score: newScore }));
+      dispatch(updatePlayerExplains(currentTeam.id, correctAnswers - skippedAnswers));
+      dispatch(updateTeamIndex((currentTeamIndex + 1) % teams.length));
+      if (newScore >= maxScore) {
+        dispatch(updateMaxScoreReached(true));
+        maxScoreFlag = true;
+      }
+      if (currentTeamIndex === teams.length - 1 && (maxScoreReached || maxScoreFlag)) {
+        const currentRoundTeam = {
+          name: currentTeam.name,
+          score: newScore
+        }
+        const highestScore = teamWithHighestScore(teams, currentRoundTeam);
+        setWinnerTeam(highestScore);
+        setWinnerDialog(true);
+      } else {
+        setTeamDialog(true);
+      }
     }
     return () => {
       clearInterval(interval);
@@ -76,6 +95,11 @@ const PlayGame = ({ teams, currentTeamIndex, gameStarted, updateTeam, navigation
   const handlePauseButton = () => {
     setTeamDialog(true);
     setPaused(true);
+  }
+
+  const handleCloseWinnerDialog = () => {
+    setWinnerDialog(false);
+    navigation.navigate('NewGame');
   }
 
   return (
@@ -129,6 +153,13 @@ const PlayGame = ({ teams, currentTeamIndex, gameStarted, updateTeam, navigation
         correctAnswers={correctAnswers}
         skippedAnswers={skippedAnswers}
         gameTimer={gameTimer}
+      />
+      {/* Winner Dialog */}
+      <WinnerDialog
+        isVisible={winnerDialog}
+        onClose={handleCloseWinnerDialog}
+        language={language}
+        winnerTeam={winnerTeam}
       />
     </ImageBackground>
   )
@@ -212,14 +243,16 @@ const styles = StyleSheet.create({
 const mapStateToProps = (state) => ({
   teams: state.teamReducer.teams,
   gameStarted: state.gameReducer.gameStarted,
-  currentTeamIndex: state.gameReducer.currentTeamIndex
+  currentTeamIndex: state.gameReducer.currentTeamIndex,
+  maxScoreReached: state.gameReducer.maxScoreReached
 });
 
 const mapDispatchToProps = (dispatch) => {
   return {
     updateTeam: (team) => dispatch(updateTeam(team)),
     updateTeamIndex: (index) => dispatch(updateTeamIndex(index)),
-    updatePlayerExplains: (teamId, playerScore) => dispatch(updatePlayerExplains(teamId, playerScore))
+    updatePlayerExplains: (teamId, playerScore) => dispatch(updatePlayerExplains(teamId, playerScore)),
+    updateMaxScoreReached: () => dispatch(updateMaxScoreReached(true))
   };
 };
 

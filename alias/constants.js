@@ -115,6 +115,10 @@ export const newGame = {
 	closeButton: {
 		hr: 'Zatvori',
 		en: 'Close'
+	},
+	targetResultTxt: {
+		hr: 'Ciljni rezultat',
+		en: 'Target result'
 	}
 }
 
@@ -154,5 +158,9 @@ export const playGame = {
 	explains: {
 		hr: 'Objasnjava:',
 		en: 'Explains:'
+	},
+	winner: {
+		hr: 'Pobjednik:',
+		en: 'Winner:'
 	}
 }

@@ -13,8 +13,8 @@ import PreStartDialog from '../../components/preStartDialog';
 import ShowTeamResultDialog from '../../components/showTeamResultDialog';
 
 const NewGame = ({ teams, currentTeamIndex, gameStarted, addTeam, updateTeam, deleteTeam, gameStartEnd, navigation }) => {
-  const { language } = useContext(SettingsContext);
-  const { title, newTeam, buttonStart, score } = newGame;
+  const { language, maxScore } = useContext(SettingsContext);
+  const { title, newTeam, buttonStart, score, targetResultTxt } = newGame;
   const [addTeamDialog, setAddTeamDialog] = useState(false);
   const [selectedTeam, setSelectedTeam] = useState(null);
   const [editTeamDialog, setEditTeamDialog] = useState(false);
@@ -54,6 +54,10 @@ const NewGame = ({ teams, currentTeamIndex, gameStarted, addTeam, updateTeam, de
       <View style={styles.containerData}>
         <View style={styles.teamList} >
           <Text style={styles.title}>{title[language]}</Text>
+          {
+            gameStarted &&
+            <Text style={styles.targetResult}>{targetResultTxt[language]}: {maxScore}</Text>
+          }
           <ScrollView>
             {teams ? teams
               .slice()
@@ -196,11 +200,17 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 30,
     marginTop: 10,
-    marginBottom: 15,
+    marginBottom: 5,
     color: 'white'
   },
   buttonSaveTeam: {
     marginTop: 15
+  },
+  targetResult: {
+    textAlign: 'center',
+    fontSize: 12,
+    color: 'white',
+    marginBottom: 10
   }
 });
 
