@@ -30,4 +30,9 @@ export const updateTeamIndex = (newIndex) => ({
 export const updatePlayerExplains = (teamId, playerScore) => ({
   type: 'UPDATE_PLAYER_EXPLAINS',
   payload: { teamId, playerScore }
-})
+});
+
+export const updateMaxScoreReached = (boolean) => ({
+  type: 'MAX_SCORE_REACHED',
+  payload: boolean
+});

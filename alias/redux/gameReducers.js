@@ -1,6 +1,7 @@
 const initialState = {
   gameStarted: false,
-  currentTeamIndex: 0
+  currentTeamIndex: 0,
+  maxScoreReached: false
 };
 
 const gameReducer = (state = initialState, action) => {
@@ -10,11 +11,16 @@ const gameReducer = (state = initialState, action) => {
         ...state,
         gameStarted: action.payload
       }
-      case 'UPDATE_INDEX':
-        return {
-          ...state,
-          currentTeamIndex: action.payload
-        }
+    case 'UPDATE_INDEX':
+      return {
+        ...state,
+        currentTeamIndex: action.payload
+      }
+    case 'MAX_SCORE_REACHED':
+      return {
+        ...state,
+        maxScoreReached: action.payload
+      }
     default:
       return state;
   }
