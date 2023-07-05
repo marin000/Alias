@@ -36,3 +36,8 @@ export const updateMaxScoreReached = (boolean) => ({
   type: 'MAX_SCORE_REACHED',
   payload: boolean
 });
+
+export const addOldWords = (words) => ({
+  type: 'ADD_WORDS',
+  payload: words
+});

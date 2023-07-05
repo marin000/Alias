@@ -3,7 +3,8 @@ import { View, StyleSheet, ImageBackground, ScrollView, TouchableHighlight } fro
 import { Text, ListItem, Button } from '@rneui/themed';
 import { LinearGradient } from 'expo-linear-gradient';
 import { connect } from 'react-redux';
-import { addTeam, updateTeam, deleteTeam, gameStartEnd } from '../../redux/actions';
+import { addTeam, updateTeam, deleteTeam, gameStartEnd, deleteAllTeams, updateMaxScoreReached, updateTeamIndex } from '../../redux/actions';
+import { useDispatch } from 'react-redux';
 import { SettingsContext } from '../../utils/settings';
 import { newGame } from '../../constants';
 import backgroundImage from '../../assets/blurred-background.jpeg';
@@ -12,14 +13,15 @@ import EditTeamDialog from '../../components/editTeamDialog';
 import PreStartDialog from '../../components/preStartDialog';
 import ShowTeamResultDialog from '../../components/showTeamResultDialog';
 
-const NewGame = ({ teams, currentTeamIndex, gameStarted, addTeam, updateTeam, deleteTeam, gameStartEnd, navigation }) => {
+const NewGame = ({ teams, currentTeamIndex, gameStarted, maxScoreReached, addTeam, updateTeam, deleteTeam, gameStartEnd, navigation }) => {
   const { language, maxScore } = useContext(SettingsContext);
-  const { title, newTeam, buttonStart, score, targetResultTxt } = newGame;
+  const { title, newTeam, buttonStart, score, targetResultTxt, headerTitle, newGameSameTeamsButton } = newGame;
   const [addTeamDialog, setAddTeamDialog] = useState(false);
   const [selectedTeam, setSelectedTeam] = useState(null);
   const [editTeamDialog, setEditTeamDialog] = useState(false);
   const [preStartDialog, setPreStartDialog] = useState(false);
   const [showTeamResultDialog, setShowTeamResultDialog] = useState(false);
+  const dispatch = useDispatch();
 
   const handleTeamToEdit = (team) => {
     setSelectedTeam(team);
@@ -39,13 +41,29 @@ const NewGame = ({ teams, currentTeamIndex, gameStarted, addTeam, updateTeam, de
 
   const startGame = () => {
     setPreStartDialog(false);
+    dispatch(gameStartEnd(true));
     navigation.navigate('PlayGame');
-    gameStartEnd(true);
   }
 
   const showTeamResult = (team) => {
     setSelectedTeam(team);
     setShowTeamResultDialog(true);
+  }
+
+  const handleNewGame = () => {
+    dispatch(deleteAllTeams());
+    dispatch(gameStartEnd(false));
+    dispatch(updateMaxScoreReached(false));
+    dispatch(updateTeamIndex(0));
+  }
+
+  const handleNewGameSameTeams = () => {
+    teams.map(team => {
+      dispatch(updateTeam({ ...team, score: 0 }));
+    });
+    dispatch(gameStartEnd(false));
+    dispatch(updateMaxScoreReached(false));
+    dispatch(updateTeamIndex(0));
   }
 
   return (
@@ -110,12 +128,29 @@ const NewGame = ({ teams, currentTeamIndex, gameStarted, addTeam, updateTeam, de
             />
           }
           {
-            teams.length >= 2 &&
+            teams.length >= 2 && !maxScoreReached &&
             <Button
               containerStyle={styles.buttonSaveTeam}
               title={buttonStart[language]}
               color='success'
               onPress={() => setPreStartDialog(true)}
+            />
+          }
+          {
+            maxScoreReached &&
+            <Button
+              title={headerTitle[language]}
+              color='#0000cc'
+              onPress={() => handleNewGame()}
+            />
+          }
+          {
+            maxScoreReached &&
+            <Button
+              containerStyle={styles.buttonSaveTeam}
+              title={newGameSameTeamsButton[language]}
+              color='success'
+              onPress={() => handleNewGameSameTeams()}
             />
           }
         </View>
@@ -216,15 +251,19 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = (state) => ({
   teams: state.teamReducer.teams,
+  currentTeamIndex: state.gameReducer.currentTeamIndex,
   gameStarted: state.gameReducer.gameStarted,
-  currentTeamIndex: state.gameReducer.currentTeamIndex
+  maxScoreReached: state.gameReducer.maxScoreReached
 });
 
 const mapDispatchToProps = {
   addTeam,
   updateTeam,
   deleteTeam,
-  gameStartEnd
+  gameStartEnd,
+  deleteAllTeams,
+  updateMaxScoreReached,
+  updateTeamIndex
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(NewGame);

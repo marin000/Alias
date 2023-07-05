@@ -3,7 +3,7 @@ import { ScrollView, View, StyleSheet, Image } from 'react-native';
 import { Button, Dialog, Text } from '@rneui/themed';
 import { playGame, newGame } from '../constants';
 import { connect } from 'react-redux';
-import { deleteAllTeams, gameStartEnd } from '../redux/actions';
+import { deleteAllTeams, gameStartEnd, updateMaxScoreReached, updateTeamIndex } from '../redux/actions';
 import { useDispatch } from 'react-redux';
 import cupImage from '../assets/cup.jpeg';
 
@@ -19,6 +19,8 @@ const WinnerDialog = ({ isVisible, onClose, language, winnerTeam }) => {
   const handleNewGameButton = () => {
     dispatch(deleteAllTeams());
     dispatch(gameStartEnd(false));
+    dispatch(updateMaxScoreReached(false));
+    dispatch(updateTeamIndex(0));
     onClose();
   }
 
@@ -80,7 +82,9 @@ const styles = StyleSheet.create({
 const mapDispatchToProps = (dispatch) => {
   return {
     deleteAllTeams: () => dispatch(deleteAllTeams()),
-    gameStartEnd: () => dispatch(gameStartEnd(false))
+    gameStartEnd: () => dispatch(gameStartEnd(false)),
+    updateMaxScoreReached: () => dispatch(updateMaxScoreReached(false)),
+    updateTeamIndex: () => dispatch(updateTeamIndex(index))
   };
 };
 

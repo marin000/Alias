@@ -119,6 +119,10 @@ export const newGame = {
 	targetResultTxt: {
 		hr: 'Ciljni rezultat',
 		en: 'Target result'
+	},
+	newGameSameTeamsButton: {
+		hr: 'Nova Igra (isti timovi)',
+		en: 'New Game (same teams)'
 	}
 }
 

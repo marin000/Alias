@@ -1,7 +1,8 @@
 const initialState = {
   gameStarted: false,
   currentTeamIndex: 0,
-  maxScoreReached: false
+  maxScoreReached: false,
+  oldWords: []
 };
 
 const gameReducer = (state = initialState, action) => {
@@ -21,6 +22,11 @@ const gameReducer = (state = initialState, action) => {
         ...state,
         maxScoreReached: action.payload
       }
+    case 'ADD_WORDS':
+      return {
+        ...state,
+        oldWords: [...state.oldWords, ...action.payload]
+      };
     default:
       return state;
   }

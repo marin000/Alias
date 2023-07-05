@@ -2,7 +2,7 @@ import React, { useContext, useState, useEffect } from 'react';
 import { View, StyleSheet, ImageBackground } from 'react-native';
 import { Text, Button, Icon } from '@rneui/themed';
 import { connect } from 'react-redux';
-import { updateTeam, updateTeamIndex, updatePlayerExplains, updateMaxScoreReached } from '../../redux/actions';
+import { updateTeam, updateTeamIndex, updatePlayerExplains, updateMaxScoreReached, addOldWords } from '../../redux/actions';
 import { useDispatch } from 'react-redux';
 import { SettingsContext } from '../../utils/settings';
 import { getRandomWord, teamWithHighestScore } from '../../utils/helper';
@@ -11,7 +11,7 @@ import backgroundImage from '../../assets/blurred-background.jpeg';
 import TeamResultDialog from '../../components/teamResultDialog';
 import WinnerDialog from '../../components/winnerDialog';
 
-const PlayGame = ({ teams, currentTeamIndex, gameStarted, maxScoreReached, updateTeam, navigation }) => {
+const PlayGame = ({ teams, currentTeamIndex, maxScoreReached, oldWords, updateTeam, navigation }) => {
   const { language, timer, maxScore } = useContext(SettingsContext);
   const { buttonSave, buttonSkip, correctAnswersTxt, skippedAnswersTxt } = playGame;
   const [gameTimer, setGameTimer] = useState(timer);
@@ -23,17 +23,24 @@ const PlayGame = ({ teams, currentTeamIndex, gameStarted, maxScoreReached, updat
   const [paused, setPaused] = useState(false);
   const [winnerDialog, setWinnerDialog] = useState(false);
   const [winnerTeam, setWinnerTeam] = useState('');
+  const [oldWordsArr, setOldWordsArr] = useState([]);
 
   const dispatch = useDispatch();
   let gameWordList = [];
-  const initialTeamIndex = currentTeamIndex;
 
   if (language === 'hr') {
-    gameWordList = require('../../assets/words/hr.json');
+    gameWordList = require('../../assets/words/hr.json').filter(word => !oldWords.includes(word));
   }
 
   useEffect(() => {
-    setCurrentWord(getRandomWord(gameWordList));
+    setCurrentWord((prevWord) => {
+      const newWord = getRandomWord(gameWordList);
+      if (prevWord) {
+        setOldWordsArr((prevWords) => [...prevWords, prevWord]);
+      }
+      gameWordList = gameWordList.filter((word) => word !== newWord);
+      return newWord;
+    });
     setCurrentTeam(teams[currentTeamIndex]);
   }, []);
 
@@ -51,6 +58,7 @@ const PlayGame = ({ teams, currentTeamIndex, gameStarted, maxScoreReached, updat
       dispatch(updateTeam({ ...currentTeam, score: newScore }));
       dispatch(updatePlayerExplains(currentTeam.id, correctAnswers - skippedAnswers));
       dispatch(updateTeamIndex((currentTeamIndex + 1) % teams.length));
+      dispatch(addOldWords(oldWordsArr));
       if (newScore >= maxScore) {
         dispatch(updateMaxScoreReached(true));
         maxScoreFlag = true;
@@ -73,14 +81,24 @@ const PlayGame = ({ teams, currentTeamIndex, gameStarted, maxScoreReached, updat
   }, [gameTimer, paused]);
 
   const handleSave = () => {
-    setCurrentWord(getRandomWord(gameWordList));
+    setCurrentWord((prevWord) => {
+      const newWord = getRandomWord(gameWordList);
+      setOldWordsArr((prevWords) => [...prevWords, prevWord]);
+      gameWordList = gameWordList.filter((word) => word !== newWord);
+      return newWord;
+    });
     setCorrectAnswers(correctAnswers + 1);
-  }
+  };
 
   const handleSkip = () => {
-    setCurrentWord(getRandomWord(gameWordList));
+    setCurrentWord((prevWord) => {
+      const newWord = getRandomWord(gameWordList);
+      setOldWordsArr((prevWords) => [...prevWords, prevWord]);
+      gameWordList = gameWordList.filter((word) => word !== newWord);
+      return newWord;
+    });
     setSkippedAnswers(skippedAnswers + 1);
-  }
+  };
 
   const handleCloseTeamDialog = () => {
     if (gameTimer > 0) {
@@ -242,9 +260,9 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = (state) => ({
   teams: state.teamReducer.teams,
-  gameStarted: state.gameReducer.gameStarted,
   currentTeamIndex: state.gameReducer.currentTeamIndex,
-  maxScoreReached: state.gameReducer.maxScoreReached
+  maxScoreReached: state.gameReducer.maxScoreReached,
+  oldWords: state.gameReducer.oldWords
 });
 
 const mapDispatchToProps = (dispatch) => {
@@ -252,7 +270,8 @@ const mapDispatchToProps = (dispatch) => {
     updateTeam: (team) => dispatch(updateTeam(team)),
     updateTeamIndex: (index) => dispatch(updateTeamIndex(index)),
     updatePlayerExplains: (teamId, playerScore) => dispatch(updatePlayerExplains(teamId, playerScore)),
-    updateMaxScoreReached: () => dispatch(updateMaxScoreReached(true))
+    updateMaxScoreReached: () => dispatch(updateMaxScoreReached(true)),
+    addOldWords: (oldWords) => dispatch(addOldWords(oldWords))
   };
 };
 
