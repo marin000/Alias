@@ -30,6 +30,8 @@ const PlayGame = ({ teams, currentTeamIndex, maxScoreReached, oldWords, updateTe
 
   if (language === 'hr') {
     gameWordList = require('../../assets/words/hr.json').filter(word => !oldWords.includes(word));
+  } else if (language === 'en') {
+    gameWordList = require('../../assets/words/en.json').filter(word => !oldWords.includes(word));
   }
 
   useEffect(() => {
