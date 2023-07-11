@@ -13,17 +13,21 @@ const Home = ({ teams, navigation }) => {
 	const { newGame, continueGame, instructions, settings, login } = home;
 	const dispatch = useDispatch();
 
-	const pressHandler = (screen, option) => {
-		if (option === 'continue') {
-			navigation.navigate(screen, { language });
-		} else {
-			dispatch(deleteAllTeams());
-			dispatch(gameStartEnd(false));
-			dispatch(updateMaxScoreReached(false));
-			dispatch(updateTeamIndex(0));
-			navigation.navigate(screen, { language });
-		}
-	}
+  const handleNewGame = () => {
+    dispatch(deleteAllTeams());
+    dispatch(gameStartEnd(false));
+    dispatch(updateMaxScoreReached(false));
+    dispatch(updateTeamIndex(0));
+    navigation.navigate('NewGame', { language });
+  };
+
+  const handleContinueGame = () => {
+    navigation.navigate('NewGame', { language });
+  };
+
+  const handleSettings = () => {
+    navigation.navigate('Settings');
+  };
 
 	return (
 		<ImageBackground source={backgroundImage} style={styles.container} resizeMode={'cover'}>
@@ -37,7 +41,7 @@ const Home = ({ teams, navigation }) => {
 						<Button
 							title={continueGame[language]}
 							color='#0000cc'
-							onPress={() => pressHandler('NewGame', 'continue')}
+							onPress={handleContinueGame}
 						/>
 					</View>
 				}
@@ -45,21 +49,21 @@ const Home = ({ teams, navigation }) => {
 					<Button
 						title={newGame[language]}
 						color='#0000cc'
-						onPress={() => pressHandler('NewGame', 'new')}
+						onPress={handleNewGame}
 					/>
 				</View>
 				<View style={styles.button}>
 					<Button
 						title={instructions[language]}
 						color='#0000cc'
-						onPress={() => pressHandler('HowToPlay')}
+						onPress={() => navigation.navigate('HowToPlay')}
 					/>
 				</View>
 				<View style={styles.button}>
 					<Button
 						title={settings[language]}
 						color='#0000cc'
-						onPress={() => pressHandler('Settings')}
+						onPress={handleSettings}
 					/>
 				</View>
 				<View style={styles.button}>
