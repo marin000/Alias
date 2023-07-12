@@ -51,6 +51,13 @@ const playersLogger = createLogger({
   transports: loggerTransports
 })
 
+const teamsLogger = createLogger({
+  levels: customLevels.levels,
+  defaultMeta: { component: 'teams' },
+  format: loggerFormat,
+  transports: loggerTransports
+})
+
 const logsLogger = createLogger({
   levels: customLevels.levels,
   defaultMeta: { component: 'logs' },
@@ -77,6 +84,7 @@ const simpleLogger = createLogger({
 module.exports = {
   dbConnectionLogger: dbConnectionLogger,
   playersLogger: playersLogger,
+  teamsLogger: teamsLogger,
   simpleLogger: simpleLogger,
   logsLogger: logsLogger
 }

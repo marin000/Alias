@@ -7,9 +7,7 @@ const { playersLogger } = require('../logger/logger')
 const create = async(req, res, next) => {
   try {
     const errors = validationResult(req)
-    console.log(errors)
     if (!errors.isEmpty()) {
-      console.log('if')
       playersLogger.error(errors)
       res.status(403)
         .json({ errors: errors.array() })
