@@ -5,10 +5,10 @@ const config = require('./config/index')
 const dbMessages = require('./constants/dbMessages')
 require('dotenv')
   .config()
-// const router = require('./router');
+const router = require('./router')
 
 app.use(express.json())
-// app.use(router);
+app.use(router)
 
 const connectionParams = {
   useNewUrlParser: true,

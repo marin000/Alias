@@ -1,6 +1,6 @@
 require('dotenv')
   .config()
-const errorMessages = require('../constants/errooMessages')
+const errorMessages = require('../constants/errorMessages')
 const { DB_URL_MISSING, PORT_MISSING } = errorMessages
 
 if (!process.env.DB_URL) {
