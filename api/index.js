@@ -3,6 +3,7 @@ const mongoose = require('mongoose')
 const app = express()
 const config = require('./config/index')
 const dbMessages = require('./constants/dbMessages')
+const { dbConnectionLogger, simpleLogger } = require('./logger/logger')
 require('dotenv')
   .config()
 const router = require('./router')
@@ -19,12 +20,14 @@ const { dbUrl, port } = config
 mongoose.set('strictQuery', false)
 mongoose.connect(dbUrl, connectionParams)
   .then(() => {
-    console.log(CONNECTED)
+    simpleLogger.info(CONNECTED)
+    dbConnectionLogger.info(CONNECTED)
   })
   .catch((err) => {
-    console.error(`${ERROR_CONNECTING} \n${err}`)
+    simpleLogger.error(`${ERROR_CONNECTING} \n${err}`)
+    dbConnectionLogger.error(`${ERROR_CONNECTING} \n${err}`)
   })
 
 app.listen(port, function() {
-  console.log(PORT_LISTENING)
+  simpleLogger.info(PORT_LISTENING)
 })
