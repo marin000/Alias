@@ -10,6 +10,7 @@ const router = express.Router()
 router.post('/player', playerValidator.validate('create'), playerController.create)
 router.get('/player', playerController.fetch)
 router.delete('/deletePlayer/:id', playerValidator.validate('validatePlayer'), playerController.deletePlayer)
+router.put('/updatePlayer', playerValidator.validate('validateMongoIdAndTeam'), playerController.updatePlayer)
 
 router.post('/team', teamController.create)
 router.get('/team', teamController.fetch)

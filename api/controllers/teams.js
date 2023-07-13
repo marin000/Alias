@@ -13,8 +13,8 @@ const create = async(req, res, next) => {
         .json({ errors: errors.array() })
       return
     }
-    const { name, gamesPlayed, gamesWin, gamesLost } = req.body
-    const newTeam = Teams({ name, gamesPlayed, gamesWin, gamesLost })
+    const { name, players, gamesPlayed, gamesWin, gamesLost } = req.body
+    const newTeam = Teams({ name, players, gamesPlayed, gamesWin, gamesLost })
     await newTeam.save()
     teamsLogger.info(infoMessages.NEW_TEAM)
     res.status(201)
@@ -28,6 +28,7 @@ const create = async(req, res, next) => {
 const fetch = async(req, res) => {
   try {
     const data = await Teams.find({})
+      .populate('players')
     teamsLogger.info(infoMessages.GET_TEAMS)
     res.json(data)
   } catch (error) {

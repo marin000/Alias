@@ -13,8 +13,8 @@ const create = async(req, res, next) => {
         .json({ errors: errors.array() })
       return
     }
-    const { name, email, password, age, gamesPlayed, gamesWin, gamesLost } = req.body
-    const newPlayer = Players({ name, email, password, age, gamesPlayed, gamesWin, gamesLost })
+    const { name, email, password, team, age, gamesPlayed, gamesWin, gamesLost } = req.body
+    const newPlayer = Players({ name, email, password, team, age, gamesPlayed, gamesWin, gamesLost })
     await newPlayer.save()
     playersLogger.info(infoMessages.NEW_PLAYER)
     res.status(201)
@@ -58,8 +58,30 @@ const deletePlayer = async(req, res) => {
   }
 }
 
+async function updatePlayer(req, res) {
+  try {
+    const errors = validationResult(req)
+    if (!errors.isEmpty()) {
+      playersLogger.error(errors)
+      res.status(403)
+        .json({ errors: errors.array() })
+      return
+    }
+    const { id, team } = req.body
+    const updatedPlayer = await Players.findByIdAndUpdate(id, { team })
+
+    playersLogger.info(infoMessages.UPDATE_PLAYER)
+    res.json(updatedPlayer)
+  } catch (error) {
+    playersLogger.error(error.message, { metadata: error.stack })
+    res.status(500)
+      .send(error.message)
+  }
+}
+
 module.exports = {
   create,
   fetch,
-  deletePlayer
+  deletePlayer,
+  updatePlayer
 }
