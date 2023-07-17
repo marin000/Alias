@@ -1,5 +1,5 @@
 import React from 'react';
-import { ScrollView, View, StyleSheet } from 'react-native';
+import { ScrollView, View } from 'react-native';
 import { Button, Dialog, Text } from '@rneui/themed';
 import { Formik } from 'formik';
 import { TextInput } from 'react-native-gesture-handler';

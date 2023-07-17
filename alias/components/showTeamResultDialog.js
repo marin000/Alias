@@ -1,6 +1,6 @@
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
-import { Button, Dialog, Text, Icon } from '@rneui/themed';
+import { View } from 'react-native';
+import { Button, Dialog, Text } from '@rneui/themed';
 import { playGame, newGame } from '../constants';
 import { globalStyles } from '../styles/global';
 
