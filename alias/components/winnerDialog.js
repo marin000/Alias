@@ -5,6 +5,7 @@ import { playGame, newGame } from '../constants';
 import { connect } from 'react-redux';
 import { deleteAllTeams, gameStartEnd, updateMaxScoreReached, updateTeamIndex } from '../redux/actions';
 import { useDispatch } from 'react-redux';
+import { globalStyles } from '../styles/global';
 import cupImage from '../assets/cup.jpeg';
 
 const WinnerDialog = ({ isVisible, onClose, language, winnerTeam }) => {
@@ -29,7 +30,7 @@ const WinnerDialog = ({ isVisible, onClose, language, winnerTeam }) => {
       <ScrollView keyboardShouldPersistTaps='handled'>
         <View style={styles.container}>
           <View style={styles.infoContainer}>
-            <Text style={styles.dialogTitle}>{winner[language]} {winnerTeam.name}</Text>
+            <Text style={globalStyles.dialogTitle}>{winner[language]} {winnerTeam.name}</Text>
             <Text style={styles.scoreText}>{finalScore[language]}: {winnerTeam.score}</Text>
           </View>
           <Image source={cupImage} style={styles.cupImage} />
@@ -59,11 +60,6 @@ const styles = StyleSheet.create({
   },
   infoContainer: {
     flex: 1
-  },
-  dialogTitle: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 5
   },
   scoreText: {
     fontSize: 17

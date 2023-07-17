@@ -2,8 +2,9 @@ import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import { Button, Dialog, Text, Icon } from '@rneui/themed';
 import { playGame, newGame } from '../constants';
+import { globalStyles } from '../styles/global';
 
-export default function PreStartDialog({ isVisible, onClose,  startGame, language, currentTeam }) {
+export default function PreStartDialog({ isVisible, onClose, startGame, language, currentTeam }) {
   const { team, explains } = playGame;
   const { score, startGameButton } = newGame;
   const playerExplains = currentTeam.players.find((player) => player.explains);
@@ -17,15 +18,19 @@ export default function PreStartDialog({ isVisible, onClose,  startGame, languag
       isVisible={isVisible}
       onBackdropPress={onClose}
     >
-      <Text style={styles.dialogTitle}>{team[language]}: {currentTeam.name}</Text>
-      <View style={styles.textContainer}>
-        <Text style={styles.text}>{score[language]}</Text><Text>{currentTeam.score}</Text>
+      <View style={globalStyles.dialogTitleContainer}>
+        <Text style={globalStyles.dialogTitle}>
+         {team[language]}: <Text style={globalStyles.teamName}>{currentTeam.name}</Text>
+        </Text>
       </View>
-      <View style={styles.textContainer}>
-        <Text style={styles.text}>{explains[language]}</Text><Text>{playerExplains.name}</Text>
+      <View style={globalStyles.dialogScoreContainer}>
+        <Text style={globalStyles.dialogScoreText}>{score[language]} {currentTeam.score}</Text>
+      </View>
+      <View style={globalStyles.dialogScoreContainer}>
+        <Text style={globalStyles.dialogScoreText}>{explains[language]} {playerExplains.name}</Text>
       </View>
       <Button
-        containerStyle={styles.dialogButton}
+        containerStyle={globalStyles.dialogButton}
         title={startGameButton[language]}
         color='success'
         onPress={handleStartGame}
@@ -33,25 +38,3 @@ export default function PreStartDialog({ isVisible, onClose,  startGame, languag
     </Dialog>
   );
 }
-
-const styles = StyleSheet.create({
-  dialogTitle: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 10
-  },
-  dialogButton: {
-    alignSelf: 'center',
-    marginTop: 20,
-    width: 120,
-    height: 60
-  },
-  textContainer: {
-    paddingTop: 10,
-    flexDirection: 'row'
-  },  
-  text: {
-    fontWeight: 'bold',
-    paddingRight: 5
-  }
-});

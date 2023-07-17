@@ -2,6 +2,7 @@ import React from 'react';
 import { ScrollView, View, StyleSheet } from 'react-native';
 import { Button, Dialog, Text } from '@rneui/themed';
 import { playGame } from '../constants';
+import { globalStyles } from '../styles/global';
 
 export default function PauseDialog({ isVisible, onClose, language, currentTeam, correctAnswers, skippedAnswers }) {
   const { correctAnswersTxt, skippedAnswersTxt, team, dialogContinueButton } = playGame;
@@ -15,17 +16,21 @@ export default function PauseDialog({ isVisible, onClose, language, currentTeam,
       isVisible={isVisible}
     >
       <ScrollView keyboardShouldPersistTaps='handled'>
-        <Text style={styles.dialogTitle}>{team[language]}: {currentTeam.name}</Text>
-        <View style={styles.dialogAnswers}>
-          <View style={styles.dialogCorrect}>
-            <Text style={styles.answersText}>{correctAnswersTxt[language]}: {correctAnswers}</Text>
+        <View style={globalStyles.dialogTitleContainer}>
+          <Text style={globalStyles.dialogTitle}>
+            {team[language]}: <Text style={globalStyles.teamName}>{currentTeam.name}</Text>
+          </Text>
+        </View>
+        <View style={styles.dialogContentContainer}>
+          <View style={globalStyles.dialogAnswersContainer}>
+            <Text style={globalStyles.dialogAnswersText}>{correctAnswersTxt[language]}: {correctAnswers}</Text>
           </View>
-          <View style={styles.dialogSkipped}>
-            <Text style={styles.answersText}>{skippedAnswersTxt[language]}: {skippedAnswers}</Text>
+          <View style={globalStyles.dialogAnswersContainer}>
+            <Text style={globalStyles.dialogAnswersText}>{skippedAnswersTxt[language]}: {skippedAnswers}</Text>
           </View>
         </View>
         <Button
-          containerStyle={styles.dialogButton}
+          containerStyle={globalStyles.dialogButton}
           title={dialogContinueButton[language]}
           color='success'
           onPress={handleNextButton}
@@ -36,30 +41,8 @@ export default function PauseDialog({ isVisible, onClose, language, currentTeam,
 }
 
 const styles = StyleSheet.create({
-  dialogTitle: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 10
-  },
-  dialogAnswers: {
+  dialogContentContainer: {
     flexDirection: 'row',
     marginBottom: 10
-  },
-  dialogCorrect: {
-    flex: 1,
-    alignItems: 'center'
-  },
-  dialogSkipped: {
-    flex: 1,
-    alignItems: 'center'
-  },
-  answersText: {
-    fontWeight: 'bold'
-  },
-  dialogButton: {
-    alignSelf: 'center',
-    marginTop: 20,
-    width: 120,
-    height: 60
   }
 });

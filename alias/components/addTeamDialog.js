@@ -6,6 +6,7 @@ import { TextInput } from 'react-native-gesture-handler';
 import { validateTeamInput } from '../utils/helper';
 import { newGame } from '../constants';
 import shortid from 'shortid';
+import { globalStyles } from '../styles/global';
 
 export default function AddTeamDialog({ isVisible, onClose, teams, language, onAddTeam }) {
   const { teamInput, playerInput, buttonSaveTeam, buttonAddPlayer, buttonReset } = newGame;
@@ -42,10 +43,10 @@ export default function AddTeamDialog({ isVisible, onClose, teams, language, onA
           {(props) => (
             <View>
               {props.values.teamName ? (
-                <Text style={styles.label}>{teamInput[language]}</Text>
+                <Text style={globalStyles.label}>{teamInput[language]}</Text>
               ) : null}
               <TextInput
-                style={styles.teamInput}
+                style={globalStyles.teamInput}
                 placeholder={teamInput[language]}
                 onChangeText={props.handleChange('teamName')}
                 value={props.values.teamName}
@@ -53,15 +54,15 @@ export default function AddTeamDialog({ isVisible, onClose, teams, language, onA
               {props.values.players.map((player, index) => (
                 <TextInput
                   key={index}
-                  style={styles.playerInput}
+                  style={globalStyles.playerInput}
                   placeholder={`${playerInput[language]} ${index + 1}`}
                   onChangeText={props.handleChange(`players.${index}`)}
                   value={player}
                 />
               ))}
-              <View style={styles.buttonsAddResetContainer}>
+              <View style={globalStyles.buttonsAddResetContainer}>
                 <Button
-                  containerStyle={styles.buttonAdd}
+                  containerStyle={globalStyles.buttonAdd}
                   title={buttonAddPlayer[language]}
                   color='primary'
                   onPress={() => {
@@ -69,14 +70,14 @@ export default function AddTeamDialog({ isVisible, onClose, teams, language, onA
                   }}
                 />
                 <Button
-                  containerStyle={styles.buttonResetDel}
+                  containerStyle={globalStyles.buttonResetDel}
                   title={buttonReset[language]}
                   color='error'
                   onPress={props.handleReset}
                 />
               </View>
               <Button
-                containerStyle={styles.buttonSaveTeam}
+                containerStyle={globalStyles.buttonSaveTeam}
                 title={buttonSaveTeam[language]}
                 color='success'
                 onPress={props.handleSubmit}
@@ -88,36 +89,3 @@ export default function AddTeamDialog({ isVisible, onClose, teams, language, onA
     </Dialog>
   );
 }
-
-const styles = StyleSheet.create({
-  teamInput: {
-    borderWidth: 4,
-    borderColor: '#ddd',
-    padding: 10,
-    fontSize: 14,
-    borderRadius: 6,
-    marginBottom: 18
-  },
-  playerInput: {
-    borderWidth: 1,
-    borderColor: '#ddd',
-    padding: 10,
-    fontSize: 14,
-    borderRadius: 6,
-    marginBottom: 7
-  },
-  buttonSaveTeam: {
-    marginTop: 15
-  },
-  buttonAdd: {
-    flex: 1,
-    marginRight: 10
-  },
-  buttonResetDel: {
-    flex: 1,
-  },
-  buttonsAddResetContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  }
-});

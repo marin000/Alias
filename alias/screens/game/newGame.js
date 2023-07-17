@@ -12,6 +12,7 @@ import AddTeamDialog from '../../components/addTeamDialog';
 import EditTeamDialog from '../../components/editTeamDialog';
 import PreStartDialog from '../../components/preStartDialog';
 import ShowTeamResultDialog from '../../components/showTeamResultDialog';
+import { globalStyles } from '../../styles/global';
 
 const NewGame = ({ teams, currentTeamIndex, gameStarted, maxScoreReached, addTeam, updateTeam, deleteTeam, gameStartEnd, navigation }) => {
   const { language, maxScore } = useContext(SettingsContext);
@@ -130,7 +131,7 @@ const NewGame = ({ teams, currentTeamIndex, gameStarted, maxScoreReached, addTea
           {
             teams.length >= 2 && !maxScoreReached &&
             <Button
-              containerStyle={styles.buttonSaveTeam}
+              containerStyle={globalStyles.buttonSaveTeam}
               title={buttonStart[language]}
               color='success'
               onPress={() => setPreStartDialog(true)}
@@ -147,7 +148,7 @@ const NewGame = ({ teams, currentTeamIndex, gameStarted, maxScoreReached, addTea
           {
             maxScoreReached &&
             <Button
-              containerStyle={styles.buttonSaveTeam}
+              containerStyle={globalStyles.buttonSaveTeam}
               title={newGameSameTeamsButton[language]}
               color='success'
               onPress={() => handleNewGameSameTeams()}
@@ -237,9 +238,6 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginBottom: 5,
     color: 'white'
-  },
-  buttonSaveTeam: {
-    marginTop: 15
   },
   targetResult: {
     textAlign: 'center',

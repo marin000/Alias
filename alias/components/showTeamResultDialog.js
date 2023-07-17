@@ -2,6 +2,7 @@ import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import { Button, Dialog, Text, Icon } from '@rneui/themed';
 import { playGame, newGame } from '../constants';
+import { globalStyles } from '../styles/global';
 
 export default function ShowTeamResultDialog({ isVisible, onClose, language, selectedTeam }) {
   const { team } = playGame;
@@ -11,20 +12,24 @@ export default function ShowTeamResultDialog({ isVisible, onClose, language, sel
       isVisible={isVisible}
       onBackdropPress={onClose}
     >
-      <Text style={styles.dialogTitle}>{team[language]}: {selectedTeam ? selectedTeam.name : ''}</Text>
-      <View style={styles.textContainer}>
-        <Text style={styles.text}>{totalPoints[language]}</Text><Text>{selectedTeam ? selectedTeam.score : ''}</Text>
+      <View style={globalStyles.dialogTitleContainer}>
+        <Text style={globalStyles.dialogTitle}>
+          {team[language]}: <Text style={globalStyles.teamName}>{selectedTeam ? selectedTeam.name : ''}</Text>
+        </Text>
+      </View>
+      <View style={globalStyles.dialogScoreContainer}>
+        <Text style={globalStyles.dialogScoreText}>{totalPoints[language]} {selectedTeam ? selectedTeam.score : ''}</Text>
       </View>
       {
         selectedTeam ? selectedTeam.players
           .map((player, index) => (
-            <View key={index} style={styles.textContainer}>
-              <Text style={styles.text}>{player.name}: </Text><Text>{player.score}</Text>
+            <View key={index} style={globalStyles.dialogScoreContainer}>
+              <Text style={globalStyles.dialogScoreText}>{player.name}: {player.score}</Text>
             </View>
           )) : null
       }
       <Button
-        containerStyle={styles.dialogButton}
+        containerStyle={globalStyles.dialogButton}
         title={closeButton[language]}
         color='error'
         onPress={() => onClose()}
@@ -32,25 +37,3 @@ export default function ShowTeamResultDialog({ isVisible, onClose, language, sel
     </Dialog>
   );
 }
-
-const styles = StyleSheet.create({
-  dialogTitle: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 10
-  },
-  dialogButton: {
-    alignSelf: 'center',
-    marginTop: 20,
-    width: 120,
-    height: 60
-  },
-  textContainer: {
-    paddingTop: 10,
-    flexDirection: 'row'
-  },
-  text: {
-    fontWeight: 'bold',
-    paddingRight: 5
-  }
-});

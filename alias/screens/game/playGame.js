@@ -252,7 +252,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     position: 'absolute',
-    top: 80
+    top: 105
   },
   correctAnswersContainer: {
     paddingRight: 15
@@ -267,11 +267,6 @@ const styles = StyleSheet.create({
   skippedAnswersText: {
     fontSize: 20,
     color: 'white'
-  },
-  dialogTitle: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 10
   }
 });
 

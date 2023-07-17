@@ -5,6 +5,7 @@ import { Formik } from 'formik';
 import { TextInput } from 'react-native-gesture-handler';
 import { validateTeamInput } from '../utils/helper';
 import { newGame } from '../constants';
+import { globalStyles } from '../styles/global';
 
 export default function EditTeamDialog({ isVisible, onClose, teams, selectedTeam, language, onDeleteTeam, onUpdateTeam }) {
   const { teamInput, playerInput, buttonSaveTeam, buttonAddPlayer, buttonDelete } = newGame;
@@ -48,19 +49,19 @@ export default function EditTeamDialog({ isVisible, onClose, teams, selectedTeam
           {(props) => (
             <View>
               {props.values.teamName ? (
-                <Text style={styles.label}>{teamInput[language]}</Text>
+                <Text style={globalStyles.label}>{teamInput[language]}</Text>
               ) : null}
               <TextInput
-                style={styles.teamInput}
+                style={globalStyles.teamInput}
                 placeholder={props.values.teamName}
                 onChangeText={props.handleChange('teamName')}
                 value={props.values.teamName}
               />
               {props.values.players.map((player, index) => (
                 <View key={index}>
-                  <Text style={styles.label}>{`${playerInput[language]} ${index + 1}`}</Text>
+                  <Text style={globalStyles.label}>{`${playerInput[language]} ${index + 1}`}</Text>
                   <TextInput
-                    style={styles.playerInput}
+                    style={globalStyles.playerInput}
                     placeholder={player}
                     onChangeText={props.handleChange(`players.${index}`)}
                     value={player}
@@ -68,9 +69,9 @@ export default function EditTeamDialog({ isVisible, onClose, teams, selectedTeam
                 </View>
               ))}
 
-              <View style={styles.buttonsAddResetContainer}>
+              <View style={globalStyles.buttonsAddResetContainer}>
                 <Button
-                  containerStyle={styles.buttonAdd}
+                  containerStyle={globalStyles.buttonAdd}
                   title={buttonAddPlayer[language]}
                   color='primary'
                   onPress={() => {
@@ -78,14 +79,14 @@ export default function EditTeamDialog({ isVisible, onClose, teams, selectedTeam
                   }}
                 />
                 <Button
-                  containerStyle={styles.buttonResetDel}
+                  containerStyle={globalStyles.buttonResetDel}
                   title={buttonDelete[language]}
                   color='error'
                   onPress={() => onDeleteTeam()}
                 />
               </View>
               <Button
-                containerStyle={styles.buttonSaveTeam}
+                containerStyle={globalStyles.buttonSaveTeam}
                 title={buttonSaveTeam[language]}
                 color='success'
                 onPress={props.handleSubmit}
@@ -97,40 +98,3 @@ export default function EditTeamDialog({ isVisible, onClose, teams, selectedTeam
     </Dialog>
   );
 }
-
-const styles = StyleSheet.create({
-  label: {
-    fontSize: 14,
-    marginBottom: 5,
-  },
-  teamInput: {
-    borderWidth: 4,
-    borderColor: '#ddd',
-    padding: 10,
-    fontSize: 14,
-    borderRadius: 6,
-    marginBottom: 18
-  },
-  playerInput: {
-    borderWidth: 1,
-    borderColor: '#ddd',
-    padding: 10,
-    fontSize: 14,
-    borderRadius: 6,
-    marginBottom: 7
-  },
-  buttonsAddResetContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  buttonAdd: {
-    flex: 1,
-    marginRight: 10
-  },
-  buttonResetDel: {
-    flex: 1,
-  },
-  buttonSaveTeam: {
-    marginTop: 15
-  }
-});

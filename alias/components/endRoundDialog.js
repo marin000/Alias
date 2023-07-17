@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { ScrollView, View, StyleSheet } from 'react-native';
 import { Button, Dialog, Text, CheckBox } from '@rneui/themed';
 import { playGame } from '../constants';
+import { globalStyles } from '../styles/global';
 
 export default function EndRoundDialog({ isVisible, onClose, language, currentTeam, gameTimer, currentRoundWords, skippedWords }) {
   const { correctAnswersTxt, skippedAnswersTxt, team, dialogNextButton, dialogContinueButton } = playGame;
@@ -67,21 +68,25 @@ export default function EndRoundDialog({ isVisible, onClose, language, currentTe
       isVisible={isVisible}
     >
       <ScrollView keyboardShouldPersistTaps='handled'>
-        <Text style={styles.dialogTitle}>{team[language]}: {currentTeam.name}</Text>
+        <View style={globalStyles.dialogTitleContainer}>
+          <Text style={globalStyles.dialogTitle}>
+            {team[language]}: <Text style={globalStyles.teamName}>{currentTeam.name}</Text>
+          </Text>
+        </View>
         <View style={styles.checkboxesContainer}>
           {renderCheckboxes()}
         </View>
 
-        <View style={styles.dialogAnswers}>
-          <View style={styles.dialogCorrect}>
-            <Text style={styles.answersText}>{correctAnswersTxt[language]}: {countSelectedAndUnselectedWords().selectedCount}</Text>
+        <View style={styles.dialogContentContainer}>
+          <View style={globalStyles.dialogAnswersContainer}>
+            <Text style={globalStyles.dialogAnswersText}>{correctAnswersTxt[language]}: {countSelectedAndUnselectedWords().selectedCount}</Text>
           </View>
-          <View style={styles.dialogSkipped}>
-            <Text style={styles.answersText}>{skippedAnswersTxt[language]}: {countSelectedAndUnselectedWords().unselectedCount}</Text>
+          <View style={globalStyles.dialogAnswersContainer}>
+            <Text style={globalStyles.dialogAnswersText}>{skippedAnswersTxt[language]}: {countSelectedAndUnselectedWords().unselectedCount}</Text>
           </View>
         </View>
         <Button
-          containerStyle={styles.dialogButton}
+          containerStyle={globalStyles.dialogButton}
           title={gameTimer > 0 ? dialogContinueButton[language] : dialogNextButton[language]}
           color='success'
           onPress={handleNextButton}
@@ -92,32 +97,10 @@ export default function EndRoundDialog({ isVisible, onClose, language, currentTe
 }
 
 const styles = StyleSheet.create({
-  dialogTitle: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 10
-  },
-  dialogAnswers: {
+  dialogContentContainer: {
     flexDirection: 'row',
     marginBottom: 10,
     marginTop: 20
-  },
-  dialogCorrect: {
-    flex: 1,
-    alignItems: 'center'
-  },
-  dialogSkipped: {
-    flex: 1,
-    alignItems: 'center'
-  },
-  answersText: {
-    fontWeight: 'bold'
-  },
-  dialogButton: {
-    alignSelf: 'center',
-    marginTop: 20,
-    width: 120,
-    height: 60
   },
   checkboxesContainer: {
     flexDirection: 'column',
