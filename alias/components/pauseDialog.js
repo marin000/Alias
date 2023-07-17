@@ -3,8 +3,8 @@ import { ScrollView, View, StyleSheet } from 'react-native';
 import { Button, Dialog, Text } from '@rneui/themed';
 import { playGame } from '../constants';
 
-export default function TeamResultDialog({ isVisible, onClose, language, currentTeam, correctAnswers, skippedAnswers, gameTimer }) {
-  const { correctAnswersTxt, skippedAnswersTxt, team, finalScore, dialogNextButton, dialogContinueButton } = playGame;
+export default function PauseDialog({ isVisible, onClose, language, currentTeam, correctAnswers, skippedAnswers }) {
+  const { correctAnswersTxt, skippedAnswersTxt, team, dialogContinueButton } = playGame;
 
   const handleNextButton = () => {
     onClose();
@@ -18,16 +18,15 @@ export default function TeamResultDialog({ isVisible, onClose, language, current
         <Text style={styles.dialogTitle}>{team[language]}: {currentTeam.name}</Text>
         <View style={styles.dialogAnswers}>
           <View style={styles.dialogCorrect}>
-            <Text>{correctAnswersTxt[language]}: {correctAnswers}</Text>
+            <Text style={styles.answersText}>{correctAnswersTxt[language]}: {correctAnswers}</Text>
           </View>
           <View style={styles.dialogSkipped}>
-            <Text>{skippedAnswersTxt[language]}: {skippedAnswers}</Text>
+            <Text style={styles.answersText}>{skippedAnswersTxt[language]}: {skippedAnswers}</Text>
           </View>
         </View>
-        <Text>{finalScore[language]}: {correctAnswers - skippedAnswers}</Text>
         <Button
           containerStyle={styles.dialogButton}
-          title={gameTimer > 0 ? dialogContinueButton[language] : dialogNextButton[language]}
+          title={dialogContinueButton[language]}
           color='success'
           onPress={handleNextButton}
         />
@@ -48,11 +47,14 @@ const styles = StyleSheet.create({
   },
   dialogCorrect: {
     flex: 1,
-    marginRight: 5
+    alignItems: 'center'
   },
   dialogSkipped: {
     flex: 1,
-    marginLeft: 5
+    alignItems: 'center'
+  },
+  answersText: {
+    fontWeight: 'bold'
   },
   dialogButton: {
     alignSelf: 'center',

@@ -187,7 +187,7 @@ const NewGame = ({ teams, currentTeamIndex, gameStarted, maxScoreReached, addTea
             currentTeam={teams[currentTeamIndex]}
           />
         }
-        {/* Show team result didalog */}
+        {/* Show team result dialog */}
         {
           teams.length >= 2 && gameStarted &&
           <ShowTeamResultDialog

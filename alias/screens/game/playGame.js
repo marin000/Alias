@@ -8,8 +8,9 @@ import { SettingsContext } from '../../utils/settings';
 import { getRandomWord, teamWithHighestScore } from '../../utils/helper';
 import { playGame } from '../../constants';
 import backgroundImage from '../../assets/blurred-background.jpeg';
-import TeamResultDialog from '../../components/teamResultDialog';
+import EndRoundDialog from '../../components/endRoundDialog';
 import WinnerDialog from '../../components/winnerDialog';
+import PauseDialog from '../../components/pauseDialog';
 
 const PlayGame = ({ teams, currentTeamIndex, maxScoreReached, oldWords, updateTeam, navigation }) => {
   const { language, timer, maxScore } = useContext(SettingsContext);
@@ -19,11 +20,13 @@ const PlayGame = ({ teams, currentTeamIndex, maxScoreReached, oldWords, updateTe
   const [currentTeam, setCurrentTeam] = useState('');
   const [correctAnswers, setCorrectAnswers] = useState(0);
   const [skippedAnswers, setSkippedAnswers] = useState(0);
-  const [teamDialog, setTeamDialog] = useState(false);
+  const [pauseDialog, setPauseDialog] = useState(false);
+  const [endDialog, setEndDialog] = useState(false);
   const [paused, setPaused] = useState(false);
   const [winnerDialog, setWinnerDialog] = useState(false);
   const [winnerTeam, setWinnerTeam] = useState('');
   const [oldWordsArr, setOldWordsArr] = useState([]);
+  const [skippedWords, setSkippedWords] = useState([]);
 
   const dispatch = useDispatch();
   let gameWordList = [];
@@ -48,34 +51,14 @@ const PlayGame = ({ teams, currentTeamIndex, maxScoreReached, oldWords, updateTe
 
   useEffect(() => {
     let interval = null;
-    let maxScoreFlag = false;
     if (gameTimer > 0 && !paused) {
       interval = setInterval(() => {
         setGameTimer((prevTimer) => prevTimer - 1);
       }, 1000);
     } else if (paused) {
-      setTeamDialog(true);
+      setPauseDialog(true);
     } else {
-      const newScore = currentTeam.score + correctAnswers - skippedAnswers;
-      dispatch(updateTeam({ ...currentTeam, score: newScore }));
-      dispatch(updatePlayerExplains(currentTeam.id, correctAnswers - skippedAnswers));
-      dispatch(updateTeamIndex((currentTeamIndex + 1) % teams.length));
-      dispatch(addOldWords(oldWordsArr));
-      if (newScore >= maxScore) {
-        dispatch(updateMaxScoreReached(true));
-        maxScoreFlag = true;
-      }
-      if (currentTeamIndex === teams.length - 1 && (maxScoreReached || maxScoreFlag)) {
-        const currentRoundTeam = {
-          name: currentTeam.name,
-          score: newScore
-        }
-        const highestScore = teamWithHighestScore(teams, currentRoundTeam);
-        setWinnerTeam(highestScore);
-        setWinnerDialog(true);
-      } else {
-        setTeamDialog(true);
-      }
+      setEndDialog(true);
     }
     return () => {
       clearInterval(interval);
@@ -93,6 +76,7 @@ const PlayGame = ({ teams, currentTeamIndex, maxScoreReached, oldWords, updateTe
   };
 
   const handleSkip = () => {
+    setSkippedWords((prevWords) => [...prevWords, currentWord]);
     setCurrentWord((prevWord) => {
       const newWord = getRandomWord(gameWordList);
       setOldWordsArr((prevWords) => [...prevWords, prevWord]);
@@ -102,18 +86,39 @@ const PlayGame = ({ teams, currentTeamIndex, maxScoreReached, oldWords, updateTe
     setSkippedAnswers(skippedAnswers + 1);
   };
 
-  const handleCloseTeamDialog = () => {
-    if (gameTimer > 0) {
-      setTeamDialog(false);
-      setPaused(false);
+  const handleCloseEndDialog = (selectedWordsCount, unselectedWordsCount) => {
+    let maxScoreFlag = false;
+    const newScore = currentTeam.score + selectedWordsCount - unselectedWordsCount;
+    dispatch(updateTeam({ ...currentTeam, score: newScore }));
+    dispatch(updatePlayerExplains(currentTeam.id, correctAnswers - skippedAnswers));
+    dispatch(updateTeamIndex((currentTeamIndex + 1) % teams.length));
+    dispatch(addOldWords(oldWordsArr));
+    if (newScore >= maxScore) {
+      dispatch(updateMaxScoreReached(true));
+      maxScoreFlag = true;
+    }
+    if (currentTeamIndex === teams.length - 1 && (maxScoreReached || maxScoreFlag)) {
+      const currentRoundTeam = {
+        name: currentTeam.name,
+        score: newScore
+      }
+      const highestScoreTeam = teamWithHighestScore(teams, currentRoundTeam);
+      setWinnerTeam(highestScoreTeam);
+      setEndDialog(false);
+      setWinnerDialog(true);
     } else {
-      setTeamDialog(false);
+      setEndDialog(false);
       navigation.navigate('NewGame');
     }
   }
 
+  const handleClosePauseDialog = () => {
+    setPauseDialog(false);
+    setPaused(false);
+  }
+
   const handlePauseButton = () => {
-    setTeamDialog(true);
+    setPauseDialog(true);
     setPaused(true);
   }
 
@@ -164,15 +169,25 @@ const PlayGame = ({ teams, currentTeamIndex, maxScoreReached, oldWords, updateTe
           onPress={handleSave}
         />
       </View>
-      {/* Show current team results */}
-      <TeamResultDialog
-        isVisible={teamDialog}
-        onClose={handleCloseTeamDialog}
+      {/* End round dialog */}
+      {gameTimer === 0 &&
+        <EndRoundDialog
+          isVisible={endDialog}
+          onClose={handleCloseEndDialog}
+          language={language}
+          currentTeam={currentTeam}
+          gameTimer={gameTimer}
+          currentRoundWords={oldWordsArr}
+          skippedWords={skippedWords}
+        />}
+      {/* Pause dialog */}
+      <PauseDialog
+        isVisible={pauseDialog}
+        onClose={handleClosePauseDialog}
         language={language}
         currentTeam={currentTeam}
         correctAnswers={correctAnswers}
         skippedAnswers={skippedAnswers}
-        gameTimer={gameTimer}
       />
       {/* Winner Dialog */}
       <WinnerDialog
