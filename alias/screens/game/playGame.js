@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect } from 'react';
-import { View, StyleSheet, ImageBackground } from 'react-native';
+import { View, StyleSheet, ImageBackground, BackHandler } from 'react-native';
 import { Text, Button, Icon } from '@rneui/themed';
 import { connect } from 'react-redux';
 import { updateTeam, updateTeamIndex, updatePlayerExplains, updateMaxScoreReached, addOldWords } from '../../redux/actions';
@@ -51,6 +51,11 @@ const PlayGame = ({ teams, currentTeamIndex, maxScoreReached, oldWords, updateTe
 
   useEffect(() => {
     let interval = null;
+    const handleBackButton = () => {
+      return true;
+    };
+    const backHandler = BackHandler.addEventListener('hardwareBackPress', handleBackButton);
+
     if (gameTimer > 0 && !paused) {
       interval = setInterval(() => {
         setGameTimer((prevTimer) => prevTimer - 1);
@@ -62,6 +67,7 @@ const PlayGame = ({ teams, currentTeamIndex, maxScoreReached, oldWords, updateTe
     }
     return () => {
       clearInterval(interval);
+      backHandler.remove();
     };
   }, [gameTimer, paused]);
 
@@ -252,7 +258,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     position: 'absolute',
-    top: 105
+    top: 100
   },
   correctAnswersContainer: {
     paddingRight: 15

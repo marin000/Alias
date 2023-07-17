@@ -35,6 +35,7 @@ const screens = {
   PlayGame: {
 		screen: PlayGame,
 		navigationOptions: {
+			headerLeft: () => null,
 			headerTitle: () => <EmptyCustomHeader />
 		}
 	},
