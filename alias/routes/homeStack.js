@@ -1,33 +1,21 @@
-import React from 'react';
-import { View } from 'react-native';
 import { createStackNavigator } from 'react-navigation-stack';
 import Home from "../screens/home/home";
 import HowToPlay from '../screens/home/howToPlay';
+import Login from '../screens/home/login';
 import Settings from '../screens/home/settings';
-
-const CustomHeader = () => {
-	return (
-		<View style={{ backgroundColor: 'transparent' }}>
-			{/* Empty view */}
-		</View>
-	);
-};
 
 const screens = {
 	Home: {
 		screen: Home
 	},
 	HowToPlay: {
-		screen: HowToPlay,
-		navigationOptions: {
-			headerTitle: () => <CustomHeader />
-		}
+		screen: HowToPlay
 	},
 	Settings: {
-		screen: Settings,
-		navigationOptions: {
-			headerTitle: () => <CustomHeader />
-		}
+		screen: Settings
+	},
+	Login: {
+		screen: Login
 	}
 };
 

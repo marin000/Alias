@@ -68,7 +68,7 @@ const NewGame = ({ teams, currentTeamIndex, gameStarted, maxScoreReached, addTea
   }
 
   return (
-    <ImageBackground source={backgroundImage} style={styles.container} resizeMode={'cover'}>
+    <ImageBackground source={backgroundImage} style={globalStyles.mainContainer} resizeMode={'cover'}>
       {/* List of teams */}
       <View style={styles.containerData}>
         <View style={styles.teamList} >
@@ -204,10 +204,6 @@ const NewGame = ({ teams, currentTeamIndex, gameStarted, maxScoreReached, addTea
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 20
-  },
   containerData: {
     flex: 1
   },
@@ -246,6 +242,10 @@ const styles = StyleSheet.create({
     marginBottom: 10
   }
 });
+
+NewGame.navigationOptions = {
+	headerShown: false,
+};
 
 const mapStateToProps = (state) => ({
   teams: state.teamReducer.teams,

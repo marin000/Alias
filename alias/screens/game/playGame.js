@@ -11,6 +11,7 @@ import backgroundImage from '../../assets/blurred-background.jpeg';
 import EndRoundDialog from '../../components/endRoundDialog';
 import WinnerDialog from '../../components/winnerDialog';
 import PauseDialog from '../../components/pauseDialog';
+import { globalStyles } from '../../styles/global';
 
 const PlayGame = ({ teams, currentTeamIndex, maxScoreReached, oldWords, updateTeam, navigation }) => {
   const { language, timer, maxScore } = useContext(SettingsContext);
@@ -208,8 +209,7 @@ const PlayGame = ({ teams, currentTeamIndex, maxScoreReached, oldWords, updateTe
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    padding: 20,
+    ...globalStyles.mainContainer,
     justifyContent: 'center',
     alignItems: 'center'
   },
@@ -275,6 +275,10 @@ const styles = StyleSheet.create({
     color: 'white'
   }
 });
+
+PlayGame.navigationOptions = {
+	headerShown: false,
+};
 
 const mapStateToProps = (state) => ({
   teams: state.teamReducer.teams,

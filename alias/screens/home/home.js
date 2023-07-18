@@ -70,6 +70,7 @@ const Home = ({ teams, navigation }) => {
 					<Button
 						title={login[language]}
 						color='#0000cc'
+						onPress={() => navigation.navigate('Login')}
 					/>
 				</View>
 			</View>

@@ -24,20 +24,9 @@ const EmptyCustomHeader = () => {
 const screens = {
   NewGame: {
     screen: NewGame,
-    navigationOptions: ({ navigation }) => {
-      const language = navigation.getParam('language', 'hr');
-      const { headerTitle } = newGame;
-      return {
-        headerTitle: () => <CustomHeader headerTitle={headerTitle[language]} />,
-      };
-    },
   },
   PlayGame: {
-		screen: PlayGame,
-		navigationOptions: {
-			headerLeft: () => null,
-			headerTitle: () => <EmptyCustomHeader />
-		}
+		screen: PlayGame
 	},
 };
 

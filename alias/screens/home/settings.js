@@ -4,6 +4,7 @@ import { Text, Card, CheckBox, Image, Slider, Icon } from '@rneui/themed';
 import { SettingsContext } from '../../utils/settings';
 import { settings } from '../../constants';
 import backgroundImage from '../../assets/blurred-background.jpeg';
+import { globalStyles } from '../../styles/global';
 import croFlag from '../../assets/cro-flag.png';
 import ukFlag from '../../assets/uk-flag.png';
 
@@ -30,9 +31,9 @@ export default function Settings() {
   }
 
   return (
-    <ImageBackground source={backgroundImage} style={styles.container} resizeMode={'cover'}>
+    <ImageBackground source={backgroundImage} style={globalStyles.mainContainer} resizeMode={'cover'}>
       <View>
-        <Text style={styles.title}>{title[language]}</Text>
+        <Text style={globalStyles.screenTitle}>{title[language]}</Text>
         <Card>
           <View style={styles.radioContainer}>
             <View style={styles.radio}>
@@ -115,16 +116,6 @@ export default function Settings() {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 20
-  },
-  title: {
-    textAlign: 'center',
-    fontSize: 30,
-    marginTop: 10,
-    color: 'white'
-  },
   radioContainer: {
     padding: 20,
     flexDirection: 'column'
@@ -155,3 +146,7 @@ const styles = StyleSheet.create({
     fontSize: 15
   }
 });
+
+Settings.navigationOptions = {
+	headerShown: false,
+};

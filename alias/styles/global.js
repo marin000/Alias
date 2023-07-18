@@ -1,6 +1,10 @@
 import { StyleSheet } from "react-native";
 
 export const globalStyles = StyleSheet.create({
+  mainContainer: {
+    flex: 1,
+    padding: 20
+  },
   teamInput: {
     borderWidth: 4,
     borderColor: '#ddd',
@@ -68,5 +72,11 @@ export const globalStyles = StyleSheet.create({
   },
   teamName: {
     fontWeight: 'normal'
-  }
+  },
+  screenTitle: {
+		textAlign: 'center',
+		fontSize: 30,
+		marginTop: 10,
+		color: 'white'
+	},
 });
