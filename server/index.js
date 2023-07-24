@@ -1,5 +1,6 @@
 const express = require('express')
 const mongoose = require('mongoose')
+const cors = require('cors')
 const app = express()
 const config = require('./config/index')
 const dbMessages = require('./constants/dbMessages')
@@ -9,6 +10,7 @@ require('dotenv')
 const router = require('./router')
 
 app.use(express.json())
+app.use(cors())
 app.use(router)
 
 const connectionParams = {

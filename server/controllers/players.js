@@ -13,8 +13,8 @@ const create = async(req, res, next) => {
         .json({ errors: errors.array() })
       return
     }
-    const { name, email, password, team, age, gamesPlayed, gamesWin, gamesLost } = req.body
-    const newPlayer = Players({ name, email, password, team, age, gamesPlayed, gamesWin, gamesLost })
+    const { name, email, password, age } = req.body
+    const newPlayer = Players({ name, email, password, age, gamesPlayed: 0, gamesWin: 0, gamesLost: 0 })
     await newPlayer.save()
     playersLogger.info(infoMessages.NEW_PLAYER)
     res.status(201)
