@@ -21,7 +21,7 @@ const GoogleSignInButton = ({ language, onPress }) => {
   );
 };
 
-export default function Login() {
+export default function Login({ navigation }) {
   const { language } = useContext(SettingsContext);
   const { emailPlaceholder, passwordPlaceholder, signIn, forgotPass, dividerTxt, newToAlias, registerTxt } = login;
   const [showPassword, setShowPassword] = useState(false);
@@ -83,7 +83,7 @@ export default function Login() {
         />
         <View style={styles.registerContainer}>
           <Text style={styles.registerText}>{newToAlias[language]}</Text>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.navigate('Register')}>
             <Text style={styles.registerLink}>{registerTxt[language]}</Text>
           </TouchableOpacity>
         </View>
@@ -166,5 +166,5 @@ const styles = StyleSheet.create({
 });
 
 Login.navigationOptions = {
-	headerShown: false,
+  headerShown: false,
 };

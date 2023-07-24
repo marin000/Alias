@@ -1,5 +1,5 @@
 import AppNavigator from './routes/appNavigator';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { SettingsProvider } from './utils/settings';
 import { ThemeProvider, createTheme } from '@rneui/themed';
 import store from './redux/store';
@@ -15,7 +15,7 @@ const theme = createTheme({
 
 export default function App() {
 	return (
-		<SafeAreaView style={{ flex: 1 }}>
+		<SafeAreaProvider>
 			<Provider store={store}>
 				<SettingsProvider>
 					<ThemeProvider theme={theme}>
@@ -23,6 +23,6 @@ export default function App() {
 					</ThemeProvider>
 				</SettingsProvider>
 			</Provider>
-		</SafeAreaView>
+		</SafeAreaProvider>
 	);
 }

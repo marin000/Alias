@@ -3,6 +3,7 @@ import Home from "../screens/home/home";
 import HowToPlay from '../screens/home/howToPlay';
 import Login from '../screens/home/login';
 import Settings from '../screens/home/settings';
+import Register from '../screens/home/register';
 
 const screens = {
 	Home: {
@@ -16,7 +17,10 @@ const screens = {
 	},
 	Login: {
 		screen: Login
-	}
+	},
+	Register: {
+		screen: Register
+	},
 };
 
 const HomeStack = createStackNavigator(screens);
