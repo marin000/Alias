@@ -44,4 +44,28 @@ const RegisterSchema = (language) => {
   });
 };
 
-export default RegisterSchema;
+const LoginSchema = (language) => {
+  const {
+    emailReq,
+    emailFormat,
+    passwordFormat,
+    passwordMin,
+    passwordReq,
+  } = formValidator;
+
+  return yup.object({
+    email: yup.string()
+      .email(emailFormat[language])
+      .required(emailReq[language]),
+    password: yup
+      .string()
+      .min(8, passwordMin[language])
+      .matches(
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&.,])[A-Za-z\d@$!%*?&.,]{8,}$/,
+        passwordFormat[language]
+      )
+      .required(passwordReq[language])
+  });
+};
+
+export { RegisterSchema, LoginSchema };

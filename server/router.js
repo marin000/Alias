@@ -8,7 +8,8 @@ const logerValidator = require('./validators/loggerValidator')
 const router = express.Router()
 
 router.post('/api/player', playerValidator.validate('create'), playerController.create)
-router.get('/api/player', playerController.fetch)
+router.post('/api/player/login', playerController.getPlayer)
+router.get('/api/player/all', playerController.fetch)
 router.delete('/api/player/:id', playerValidator.validate('validatePlayer'), playerController.deletePlayer)
 router.put('/api/player', playerValidator.validate('validateMongoIdAndTeam'), playerController.updatePlayer)
 

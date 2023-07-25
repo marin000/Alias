@@ -9,6 +9,8 @@ import { login } from '../../constants';
 import backgroundImage from '../../assets/blurred-background.jpeg';
 import { globalStyles } from '../../styles/global';
 import LoginDivider from '../../components/customLoginDivider';
+import { LoginSchema } from '../../utils/formValidator';
+import api from '../../api/players';
 
 const GoogleSignInButton = ({ language, onPress }) => {
   return (
@@ -23,12 +25,28 @@ const GoogleSignInButton = ({ language, onPress }) => {
 
 export default function Login({ navigation }) {
   const { language } = useContext(SettingsContext);
-  const { emailPlaceholder, passwordPlaceholder, signIn, forgotPass, dividerTxt, newToAlias, registerTxt } = login;
+  const { emailPlaceholder, passwordPlaceholder, signIn, forgotPass, dividerTxt, newToAlias, registerTxt, invalidCredentials } = login;
   const [showPassword, setShowPassword] = useState(false);
+  const [invalidLoginError, setInvalidLoginError] = useState('');
 
   const togglePasswordVisibility = () => {
     setShowPassword((prevShowPassword) => !prevShowPassword);
   };
+
+  const handleLogin = (values) => {
+    setInvalidLoginError('');
+    const credentials = {
+      email: values.email,
+      password: values.password
+    };
+    console.log(credentials);
+    api.getPlayer(credentials)
+      .then(() => { console.log('login ok'); })
+      .catch((err) => {
+        setInvalidLoginError(invalidCredentials[language]);
+        console.log(err.response.data);
+      });
+  }
 
   return (
     <ImageBackground source={backgroundImage} style={globalStyles.mainContainer} resizeMode={'cover'}>
@@ -36,9 +54,8 @@ export default function Login({ navigation }) {
       <Card>
         <Formik
           initialValues={{ email: '', password: '' }}
-          onSubmit={(values) => {
-            //to do
-          }}
+          validationSchema={LoginSchema(language)}
+          onSubmit={handleLogin}
         >
           {(props) => (
             <View style={styles.form}>
@@ -53,6 +70,7 @@ export default function Login({ navigation }) {
                 />
                 <Icon name="email-outline" size={24} color="black" style={styles.icon} />
               </View>
+              <Text style={globalStyles.errorText}>{props.touched.email && props.errors.email}</Text>
               <View style={styles.inputContainer}>
                 <TextInput
                   style={styles.input}
@@ -65,6 +83,7 @@ export default function Login({ navigation }) {
                   <Icon name={showPassword ? 'eye-off' : 'eye'} size={24} color="black" />
                 </TouchableOpacity>
               </View>
+              <Text style={globalStyles.errorText}>{props.touched.password && props.errors.password}{invalidLoginError}</Text>
               <TouchableOpacity>
                 <Text style={styles.forgotPass}>{forgotPass[language]}</Text>
               </TouchableOpacity>

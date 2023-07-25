@@ -9,7 +9,7 @@ import { register } from '../../constants';
 import api from '../../api/players'
 import backgroundImage from '../../assets/blurred-background.jpeg';
 import { globalStyles } from '../../styles/global';
-import RegisterShema from '../../utils/formValidator';
+import { RegisterSchema } from '../../utils/formValidator';
 
 export default function Register({ navigation }) {
   const { language } = useContext(SettingsContext);
@@ -27,39 +27,41 @@ export default function Register({ navigation }) {
     setShowRepeatPassword((prevShowRepeatPassword) => !prevShowRepeatPassword);
   };
 
+  const handleRegistration = (values) => {
+    setDuplicateEmailError('');
+    setDuplicateNameError('');
+    const numericInput = values.age.replace(/[^0-9]/g, '');
+    const ageValue = parseInt(numericInput, 10);
+    const newPlayer = {
+      name: values.name,
+      email: values.email,
+      password: values.password,
+      age: ageValue
+    };
+
+    api.addNewPLayer(newPlayer)
+      .then(() => { navigation.navigate('Login') })
+      .catch((err) => {
+        const errorResponse = err.response.data;
+        const dbProperty = errorResponse.error.split(' ')[0];
+        if (dbProperty === 'Email') {
+          setDuplicateEmailError(errorResponse.error);
+        }
+        if (dbProperty === 'Name') {
+          setDuplicateNameError(errorResponse.error);
+        }
+        console.log(errorResponse);
+      });
+  };
+
   return (
     <ImageBackground source={backgroundImage} style={globalStyles.mainContainer} resizeMode={'cover'}>
       <Text style={styles.title}>{registerTitle[language]}</Text>
       <Card>
         <Formik
           initialValues={{ name: '', email: '', password: '', repeatPassword: '', age: '' }}
-          validationSchema={RegisterShema(language)}
-          onSubmit={(values) => {
-            setDuplicateEmailError('');
-            setDuplicateNameError('');
-            const numericInput = values.age.replace(/[^0-9]/g, '');
-            const ageValue = parseInt(numericInput, 10);
-            const newPlayer = {
-              name: values.name,
-              email: values.email,
-              password: values.password,
-              age: ageValue
-            };
-
-            api.addNewPLayer(newPlayer)
-              .then(() => { navigation.navigate('Login') })
-              .catch((err) => {
-                const errorResponse = err.response.data;
-                const dbProperty = errorResponse.error.split(' ')[0];
-                if (dbProperty === 'Email') {
-                  setDuplicateEmailError(errorResponse.error);
-                }
-                if (dbProperty === 'Name') {
-                  setDuplicateNameError(errorResponse.error);
-                }
-                console.log(errorResponse)
-              });
-          }}
+          validationSchema={RegisterSchema(language)}
+          onSubmit={handleRegistration}
         >
           {(props) => (
             <View style={styles.form}>

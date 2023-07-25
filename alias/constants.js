@@ -201,6 +201,10 @@ export const login = {
 	registerTxt: {
 		hr: 'Registrirajte se',
 		en: 'Register now'
+	},
+	invalidCredentials: {
+		hr: 'Nevažeći email ili lozinka',
+		en: 'Invalid email or password'
 	}
 }
 

@@ -4,6 +4,7 @@ const { validationResult } = require('express-validator')
 const infoMessages = require('../constants/infoMessages')
 const errorMessages = require('../constants/errorMessages')
 const { playersLogger } = require('../logger/logger')
+const bcrypt = require('bcrypt')
 
 const create = async(req, res) => {
   try {
@@ -15,7 +16,8 @@ const create = async(req, res) => {
       return
     }
     const { name, email, password, age } = req.body
-    const newPlayer = Players({ name, email, password, age, gamesPlayed: 0, gamesWin: 0, gamesLost: 0 })
+    const hashedPassword = await bcrypt.hash(password, 10)
+    const newPlayer = Players({ name, email, password: hashedPassword, age, gamesPlayed: 0, gamesWin: 0, gamesLost: 0 })
     await newPlayer.save()
     playersLogger.info(infoMessages.NEW_PLAYER)
     res.status(201)
@@ -89,9 +91,30 @@ async function updatePlayer(req, res) {
   }
 }
 
+async function getPlayer(req, res) {
+  try {
+    console.log(req.body)
+    const { email, password } = req.body
+    const player = await Players.findOne({ email })
+    const passwordMatch = await bcrypt.compare(password, player.password)
+    if (passwordMatch) {
+      playersLogger.info(infoMessages.GET_PLAYER)
+      res.json(player)
+    } else {
+      res.status(401)
+        .json({ error: errorMessages.INVALID_LOGIN })
+    }
+  } catch (error) {
+    playersLogger.error(error.message, { metadata: error.stack })
+    res.status(500)
+      .send(error.message)
+  }
+}
+
 module.exports = {
   create,
   fetch,
   deletePlayer,
-  updatePlayer
+  updatePlayer,
+  getPlayer
 }
