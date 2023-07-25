@@ -2,9 +2,10 @@
 const Players = require('../Models/Players')
 const { validationResult } = require('express-validator')
 const infoMessages = require('../constants/infoMessages')
+const errorMessages = require('../constants/errorMessages')
 const { playersLogger } = require('../logger/logger')
 
-const create = async(req, res, next) => {
+const create = async(req, res) => {
   try {
     const errors = validationResult(req)
     if (!errors.isEmpty()) {
@@ -21,7 +22,16 @@ const create = async(req, res, next) => {
       .send(newPlayer)
   } catch (error) {
     playersLogger.error((error.message, { metadata: error.stack }))
-    return next(error)
+    if (error.code === 11000) {
+      const fieldName = Object.keys(error.keyValue)[0]
+      const capitalizedFieldName = fieldName.charAt(0)
+        .toUpperCase() + fieldName.slice(1)
+      const modifiedError = new Error(`${capitalizedFieldName} ${errorMessages.DEFAULT_DUPLICATE}`)
+      res.status(400)
+      return res.json({ error: modifiedError.message })
+    }
+    res.status(500)
+      .send(error.message)
   }
 }
 

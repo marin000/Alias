@@ -3,7 +3,8 @@ import { StyleSheet } from "react-native";
 export const globalStyles = StyleSheet.create({
   mainContainer: {
     flex: 1,
-    padding: 20
+    padding: 20,
+    paddingTop: 30
   },
   teamInput: {
     borderWidth: 4,
@@ -79,4 +80,10 @@ export const globalStyles = StyleSheet.create({
 		marginTop: 10,
 		color: 'white'
 	},
+  errorText: {
+    color: 'crimson',
+    fontWeight: 'bold',
+    marginBottom: 5,
+    textAlign: 'center'
+  }
 });

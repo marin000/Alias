@@ -5,6 +5,7 @@ const { playersLogger } = require('../logger/logger')
 const PlayersShema = new mongoose.Schema({
   name: {
     type: String,
+    unique: true,
     required: 'Player must have a name!'
   },
   email: {
