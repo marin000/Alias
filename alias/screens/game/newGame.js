@@ -3,7 +3,16 @@ import { View, StyleSheet, ImageBackground, ScrollView, TouchableHighlight } fro
 import { Text, ListItem, Button } from '@rneui/themed';
 import { LinearGradient } from 'expo-linear-gradient';
 import { connect } from 'react-redux';
-import { addTeam, updateTeam, deleteTeam, gameStartEnd, deleteAllTeams, updateMaxScoreReached, updateTeamIndex } from '../../redux/actions';
+import {
+  addTeam,
+  updateTeam,
+  deleteTeam,
+  gameStartEnd,
+  deleteAllTeams,
+  updateMaxScoreReached,
+  updateTeamIndex,
+  addAllTeams
+} from '../../redux/actions';
 import { useDispatch } from 'react-redux';
 import { SettingsContext } from '../../utils/settings';
 import { newGame } from '../../constants';
@@ -12,16 +21,18 @@ import AddTeamDialog from '../../components/addTeamDialog';
 import EditTeamDialog from '../../components/editTeamDialog';
 import PreStartDialog from '../../components/preStartDialog';
 import ShowTeamResultDialog from '../../components/showTeamResultDialog';
+import RandomTeamDialog from '../../components/randomTeamDialog';
 import { globalStyles } from '../../styles/global';
 
 const NewGame = ({ teams, currentTeamIndex, gameStarted, maxScoreReached, addTeam, updateTeam, deleteTeam, gameStartEnd, navigation }) => {
   const { language, maxScore } = useContext(SettingsContext);
-  const { title, newTeam, buttonStart, score, targetResultTxt, headerTitle, newGameSameTeamsButton } = newGame;
+  const { title, newTeam, buttonStart, score, targetResultTxt, headerTitle, newGameSameTeamsButton, createRandomTeams } = newGame;
   const [addTeamDialog, setAddTeamDialog] = useState(false);
   const [selectedTeam, setSelectedTeam] = useState(null);
   const [editTeamDialog, setEditTeamDialog] = useState(false);
   const [preStartDialog, setPreStartDialog] = useState(false);
   const [showTeamResultDialog, setShowTeamResultDialog] = useState(false);
+  const [randomTeamDialog, setRandomTeamDialog] = useState(false);
   const dispatch = useDispatch();
 
   const handleTeamToEdit = (team) => {
@@ -129,6 +140,15 @@ const NewGame = ({ teams, currentTeamIndex, gameStarted, maxScoreReached, addTea
             />
           }
           {
+            !gameStarted && teams.length === 0 &&
+            <Button
+              containerStyle={styles.buttonRandomTeams}
+              title={createRandomTeams[language]}
+              color='#0000cc'
+              onPress={() => setRandomTeamDialog(true)}
+            />
+          }
+          {
             teams.length >= 2 && !maxScoreReached &&
             <Button
               containerStyle={globalStyles.buttonSaveTeam}
@@ -198,6 +218,18 @@ const NewGame = ({ teams, currentTeamIndex, gameStarted, maxScoreReached, addTea
             selectedTeam={selectedTeam}
           />
         }
+        {/* Random team generator dialog */}
+        {
+          teams.length === 0 && !gameStarted &&
+          <RandomTeamDialog
+            isVisible={randomTeamDialog}
+            onClose={() => setRandomTeamDialog(false)}
+            language={language}
+            onAddAllTeams={(randomTeams) => {
+              dispatch(addAllTeams(randomTeams));
+            }}
+          />
+        }
       </View>
     </ImageBackground>
   );
@@ -240,11 +272,14 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: 'white',
     marginBottom: 10
+  },
+  buttonRandomTeams: {
+    marginTop: 15
   }
 });
 
 NewGame.navigationOptions = {
-	headerShown: false,
+  headerShown: false,
 };
 
 const mapStateToProps = (state) => ({
@@ -261,7 +296,8 @@ const mapDispatchToProps = {
   gameStartEnd,
   deleteAllTeams,
   updateMaxScoreReached,
-  updateTeamIndex
+  updateTeamIndex,
+  addAllTeams
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(NewGame);

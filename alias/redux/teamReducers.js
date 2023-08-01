@@ -9,6 +9,11 @@ const teamReducer = (state = initialState, action) => {
         ...state,
         teams: [...state.teams, action.payload]
       };
+    case 'ADD_ALL_TEAMS':
+      return {
+        ...state,
+        teams: action.payload
+      };
     case 'UPDATE_TEAM':
       const updatedTeams = state.teams.map((team) => {
         if (team.id === action.payload.id) {
@@ -32,7 +37,7 @@ const teamReducer = (state = initialState, action) => {
         teams: []
       };
     case 'UPDATE_PLAYER_EXPLAINS':
-      const teamToUpdate = state.teams.map( team => {
+      const teamToUpdate = state.teams.map(team => {
         if (team.id === action.payload.teamId) {
           let currentPlayerIndex
           const currentPlayer = team.players.find((player, index) => {

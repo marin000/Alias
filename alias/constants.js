@@ -123,6 +123,30 @@ export const newGame = {
 	newGameSameTeamsButton: {
 		hr: 'Nova Igra (isti timovi)',
 		en: 'New Game (same teams)'
+	},
+	createRandomTeams: {
+		hr: 'Kreirajte nasumične timove',
+		en: 'Create random teams'
+	},
+	buttonGenerateRandom: {
+		hr: 'Kreiraj timove',
+		en: 'Create teams'
+	},
+	numberOfTeamsTxt: {
+		hr: 'Broj timova',
+		en: 'Number of teams'
+	},
+	alertTeamNumber: {
+		hr: 'Minimalni broj igrača u timu je 2', 
+		en: 'Minimum number of players in team is 2'
+	},
+	alertMinTeamNumber: {
+		hr: 'Minimalni broj timova je 2', 
+		en: 'Minimum number of teams is 2'
+	},
+	teamTxt: {
+		hr: 'Tim',
+		en: 'Team'
 	}
 }
 

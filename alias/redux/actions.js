@@ -3,6 +3,11 @@ export const addTeam = (team) => ({
   payload: team
 });
 
+export const addAllTeams = (teams) => ({
+  type: 'ADD_ALL_TEAMS',
+  payload: teams
+});
+
 export const updateTeam = (team) => ({
   type: 'UPDATE_TEAM',
   payload: team
