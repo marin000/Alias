@@ -10,6 +10,31 @@ import { globalStyles } from '../styles/global';
 export default function EditTeamDialog({ isVisible, onClose, teams, selectedTeam, language, onDeleteTeam, onUpdateTeam }) {
   const { teamInput, playerInput, buttonSaveTeam, buttonAddPlayer, buttonDelete } = newGame;
 
+  const handleEditTeam = (values) => {
+    const tempTeams = teams.filter(team => team.name !== selectedTeam.name);
+
+    if (!validateTeamInput(tempTeams, values, language)) {
+      return;
+    }
+    const playersArray = values.players
+      .filter(player => player.length > 0)
+      .map((player, index) => {
+        return {
+          name: player,
+          score: 0,
+          explains: index === 0 ? true : false
+        }
+      });
+    const updatedTeam = {
+      id: selectedTeam.id,
+      name: values.teamName,
+      players: playersArray,
+      score: 0,
+    }
+    onUpdateTeam(updatedTeam);
+    onClose();
+  }
+  
   return (
     <Dialog
       isVisible={isVisible}
@@ -21,30 +46,7 @@ export default function EditTeamDialog({ isVisible, onClose, teams, selectedTeam
             teamName: selectedTeam ? selectedTeam.name : '',
             players: selectedTeam ? selectedTeam.players.map(player => { return player.name }) : []
           }}
-          onSubmit={(values) => {
-            const tempTeams = teams.filter(team => team.name !== selectedTeam.name);
-
-            if (!validateTeamInput(tempTeams, values, language)) {
-              return;
-            }
-            const playersArray = values.players
-              .filter(player => player.length > 0)
-              .map((player, index) => {
-                return {
-                  name: player,
-                  score: 0,
-                  explains: index === 0 ? true : false
-                }
-              });
-            const updatedTeam = {
-              id: selectedTeam.id,
-              name: values.teamName,
-              players: playersArray,
-              score: 0,
-            }
-            onUpdateTeam(updatedTeam);
-            onClose();
-          }}
+          onSubmit={handleEditTeam}
         >
           {(props) => (
             <View>

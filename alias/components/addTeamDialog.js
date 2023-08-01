@@ -11,34 +11,36 @@ import { globalStyles } from '../styles/global';
 export default function AddTeamDialog({ isVisible, onClose, teams, language, onAddTeam }) {
   const { teamInput, playerInput, buttonSaveTeam, buttonAddPlayer, buttonReset } = newGame;
 
+  const handleAddNewTeam = (values) => {
+    if (!validateTeamInput(teams, values, language)) {
+      return;
+    }
+    const playersArray = values.players
+      .filter(player => player.length > 0)
+      .map((player, index) => {
+        return {
+          name: player,
+          score: 0,
+          explains: index === 0 ? true : false
+        }
+      });
+    const newTeam = {
+      id: shortid.generate(),
+      name: values.teamName,
+      players: playersArray,
+      score: 0,
+    };
+
+    onAddTeam(newTeam);
+    onClose();
+  }
+
   return (
     <Dialog isVisible={isVisible} onBackdropPress={onClose}>
       <ScrollView keyboardShouldPersistTaps='handled'>
         <Formik
           initialValues={{ teamName: '', players: [] }}
-          onSubmit={(values) => {
-            if (!validateTeamInput(teams, values, language)) {
-              return;
-            }
-            const playersArray = values.players
-              .filter(player => player.length > 0)
-              .map((player, index) => {
-                return {
-                  name: player,
-                  score: 0,
-                  explains: index === 0 ? true : false
-                }
-              });
-            const newTeam = {
-              id: shortid.generate(),
-              name: values.teamName,
-              players: playersArray,
-              score: 0,
-            };
-
-            onAddTeam(newTeam);
-            onClose();
-          }}
+          onSubmit={handleAddNewTeam}
         >
           {(props) => (
             <View>
