@@ -93,7 +93,6 @@ async function updatePlayer(req, res) {
 
 async function getPlayer(req, res) {
   try {
-    console.log(req.body)
     const { email, password } = req.body
     const player = await Players.findOne({ email })
     const passwordMatch = await bcrypt.compare(password, player.password)

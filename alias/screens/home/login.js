@@ -39,7 +39,6 @@ export default function Login({ navigation }) {
       email: values.email,
       password: values.password
     };
-    console.log(credentials);
     api.getPlayer(credentials)
       .then(() => { console.log('login ok'); })
       .catch((err) => {
