@@ -10,6 +10,7 @@ import api from '../../api/players'
 import backgroundImage from '../../assets/blurred-background.jpeg';
 import { globalStyles } from '../../styles/global';
 import { RegisterSchema } from '../../utils/formValidator';
+import BackButton from '../../components/backButton';
 
 export default function Register({ navigation }) {
   const { language } = useContext(SettingsContext);
@@ -56,82 +57,85 @@ export default function Register({ navigation }) {
 
   return (
     <ImageBackground source={backgroundImage} style={globalStyles.mainContainer} resizeMode={'cover'}>
-      <Text style={styles.title}>{registerTitle[language]}</Text>
-      <Card>
-        <Formik
-          initialValues={{ name: '', email: '', password: '', repeatPassword: '', age: '' }}
-          validationSchema={RegisterSchema(language)}
-          onSubmit={handleRegistration}
-        >
-          {(props) => (
-            <View style={styles.form}>
-              <View style={styles.inputContainer}>
-                <TextInput
-                  style={styles.input}
-                  placeholder={usernamePlaceholder[language]}
-                  onChangeText={props.handleChange('name')}
-                  value={props.values.name}
+      <View>
+        <BackButton onPress={() => navigation.goBack()} />
+        <Text style={styles.title}>{registerTitle[language]}</Text>
+        <Card>
+          <Formik
+            initialValues={{ name: '', email: '', password: '', repeatPassword: '', age: '' }}
+            validationSchema={RegisterSchema(language)}
+            onSubmit={handleRegistration}
+          >
+            {(props) => (
+              <View style={styles.form}>
+                <View style={styles.inputContainer}>
+                  <TextInput
+                    style={styles.input}
+                    placeholder={usernamePlaceholder[language]}
+                    onChangeText={props.handleChange('name')}
+                    value={props.values.name}
+                  />
+                </View>
+                <Text style={globalStyles.errorText}>{props.touched.name && props.errors.name}{duplicateNameError}</Text>
+                <View style={styles.inputContainer}>
+                  <TextInput
+                    style={styles.input}
+                    placeholder={emailPlaceholder[language]}
+                    keyboardType='email-address'
+                    autoCapitalize='none'
+                    onChangeText={props.handleChange('email')}
+                    value={props.values.email}
+                  />
+                  <Icon name="email-outline" size={24} color="black" style={styles.icon} />
+                </View>
+                <Text style={globalStyles.errorText}>{props.touched.email && props.errors.email}{duplicateEmailError}</Text>
+                <View style={styles.inputContainer}>
+                  <TextInput
+                    style={styles.input}
+                    placeholder={passPlaceholder[language]}
+                    secureTextEntry={!showPassword}
+                    onChangeText={props.handleChange('password')}
+                    value={props.values.password}
+                  />
+                  <TouchableOpacity style={styles.icon} onPress={togglePasswordVisibility}>
+                    <Icon name={showPassword ? 'eye-off' : 'eye'} size={24} color="black" />
+                  </TouchableOpacity>
+                </View>
+                <Text style={globalStyles.errorText}>{props.touched.password && props.errors.password}</Text>
+                <View style={styles.inputContainer}>
+                  <TextInput
+                    style={styles.input}
+                    placeholder={repeatPassPlaceholder[language]}
+                    secureTextEntry={!showRepeatPassword}
+                    onChangeText={props.handleChange('repeatPassword')}
+                    value={props.values.repeatPassword}
+                  />
+                  <TouchableOpacity style={styles.icon} onPress={toggleRepeatPasswordVisibility}>
+                    <Icon name={showRepeatPassword ? 'eye-off' : 'eye'} size={24} color="black" />
+                  </TouchableOpacity>
+                </View>
+                <Text style={globalStyles.errorText}>{props.touched.repeatPassword && props.errors.repeatPassword}</Text>
+                <View style={styles.inputContainer}>
+                  <TextInput
+                    style={styles.input}
+                    keyboardType='numeric'
+                    placeholder={agePlaceholder[language]}
+                    onChangeText={props.handleChange('age')}
+                    value={props.values.age}
+                    maxLength={3}
+                  />
+                </View>
+                <Text style={globalStyles.errorText}>{props.touched.age && props.errors.age}</Text>
+                <Button
+                  containerStyle={styles.registerButton}
+                  title={submitButton[language]}
+                  onPress={props.handleSubmit}
                 />
               </View>
-              <Text style={globalStyles.errorText}>{props.touched.name && props.errors.name}{duplicateNameError}</Text>
-              <View style={styles.inputContainer}>
-                <TextInput
-                  style={styles.input}
-                  placeholder={emailPlaceholder[language]}
-                  keyboardType='email-address'
-                  autoCapitalize='none'
-                  onChangeText={props.handleChange('email')}
-                  value={props.values.email}
-                />
-                <Icon name="email-outline" size={24} color="black" style={styles.icon} />
-              </View>
-              <Text style={globalStyles.errorText}>{props.touched.email && props.errors.email}{duplicateEmailError}</Text>
-              <View style={styles.inputContainer}>
-                <TextInput
-                  style={styles.input}
-                  placeholder={passPlaceholder[language]}
-                  secureTextEntry={!showPassword}
-                  onChangeText={props.handleChange('password')}
-                  value={props.values.password}
-                />
-                <TouchableOpacity style={styles.icon} onPress={togglePasswordVisibility}>
-                  <Icon name={showPassword ? 'eye-off' : 'eye'} size={24} color="black" />
-                </TouchableOpacity>
-              </View>
-              <Text style={globalStyles.errorText}>{props.touched.password && props.errors.password}</Text>
-              <View style={styles.inputContainer}>
-                <TextInput
-                  style={styles.input}
-                  placeholder={repeatPassPlaceholder[language]}
-                  secureTextEntry={!showRepeatPassword}
-                  onChangeText={props.handleChange('repeatPassword')}
-                  value={props.values.repeatPassword}
-                />
-                <TouchableOpacity style={styles.icon} onPress={toggleRepeatPasswordVisibility}>
-                  <Icon name={showRepeatPassword ? 'eye-off' : 'eye'} size={24} color="black" />
-                </TouchableOpacity>
-              </View>
-              <Text style={globalStyles.errorText}>{props.touched.repeatPassword && props.errors.repeatPassword}</Text>
-              <View style={styles.inputContainer}>
-                <TextInput
-                  style={styles.input}
-                  keyboardType='numeric'
-                  placeholder={agePlaceholder[language]}
-                  onChangeText={props.handleChange('age')}
-                  value={props.values.age}
-                  maxLength={3}
-                />
-              </View>
-              <Text style={globalStyles.errorText}>{props.touched.age && props.errors.age}</Text>
-              <Button
-                containerStyle={styles.registerButton}
-                title={submitButton[language]}
-                onPress={props.handleSubmit}
-              />
-            </View>
-          )}
-        </Formik>
-      </Card>
+            )}
+          </Formik>
+        </Card>
+      </View>
     </ImageBackground >
   );
 }

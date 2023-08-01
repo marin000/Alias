@@ -85,5 +85,12 @@ export const globalStyles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 5,
     textAlign: 'center'
+  },
+  backArrow: {
+    position: 'absolute',
+    marginTop: 20,
+    left: 10,
+    color: 'white',
+    zIndex: 1,
   }
 });

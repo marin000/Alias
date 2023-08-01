@@ -5,10 +5,11 @@ import { SettingsContext } from '../../utils/settings';
 import { settings } from '../../constants';
 import backgroundImage from '../../assets/blurred-background.jpeg';
 import { globalStyles } from '../../styles/global';
+import BackButton from '../../components/backButton';
 import croFlag from '../../assets/cro-flag.png';
 import ukFlag from '../../assets/uk-flag.png';
 
-export default function Settings() {
+export default function Settings({ navigation }) {
   const { language, updateLanguage, timer, updateTimer, maxScore, updateMaxScore } = useContext(SettingsContext);
   const [selectedRadio, setRadio] = useState(language);
   const [timerValue, setTimerValue] = useState(timer);
@@ -33,6 +34,7 @@ export default function Settings() {
   return (
     <ImageBackground source={backgroundImage} style={globalStyles.mainContainer} resizeMode={'cover'}>
       <View>
+        <BackButton onPress={() => navigation.goBack()} />
         <Text style={globalStyles.screenTitle}>{title[language]}</Text>
         <Card>
           <View style={styles.radioContainer}>
@@ -128,7 +130,7 @@ const styles = StyleSheet.create({
     width: 24,
     height: 24,
     marginRight: 4
-  }, 
+  },
   timerView: {
     padding: 20,
     width: '100%',
@@ -148,5 +150,5 @@ const styles = StyleSheet.create({
 });
 
 Settings.navigationOptions = {
-	headerShown: false,
+  headerShown: false,
 };

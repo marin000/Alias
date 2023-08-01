@@ -22,6 +22,7 @@ import EditTeamDialog from '../../components/editTeamDialog';
 import PreStartDialog from '../../components/preStartDialog';
 import ShowTeamResultDialog from '../../components/showTeamResultDialog';
 import RandomTeamDialog from '../../components/randomTeamDialog';
+import BackButton from '../../components/backButton';
 import { globalStyles } from '../../styles/global';
 
 const NewGame = ({ teams, currentTeamIndex, gameStarted, maxScoreReached, addTeam, updateTeam, deleteTeam, gameStartEnd, navigation }) => {
@@ -84,6 +85,7 @@ const NewGame = ({ teams, currentTeamIndex, gameStarted, maxScoreReached, addTea
       <View style={styles.containerData}>
         <View style={styles.teamList} >
           <Text style={styles.title}>{title[language]}</Text>
+          <BackButton onPress={() => navigation.navigate('Home')} />
           {
             gameStarted &&
             <Text style={styles.targetResult}>{targetResultTxt[language]}: {maxScore}</Text>
