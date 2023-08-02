@@ -3,7 +3,11 @@
     "name": "alias",
     "slug": "alias",
     "version": "1.0.0",
-    "platforms": ["ios", "android", "web"],
+    "platforms": [
+      "ios",
+      "android",
+      "web"
+    ],
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -19,14 +23,23 @@
       "supportsTablet": true
     },
     "android": {
-      "permissions": ["INTERNET"],
+      "permissions": [
+        "INTERNET"
+      ],
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.marin.alias",
+      "versionCode": 1
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "8818aa55-e5a6-4762-be56-a9dd8d2d15e6"
+      }
     }
   }
 }
