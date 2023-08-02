@@ -1,7 +1,7 @@
 import React from 'react';
 import { ScrollView, View, StyleSheet } from 'react-native';
 import { Button, Dialog, Text } from '@rneui/themed';
-import { playGame } from '../constants';
+import { playGame } from '../constants/playGameScreen';
 import { globalStyles } from '../styles/global';
 
 export default function PauseDialog({ isVisible, onClose, language, currentTeam, correctAnswers, skippedAnswers }) {

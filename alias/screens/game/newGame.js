@@ -15,7 +15,7 @@ import {
 } from '../../redux/actions';
 import { useDispatch } from 'react-redux';
 import { SettingsContext } from '../../utils/settings';
-import { newGame } from '../../constants';
+import { newGame } from '../../constants/newGameScreen';
 import backgroundImage from '../../assets/blurred-background.jpeg';
 import AddTeamDialog from '../../components/addTeamDialog';
 import EditTeamDialog from '../../components/editTeamDialog';

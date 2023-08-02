@@ -3,7 +3,7 @@ import { ScrollView, View, StyleSheet } from 'react-native';
 import { Button, Dialog, Text } from '@rneui/themed';
 import { Formik } from 'formik';
 import { TextInput } from 'react-native-gesture-handler';
-import { newGame } from '../constants';
+import { newGame } from '../constants/newGameScreen';
 import { shufflePlayers, isValidNumberOfTeams, createRandomTeams } from '../utils/helper';
 import { globalStyles } from '../styles/global';
 

@@ -9,7 +9,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { Formik } from 'formik';
 import { TextInput } from 'react-native-gesture-handler';
 import { SettingsContext } from '../../utils/settings';
-import { login } from '../../constants';
+import { login } from '../../constants/loginScreen';
 import backgroundImage from '../../assets/blurred-background.jpeg';
 import { globalStyles } from '../../styles/global';
 import LoginDivider from '../../components/customLoginDivider';

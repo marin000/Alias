@@ -2,7 +2,7 @@ import React, { useContext, useState } from 'react';
 import { View, StyleSheet, ImageBackground } from 'react-native';
 import { Text, Card, CheckBox, Image, Slider, Icon } from '@rneui/themed';
 import { SettingsContext } from '../../utils/settings';
-import { settings } from '../../constants';
+import { settings } from '../../constants/settingsScreen';
 import backgroundImage from '../../assets/blurred-background.jpeg';
 import { globalStyles } from '../../styles/global';
 import BackButton from '../../components/backButton';

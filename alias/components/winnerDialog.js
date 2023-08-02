@@ -1,7 +1,8 @@
 import React from 'react';
 import { ScrollView, View, StyleSheet, Image } from 'react-native';
 import { Button, Dialog, Text } from '@rneui/themed';
-import { playGame, newGame } from '../constants';
+import { playGame } from '../constants/playGameScreen';
+import { newGame } from '../constants/newGameScreen';
 import { connect } from 'react-redux';
 import { deleteAllTeams, gameStartEnd, updateMaxScoreReached, updateTeamIndex } from '../redux/actions';
 import { useDispatch } from 'react-redux';

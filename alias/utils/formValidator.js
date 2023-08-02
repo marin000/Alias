@@ -1,5 +1,5 @@
 import * as yup from 'yup';
-import { formValidator } from '../constants';
+import { formValidator } from '../constants/formValidator';
 
 const RegisterSchema = (language) => {
   const {

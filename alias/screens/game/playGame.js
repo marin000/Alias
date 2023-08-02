@@ -6,7 +6,7 @@ import { updateTeam, updateTeamIndex, updatePlayerExplains, updateMaxScoreReache
 import { useDispatch } from 'react-redux';
 import { SettingsContext } from '../../utils/settings';
 import { getRandomWord, teamWithHighestScore } from '../../utils/helper';
-import { playGame } from '../../constants';
+import { playGame } from '../../constants/playGameScreen';
 import backgroundImage from '../../assets/blurred-background.jpeg';
 import EndRoundDialog from '../../components/endRoundDialog';
 import WinnerDialog from '../../components/winnerDialog';

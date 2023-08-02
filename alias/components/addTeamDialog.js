@@ -4,7 +4,7 @@ import { Button, Dialog, Text } from '@rneui/themed';
 import { Formik } from 'formik';
 import { TextInput } from 'react-native-gesture-handler';
 import { validateTeamInput } from '../utils/helper';
-import { newGame } from '../constants';
+import { newGame } from '../constants/newGameScreen';
 import shortid from 'shortid';
 import { globalStyles } from '../styles/global';
 

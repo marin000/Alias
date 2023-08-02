@@ -1,5 +1,5 @@
 import { Alert } from 'react-native';
-import { newGame } from '../constants';
+import { newGame } from '../constants/newGameScreen';
 import shortid from 'shortid';
 
 const validateTeamInput = (teams, values, language) => {

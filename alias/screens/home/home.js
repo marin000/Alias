@@ -5,7 +5,7 @@ import { useDispatch } from 'react-redux';
 import { View, StyleSheet, ImageBackground } from 'react-native';
 import { Button, Text } from '@rneui/themed';
 import { SettingsContext } from '../../utils/settings';
-import { home } from '../../constants';
+import { home } from '../../constants/homeScreen';
 import backgroundImage from '../../assets/blurred-background.jpeg';
 
 const Home = ({ teams, userData, navigation }) => {

@@ -1,7 +1,8 @@
 import React from 'react';
 import { View } from 'react-native';
 import { Button, Dialog, Text } from '@rneui/themed';
-import { playGame, newGame } from '../constants';
+import { playGame } from '../constants/playGameScreen';
+import { newGame } from '../constants/newGameScreen';
 import { globalStyles } from '../styles/global';
 
 export default function ShowTeamResultDialog({ isVisible, onClose, language, selectedTeam }) {

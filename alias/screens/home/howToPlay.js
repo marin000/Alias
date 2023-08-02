@@ -1,9 +1,8 @@
 import React, { useContext } from 'react';
 import { View, StyleSheet, ImageBackground } from 'react-native';
 import { Text, Card } from '@rneui/themed';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { SettingsContext } from '../../utils/settings';
-import { howToPlay } from '../../constants';
+import { howToPlay } from '../../constants/howToPlayScreen';
 import { globalStyles } from '../../styles/global';
 import backgroundImage from '../../assets/blurred-background.jpeg';
 import BackButton from '../../components/backButton';

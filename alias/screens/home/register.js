@@ -5,7 +5,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { Formik } from 'formik';
 import { TextInput } from 'react-native-gesture-handler';
 import { SettingsContext } from '../../utils/settings';
-import { register } from '../../constants';
+import { register } from '../../constants/registerScreen';
 import api from '../../api/players'
 import backgroundImage from '../../assets/blurred-background.jpeg';
 import { globalStyles } from '../../styles/global';

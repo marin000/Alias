@@ -1,4 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { errorMsg } from '../constants/errorMessages';
 
 const TOKEN_KEY = 'auth_token';
 
@@ -6,7 +7,7 @@ export const storeToken = async (token) => {
   try {
     await AsyncStorage.setItem(TOKEN_KEY, token);
   } catch (error) {
-    console.error('Error storing token:', error);
+    console.error(errorMsg.storingToken, error);
   }
 };
 
@@ -15,7 +16,7 @@ export const getToken = async () => {
     const token = await AsyncStorage.getItem(TOKEN_KEY);
     return token;
   } catch (error) {
-    console.error('Error getting token:', error);
+    console.error(errorMsg.gettingToken, error);
     return null;
   }
 };
@@ -24,6 +25,6 @@ export const removeToken = async () => {
   try {
     await AsyncStorage.removeItem(TOKEN_KEY);
   } catch (error) {
-    console.error('Error removing token:', error);
+    console.error(errorMsg.removingToken, error);
   }
 };
