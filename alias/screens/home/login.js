@@ -47,7 +47,9 @@ const Login = ({ navigation }) => {
     };
     api.getPlayer(credentials)
       .then((res) => { 
-        dispatch(updateUser(res.data));
+        const { player, token } = res.data;
+        dispatch(updateUser(player));
+        storeToken(token);
         navigation.navigate('NewGame'); 
       })
       .catch((err) => {

@@ -5,6 +5,8 @@ const infoMessages = require('../constants/infoMessages')
 const errorMessages = require('../constants/errorMessages')
 const { playersLogger } = require('../logger/logger')
 const bcrypt = require('bcrypt')
+const jwt = require('jsonwebtoken')
+const config = require('../config/index')
 
 const create = async(req, res) => {
   try {
@@ -98,7 +100,8 @@ async function getPlayer(req, res) {
     const passwordMatch = await bcrypt.compare(password, player.password)
     if (passwordMatch) {
       playersLogger.info(infoMessages.GET_PLAYER)
-      res.json(player)
+      const token = jwt.sign({ playerId: player._id }, config.token, { expiresIn: '1h' })
+      res.json({ player, token })
     } else {
       res.status(401)
         .json({ error: errorMessages.INVALID_LOGIN })

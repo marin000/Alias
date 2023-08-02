@@ -67,7 +67,7 @@ const Home = ({ teams, userData, navigation }) => {
 					/>
 				</View>
 				<View style={styles.button}>
-					{userData ?
+					{ userData ?
 						<Button
 							title={profile[language]}
 							color='#0000cc'
