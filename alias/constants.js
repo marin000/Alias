@@ -18,6 +18,10 @@ export const home = {
 	login: {
 		hr: 'Prijava',
 		en: 'Login'
+	},
+	profile: {
+		hr: 'Profil',
+		en: 'Profile'
 	}
 };
 

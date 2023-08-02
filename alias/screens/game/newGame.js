@@ -25,7 +25,7 @@ import RandomTeamDialog from '../../components/randomTeamDialog';
 import BackButton from '../../components/backButton';
 import { globalStyles } from '../../styles/global';
 
-const NewGame = ({ teams, currentTeamIndex, gameStarted, maxScoreReached, addTeam, updateTeam, deleteTeam, gameStartEnd, navigation }) => {
+const NewGame = ({ teams, currentTeamIndex, gameStarted, maxScoreReached, addTeam, updateTeam, deleteTeam, gameStartEnd, userData, navigation }) => {
   const { language, maxScore } = useContext(SettingsContext);
   const { title, newTeam, buttonStart, score, targetResultTxt, headerTitle, newGameSameTeamsButton, createRandomTeams } = newGame;
   const [addTeamDialog, setAddTeamDialog] = useState(false);
@@ -288,7 +288,8 @@ const mapStateToProps = (state) => ({
   teams: state.teamReducer.teams,
   currentTeamIndex: state.gameReducer.currentTeamIndex,
   gameStarted: state.gameReducer.gameStarted,
-  maxScoreReached: state.gameReducer.maxScoreReached
+  maxScoreReached: state.gameReducer.maxScoreReached,
+  userData: state.userReducer.userData
 });
 
 const mapDispatchToProps = {

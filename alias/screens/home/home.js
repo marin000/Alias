@@ -8,26 +8,26 @@ import { SettingsContext } from '../../utils/settings';
 import { home } from '../../constants';
 import backgroundImage from '../../assets/blurred-background.jpeg';
 
-const Home = ({ teams, navigation }) => {
+const Home = ({ teams, userData, navigation }) => {
 	const { language } = useContext(SettingsContext);
-	const { newGame, continueGame, instructions, settings, login } = home;
+	const { newGame, continueGame, instructions, settings, login, profile } = home;
 	const dispatch = useDispatch();
 
-  const handleNewGame = () => {
-    dispatch(deleteAllTeams());
-    dispatch(gameStartEnd(false));
-    dispatch(updateMaxScoreReached(false));
-    dispatch(updateTeamIndex(0));
-    navigation.navigate('NewGame', { language });
-  };
+	const handleNewGame = () => {
+		dispatch(deleteAllTeams());
+		dispatch(gameStartEnd(false));
+		dispatch(updateMaxScoreReached(false));
+		dispatch(updateTeamIndex(0));
+		navigation.navigate('NewGame', { language });
+	};
 
-  const handleContinueGame = () => {
-    navigation.navigate('NewGame', { language });
-  };
+	const handleContinueGame = () => {
+		navigation.navigate('NewGame', { language });
+	};
 
-  const handleSettings = () => {
-    navigation.navigate('Settings');
-  };
+	const handleSettings = () => {
+		navigation.navigate('Settings');
+	};
 
 	return (
 		<ImageBackground source={backgroundImage} style={styles.container} resizeMode={'cover'}>
@@ -67,11 +67,18 @@ const Home = ({ teams, navigation }) => {
 					/>
 				</View>
 				<View style={styles.button}>
-					<Button
-						title={login[language]}
-						color='#0000cc'
-						onPress={() => navigation.navigate('Login')}
-					/>
+					{userData ?
+						<Button
+							title={profile[language]}
+							color='#0000cc'
+							onPress={() => navigation.navigate('Profile')}
+						/> :
+						<Button
+							title={login[language]}
+							color='#0000cc'
+							onPress={() => navigation.navigate('Login')}
+						/>
+					}
 				</View>
 			</View>
 		</ImageBackground>
@@ -105,16 +112,17 @@ Home.navigationOptions = {
 };
 
 const mapStateToProps = (state) => ({
-	teams: state.teamReducer.teams
+	teams: state.teamReducer.teams,
+	userData: state.userReducer.userData
 });
 
 const mapDispatchToProps = (dispatch) => {
-  return {
-    deleteAllTeams: () => dispatch(deleteAllTeams()),
-    gameStartEnd: () => dispatch(gameStartEnd(false)),
+	return {
+		deleteAllTeams: () => dispatch(deleteAllTeams()),
+		gameStartEnd: () => dispatch(gameStartEnd(false)),
 		updateMaxScoreReached: () => dispatch(updateMaxScoreReached(false)),
 		updateTeamIndex: () => dispatch(updateTeamIndex(index))
-  };
+	};
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Home);

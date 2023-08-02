@@ -46,3 +46,8 @@ export const addOldWords = (words) => ({
   type: 'ADD_WORDS',
   payload: words
 });
+
+export const updateUser = (userData) => ({
+  type: 'UPDATE_USER',
+  payload: userData
+});

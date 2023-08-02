@@ -1,4 +1,8 @@
 import React, { useContext, useState } from 'react';
+import { connect } from 'react-redux';
+import { updateUser } from '../../redux/actions';
+import { useDispatch } from 'react-redux';
+import { storeToken, getToken } from '../../utils/auth';
 import { View, StyleSheet, ImageBackground, TouchableOpacity } from 'react-native';
 import { Text, Card, Button } from '@rneui/themed';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -24,11 +28,12 @@ const GoogleSignInButton = ({ language, onPress }) => {
   );
 };
 
-export default function Login({ navigation }) {
+const Login = ({ navigation }) => {
   const { language } = useContext(SettingsContext);
   const { emailPlaceholder, passwordPlaceholder, signIn, forgotPass, dividerTxt, newToAlias, registerTxt, invalidCredentials } = login;
   const [showPassword, setShowPassword] = useState(false);
   const [invalidLoginError, setInvalidLoginError] = useState('');
+  const dispatch = useDispatch();
 
   const togglePasswordVisibility = () => {
     setShowPassword((prevShowPassword) => !prevShowPassword);
@@ -41,7 +46,10 @@ export default function Login({ navigation }) {
       password: values.password
     };
     api.getPlayer(credentials)
-      .then(() => { console.log('login ok'); })
+      .then((res) => { 
+        dispatch(updateUser(res.data));
+        navigation.navigate('NewGame'); 
+      })
       .catch((err) => {
         setInvalidLoginError(invalidCredentials[language]);
         console.log(err.response.data);
@@ -190,3 +198,9 @@ const styles = StyleSheet.create({
 Login.navigationOptions = {
   headerShown: false,
 };
+
+const mapDispatchToProps = {
+  updateUser
+};
+
+export default connect(null, mapDispatchToProps)(Login);
