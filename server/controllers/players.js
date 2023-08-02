@@ -113,10 +113,33 @@ async function getPlayer(req, res) {
   }
 }
 
+async function getPlayerByToken(req, res) {
+  const token = req.header('Authorization')
+  if (!token) {
+    return res.status(401)
+      .json({ message: errorMessages.NO_TOKEN_PROVIDED })
+  }
+
+  try {
+    const decoded = jwt.verify(token, config.token)
+    const player = await Players.findById(decoded.playerId)
+
+    if (!player) {
+      return res.status(404)
+        .json({ message: errorMessages.NO_PLAYER })
+    }
+    res.json(player)
+  } catch (error) {
+    res.status(401)
+      .json({ message: errorMessages.INVALID_TOKEN })
+  }
+}
+
 module.exports = {
   create,
   fetch,
   deletePlayer,
   updatePlayer,
-  getPlayer
+  getPlayer,
+  getPlayerByToken
 }

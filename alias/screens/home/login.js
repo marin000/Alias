@@ -2,7 +2,7 @@ import React, { useContext, useState } from 'react';
 import { connect } from 'react-redux';
 import { updateUser } from '../../redux/actions';
 import { useDispatch } from 'react-redux';
-import { storeToken, getToken } from '../../utils/auth';
+import { storeToken } from '../../utils/auth';
 import { View, StyleSheet, ImageBackground, TouchableOpacity } from 'react-native';
 import { Text, Card, Button } from '@rneui/themed';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';

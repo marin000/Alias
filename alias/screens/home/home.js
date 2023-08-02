@@ -1,17 +1,44 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { connect } from 'react-redux';
-import { deleteAllTeams, gameStartEnd, updateMaxScoreReached, updateTeamIndex } from '../../redux/actions';
+import { deleteAllTeams, gameStartEnd, updateMaxScoreReached, updateTeamIndex, updateUser } from '../../redux/actions';
 import { useDispatch } from 'react-redux';
+import { getToken } from '../../utils/auth';
 import { View, StyleSheet, ImageBackground } from 'react-native';
 import { Button, Text } from '@rneui/themed';
 import { SettingsContext } from '../../utils/settings';
 import { home } from '../../constants/homeScreen';
 import backgroundImage from '../../assets/blurred-background.jpeg';
+import api from '../../api/players';
 
 const Home = ({ teams, userData, navigation }) => {
 	const { language } = useContext(SettingsContext);
 	const { newGame, continueGame, instructions, settings, login, profile } = home;
 	const dispatch = useDispatch();
+
+	useEffect(() => {
+		const checkToken = async () => {
+			try {
+				const token = await getToken('auth_token');
+				if (token && !userData) {
+					const header = {
+						headers: {
+							'Authorization': token
+						}
+					};
+					api.getPlayerByToken(header)
+						.then((res) => {
+							dispatch(updateUser(res.data));
+						})
+						.catch((err) => {
+							console.log(err.response.data);
+						});
+				}
+			} catch (error) {
+				console.log(error);
+			}
+		};
+		checkToken();
+	}, []);
 
 	const handleNewGame = () => {
 		dispatch(deleteAllTeams());
@@ -67,7 +94,7 @@ const Home = ({ teams, userData, navigation }) => {
 					/>
 				</View>
 				<View style={styles.button}>
-					{ userData ?
+					{userData ?
 						<Button
 							title={profile[language]}
 							color='#0000cc'
@@ -121,7 +148,8 @@ const mapDispatchToProps = (dispatch) => {
 		deleteAllTeams: () => dispatch(deleteAllTeams()),
 		gameStartEnd: () => dispatch(gameStartEnd(false)),
 		updateMaxScoreReached: () => dispatch(updateMaxScoreReached(false)),
-		updateTeamIndex: () => dispatch(updateTeamIndex(index))
+		updateTeamIndex: () => dispatch(updateTeamIndex(index)),
+		updateUser: (user) => dispatch(updateUser(user))
 	};
 };
 
