@@ -100,7 +100,7 @@ async function getPlayer(req, res) {
     const passwordMatch = await bcrypt.compare(password, player.password)
     if (passwordMatch) {
       playersLogger.info(infoMessages.GET_PLAYER)
-      const token = jwt.sign({ playerId: player._id }, config.token, { expiresIn: '1h' })
+      const token = jwt.sign({ playerId: player._id }, config.token, { expiresIn: '4d' })
       res.json({ player, token })
     } else {
       res.status(401)
