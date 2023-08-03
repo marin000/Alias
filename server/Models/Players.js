@@ -24,6 +24,7 @@ const PlayersShema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Teams'
   },
+  country: String,
   gamesPlayed: Number,
   gamesWin: Number,
   gamesLost: Number

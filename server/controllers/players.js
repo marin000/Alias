@@ -17,9 +17,9 @@ const create = async(req, res) => {
         .json({ errors: errors.array() })
       return
     }
-    const { name, email, password } = req.body
+    const { name, email, password, country } = req.body
     const hashedPassword = await bcrypt.hash(password, 10)
-    const newPlayer = Players({ name, email, password: hashedPassword, gamesPlayed: 0, gamesWin: 0, gamesLost: 0 })
+    const newPlayer = Players({ name, email, password: hashedPassword, country, gamesPlayed: 0, gamesWin: 0, gamesLost: 0 })
     await newPlayer.save()
     playersLogger.info(infoMessages.NEW_PLAYER)
     res.status(201)

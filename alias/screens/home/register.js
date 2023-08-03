@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { View, StyleSheet, ImageBackground, TouchableOpacity } from 'react-native';
 import { Text, Card, Button } from '@rneui/themed';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -11,14 +11,32 @@ import backgroundImage from '../../assets/blurred-background.jpeg';
 import { globalStyles } from '../../styles/global';
 import { RegisterSchema } from '../../utils/formValidator';
 import BackButton from '../../components/backButton';
+import axios from 'axios';
+import { errorMsg } from '../../constants/errorMessages';
+import countriesCodes from '../../assets/countryCodes.json';
 
 export default function Register({ navigation }) {
   const { language } = useContext(SettingsContext);
-  const { emailPlaceholder, passPlaceholder, usernamePlaceholder, agePlaceholder, registerTitle, submitButton, repeatPassPlaceholder } = register;
+  const { emailPlaceholder, passPlaceholder, usernamePlaceholder, registerTitle, submitButton, repeatPassPlaceholder } = register;
   const [showPassword, setShowPassword] = useState(false);
   const [showRepeatPassword, setShowRepeatPassword] = useState(false);
   const [duplicateEmailError, setDuplicateEmailError] = useState('');
   const [duplicateNameError, setDuplicateNameError] = useState('');
+  const [country, setCountry] = useState('');
+
+  useEffect(() => {
+    const getCountryFromIP = async () => {
+      try {
+        const response = await axios.get('http://ipinfo.io');
+        setCountry(countriesCodes[response.data.country]);
+      } catch (error) {
+        console.error(errorMsg.ipInfo, error);
+      }
+    };
+    getCountryFromIP();
+  }, []);
+
+  console.log(country);
 
   const togglePasswordVisibility = () => {
     setShowPassword((prevShowPassword) => !prevShowPassword);
@@ -28,13 +46,16 @@ export default function Register({ navigation }) {
     setShowRepeatPassword((prevShowRepeatPassword) => !prevShowRepeatPassword);
   };
 
+  console.log();
+
   const handleRegistration = (values) => {
     setDuplicateEmailError('');
     setDuplicateNameError('');
     const newPlayer = {
       name: values.name,
       email: values.email,
-      password: values.password
+      password: values.password,
+      country
     };
 
     api.addNewPLayer(newPlayer)
