@@ -15,10 +15,6 @@ export const register = {
 		hr: 'Korisničko ime',
 		en: 'Username'
 	},
-	agePlaceholder: {
-		hr: 'Godina',
-		en: 'Age'
-	},
 	registerTitle: {
 		hr: 'Registriraj se',
 		en: 'Register'

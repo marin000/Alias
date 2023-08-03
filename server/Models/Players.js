@@ -24,7 +24,6 @@ const PlayersShema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Teams'
   },
-  age: Number,
   gamesPlayed: Number,
   gamesWin: Number,
   gamesLost: Number

@@ -31,13 +31,10 @@ export default function Register({ navigation }) {
   const handleRegistration = (values) => {
     setDuplicateEmailError('');
     setDuplicateNameError('');
-    const numericInput = values.age.replace(/[^0-9]/g, '');
-    const ageValue = parseInt(numericInput, 10);
     const newPlayer = {
       name: values.name,
       email: values.email,
-      password: values.password,
-      age: ageValue
+      password: values.password
     };
 
     api.addNewPLayer(newPlayer)
@@ -62,7 +59,7 @@ export default function Register({ navigation }) {
         <Text style={styles.title}>{registerTitle[language]}</Text>
         <Card>
           <Formik
-            initialValues={{ name: '', email: '', password: '', repeatPassword: '', age: '' }}
+            initialValues={{ name: '', email: '', password: '', repeatPassword: '' }}
             validationSchema={RegisterSchema(language)}
             onSubmit={handleRegistration}
           >
@@ -115,17 +112,6 @@ export default function Register({ navigation }) {
                   </TouchableOpacity>
                 </View>
                 <Text style={globalStyles.errorText}>{props.touched.repeatPassword && props.errors.repeatPassword}</Text>
-                <View style={styles.inputContainer}>
-                  <TextInput
-                    style={styles.input}
-                    keyboardType='numeric'
-                    placeholder={agePlaceholder[language]}
-                    onChangeText={props.handleChange('age')}
-                    value={props.values.age}
-                    maxLength={3}
-                  />
-                </View>
-                <Text style={globalStyles.errorText}>{props.touched.age && props.errors.age}</Text>
                 <Button
                   containerStyle={styles.registerButton}
                   title={submitButton[language]}

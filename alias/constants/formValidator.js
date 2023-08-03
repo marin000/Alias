@@ -34,17 +34,5 @@ export const formValidator = {
 	repeatPasswordMatch: {
 		hr: 'Lozinke moraju biti iste',
 		en: 'Passwords must match'
-	},
-	ageReq: {
-		hr: 'Godine su obavezne',
-		en: 'Age is required'
-	},
-	ageMin: {
-		hr: 'Minimalni broj godina je 4',
-		en: 'Minimum age is 4'
-	},
-	ageMax: {
-		hr: 'Maksimalni broj godina je 120',
-		en: 'Maximum age is 120'
 	}
 }

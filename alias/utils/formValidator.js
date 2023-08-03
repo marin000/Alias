@@ -11,10 +11,7 @@ const RegisterSchema = (language) => {
     passwordMin,
     passwordReq,
     repeatPasswordReq,
-    repeatPasswordMatch,
-    ageReq,
-    ageMin,
-    ageMax,
+    repeatPasswordMatch
   } = formValidator;
 
   return yup.object({
@@ -35,12 +32,7 @@ const RegisterSchema = (language) => {
     repeatPassword: yup
       .string()
       .oneOf([yup.ref('password'), null], repeatPasswordMatch[language])
-      .required(repeatPasswordReq[language]),
-    age: yup
-      .number()
-      .min(4, ageMin[language])
-      .max(120, ageMax[language])
-      .required(ageReq[language]),
+      .required(repeatPasswordReq[language])
   });
 };
 
