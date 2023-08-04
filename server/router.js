@@ -12,7 +12,7 @@ router.post('/api/player/login', playerController.getPlayer)
 router.get('/api/player/login', playerController.getPlayerByToken)
 router.get('/api/player/all', playerController.fetch)
 router.delete('/api/player/:id', playerValidator.validate('validatePlayer'), playerController.deletePlayer)
-router.put('/api/player', playerValidator.validate('validateMongoIdAndTeam'), playerController.updatePlayer)
+router.put('/api/player', playerValidator.validate('validatePlayer'), playerController.updatePlayer)
 
 router.post('/api/team', teamController.create)
 router.get('/api/team', teamController.fetch)

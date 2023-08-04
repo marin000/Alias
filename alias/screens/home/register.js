@@ -36,8 +36,6 @@ export default function Register({ navigation }) {
     getCountryFromIP();
   }, []);
 
-  console.log(country);
-
   const togglePasswordVisibility = () => {
     setShowPassword((prevShowPassword) => !prevShowPassword);
   };

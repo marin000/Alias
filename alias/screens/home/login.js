@@ -50,7 +50,7 @@ const Login = ({ navigation }) => {
         const { player, token } = res.data;
         dispatch(updateUser(player));
         storeToken(token);
-        navigation.navigate('NewGame'); 
+        navigation.navigate('Home'); 
       })
       .catch((err) => {
         setInvalidLoginError(invalidCredentials[language]);

@@ -19,13 +19,5 @@ exports.validate = (method) => {
           .isMongoId()
       ]
     }
-    case 'validateMongoIdAndTeam': {
-      return [
-        check('id', message.PLAYER_ID)
-          .isMongoId(),
-        check('team', message.TEAM_ID)
-          .isMongoId()
-      ]
-    }
   }
 }

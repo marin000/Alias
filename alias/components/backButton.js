@@ -3,7 +3,7 @@ import { TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { globalStyles } from '../styles/global';
 
-export default BackButton = ({ onPress }) => {
+export default function BackButton({ onPress }) {
   return (
     <TouchableOpacity onPress={onPress} style={globalStyles.backArrow}>
       <Icon
