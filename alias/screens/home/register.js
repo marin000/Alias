@@ -17,7 +17,14 @@ import countriesCodes from '../../assets/countryCodes.json';
 
 export default function Register({ navigation }) {
   const { language } = useContext(SettingsContext);
-  const { emailPlaceholder, passPlaceholder, usernamePlaceholder, registerTitle, submitButton, repeatPassPlaceholder } = register;
+  const { emailPlaceholder,
+    passPlaceholder,
+    usernamePlaceholder,
+    registerTitle,
+    submitButton,
+    repeatPassPlaceholder,
+    duplicateEmailErrorTxt,
+    duplicateNameErrorTxt } = register;
   const [showPassword, setShowPassword] = useState(false);
   const [showRepeatPassword, setShowRepeatPassword] = useState(false);
   const [duplicateEmailError, setDuplicateEmailError] = useState('');
@@ -44,8 +51,6 @@ export default function Register({ navigation }) {
     setShowRepeatPassword((prevShowRepeatPassword) => !prevShowRepeatPassword);
   };
 
-  console.log();
-
   const handleRegistration = (values) => {
     setDuplicateEmailError('');
     setDuplicateNameError('');
@@ -62,10 +67,10 @@ export default function Register({ navigation }) {
         const errorResponse = err.response.data;
         const dbProperty = errorResponse.error.split(' ')[0];
         if (dbProperty === 'Email') {
-          setDuplicateEmailError(errorResponse.error);
+          setDuplicateEmailError(duplicateEmailErrorTxt[language]);
         }
         if (dbProperty === 'Name') {
-          setDuplicateNameError(errorResponse.error);
+          setDuplicateNameError(duplicateNameErrorTxt[language]);
         }
         console.log(errorResponse);
       });

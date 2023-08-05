@@ -22,5 +22,13 @@ export const register = {
 	submitButton: {
 		hr: 'Sačuvaj',
 		en: 'Save'
+	},
+	duplicateEmailErrorTxt: {
+		hr: 'Email već postoji',
+		en: 'Email already exists'
+	},
+	duplicateNameErrorTxt: {
+		hr: 'Korisničko ime već postoji',
+		en: 'Username already exists'
 	}
 }

@@ -75,11 +75,11 @@ export const globalStyles = StyleSheet.create({
     fontWeight: 'normal'
   },
   screenTitle: {
-		textAlign: 'center',
-		fontSize: 30,
-		marginTop: 10,
-		color: 'white'
-	},
+    textAlign: 'center',
+    fontSize: 30,
+    marginTop: 10,
+    color: 'white'
+  },
   errorText: {
     color: 'crimson',
     fontWeight: 'bold',
@@ -92,5 +92,19 @@ export const globalStyles = StyleSheet.create({
     left: 10,
     color: 'white',
     zIndex: 1,
+  },
+  profileRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 5,
+    marginTop: 5
+  },
+  profileInfo: {
+    marginLeft: 10,
+    marginRight: 6
+  },
+  profileDivider: {
+    backgroundColor: 'gray',
+    marginVertical: 5,
   }
 });
