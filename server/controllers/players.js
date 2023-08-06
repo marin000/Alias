@@ -8,6 +8,13 @@ const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const config = require('../config/index')
 
+const createModifiedError = (error) => {
+  const fieldName = Object.keys(error.keyValue)[0]
+  const capitalizedFieldName = fieldName.charAt(0)
+    .toUpperCase() + fieldName.slice(1)
+  return new Error(`${capitalizedFieldName} ${errorMessages.DEFAULT_DUPLICATE}`)
+}
+
 const create = async(req, res) => {
   try {
     const errors = validationResult(req)
@@ -27,10 +34,7 @@ const create = async(req, res) => {
   } catch (error) {
     playersLogger.error((error.message, { metadata: error.stack }))
     if (error.code === 11000) {
-      const fieldName = Object.keys(error.keyValue)[0]
-      const capitalizedFieldName = fieldName.charAt(0)
-        .toUpperCase() + fieldName.slice(1)
-      const modifiedError = new Error(`${capitalizedFieldName} ${errorMessages.DEFAULT_DUPLICATE}`)
+      const modifiedError = createModifiedError(error)
       res.status(400)
       return res.json({ error: modifiedError.message })
     }
@@ -81,13 +85,35 @@ async function updatePlayer(req, res) {
         .json({ errors: errors.array() })
       return
     }
-    const { id, team } = req.body
-    const updatedPlayer = await Players.findByIdAndUpdate(id, { team })
+    const { id, email, name, team, image } = req.body
+    const updateFields = {}
 
+    if (email) {
+      updateFields.email = email
+    }
+
+    if (name) {
+      updateFields.name = name
+    }
+
+    if (team) {
+      updateFields.team = team
+    }
+
+    if (image) {
+      updateFields.image = image
+    }
+
+    const updatedPlayer = await Players.findByIdAndUpdate(id, updateFields, { new: true })
     playersLogger.info(infoMessages.UPDATE_PLAYER)
     res.json(updatedPlayer)
   } catch (error) {
-    playersLogger.error(error.message, { metadata: error.stack })
+    playersLogger.error((error.message, { metadata: error.stack }))
+    if (error.code === 11000) {
+      const modifiedError = createModifiedError(error)
+      res.status(400)
+      return res.json({ error: modifiedError.message })
+    }
     res.status(500)
       .send(error.message)
   }
@@ -97,6 +123,7 @@ async function getPlayer(req, res) {
   try {
     const { email, password } = req.body
     const player = await Players.findOne({ email })
+      .populate('team')
     const passwordMatch = await bcrypt.compare(password, player.password)
     if (passwordMatch) {
       playersLogger.info(infoMessages.GET_PLAYER)
@@ -123,6 +150,7 @@ async function getPlayerByToken(req, res) {
   try {
     const decoded = jwt.verify(token, config.token)
     const player = await Players.findById(decoded.playerId)
+      .populate('team')
 
     if (!player) {
       return res.status(404)

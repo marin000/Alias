@@ -5,13 +5,9 @@ const { DB_URL_MISSING, PORT_MISSING, TOKEN_MISSING } = errorMessages
 
 if (!process.env.DB_URL) {
   throw new Error(DB_URL_MISSING)
-}
-
-if (!process.env.PORT) {
+} else if (!process.env.PORT) {
   throw new Error(PORT_MISSING)
-}
-
-if (!process.env.JWT_TOKEN) {
+} else if (!process.env.JWT_TOKEN) {
   throw new Error(TOKEN_MISSING)
 }
 

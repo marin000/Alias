@@ -27,7 +27,8 @@ const PlayersShema = new mongoose.Schema({
   country: String,
   gamesPlayed: Number,
   gamesWin: Number,
-  gamesLost: Number
+  gamesLost: Number,
+  image: String
 }, { timestamps: true }
 )
 
