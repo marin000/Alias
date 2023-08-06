@@ -6,7 +6,7 @@ import { globalStyles } from '../../styles/global';
 
 export default function EditProfile({ isEditing, value, onChangeText, onSave, onEdit, label, errorText }) {
   return (
-    <View>
+    <>
       <View style={globalStyles.profileRow}>
         <Icon name="account-circle" type="material-community" size={24} />
         {isEditing ? (
@@ -40,7 +40,7 @@ export default function EditProfile({ isEditing, value, onChangeText, onSave, on
         )}
       </View>
       {errorText && <Text style={styles.errorText}>{errorText}</Text>}
-    </View>
+    </>
   );
 };
 
