@@ -1,14 +1,16 @@
 import React from 'react';
-import { StyleSheet, View, Image, TouchableHighlight } from 'react-native'
+import { StyleSheet, View, Image, TouchableHighlight, ActivityIndicator } from 'react-native'
 import { Text, Icon } from '@rneui/themed';
 import { profile } from '../../constants/profileScreen';
 
-export default function ProfilePictureComponent({ profilePicture, handleUploadPicture, language }) {
+export default function ProfilePictureComponent({ profilePicture, handleUploadPicture, language, isUploading }) {
   const { uploadPic } = profile;
 
   return (
     <View style={styles.profilePictureContainer}>
-      {profilePicture ? (
+      {isUploading ? (
+        <ActivityIndicator size="large" color="white" />
+      ) : profilePicture ? (
         <Image source={{ uri: profilePicture }} style={styles.profilePicture} />
       ) : (
         <Icon name="account-circle" type="material-community" size={120} color={'white'} />

@@ -7,7 +7,8 @@ import {
   StyleSheet,
   ImageBackground,
   TouchableWithoutFeedback,
-  Keyboard
+  Keyboard,
+  Alert
 } from 'react-native';
 import { Text, Card, Icon, Divider } from '@rneui/themed';
 import { SettingsContext } from '../../utils/settings';
@@ -17,6 +18,7 @@ import { RegisterSchema } from '../../utils/formValidator';
 import backgroundImage from '../../assets/blurred-background.jpeg';
 import BackButton from '../../components/backButton';
 import * as ImagePicker from 'expo-image-picker';
+import { uploadImage } from '../../utils/helper';
 import api from '../../api/players';
 import ProfilePictureComponent from '../../components/profileScreen/profilePicture';
 import EditProfile from '../../components/profileScreen/editProfile';
@@ -27,9 +29,10 @@ const Profile = ({ navigation, userData }) => {
   const { language } = useContext(SettingsContext);
   const { playedTxt, wonTxt, lostTxt, cameraAccess } = profile;
   const { duplicateEmailErrorTxt, duplicateNameErrorTxt } = register;
-  const { name, email, country, team, gamesPlayed, gamesWin, gamesLost } = userData;
+  const { name, email, country, team, image, gamesPlayed, gamesWin, gamesLost } = userData;
   const [showTeamStats, setShowTeamStats] = useState(false);
-  const [profilePicture, setProfilePicture] = useState(null);
+  const [profilePicture, setProfilePicture] = useState(image);
+  const [isUploading, setIsUploading] = useState(false);
   const [editNameFlag, setEditNameFlag] = useState(false);
   const [editedName, setEditedName] = useState(name);
   const [editEmailFlag, setEditEmailFlag] = useState(false);
@@ -44,18 +47,35 @@ const Profile = ({ navigation, userData }) => {
 
   const handleUploadPicture = async () => {
     const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
-
-    // if (permissionResult.granted === false) {
-    //   alert(cameraAccess[language]);
-    //   return;
-    // }
-    const imageResult = await ImagePicker.launchImageLibraryAsync();
-
-    if (!imageResult.canceled && imageResult.assets.length > 0) {
-      const selectedAsset = imageResult.assets[0];
-      setProfilePicture(selectedAsset.uri);
+    if (permissionResult.granted === false) {
+      Alert.alert(cameraAccess[language]);
+      return;
     }
-  };
+    
+    const imageResult = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1
+    });
+    setIsUploading(true);
+    
+    if (!imageResult.canceled && imageResult.assets.length > 0) {
+      const image = imageResult.assets[0];
+      const newImage = await uploadImage(image);
+      const updateFields = { id: userData._id, image: newImage };
+      const updatedPlayer = { ...userData, image: newImage };
+      api.updatePLayer(updateFields)
+        .then(() => {
+          setProfilePicture(newImage);
+          setIsUploading(false);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+      dispatch(updateUser(updatedPlayer));
+    }
+  }
 
   const handleBackdropPress = () => {
     setEditNameFlag(false);
@@ -127,6 +147,7 @@ const Profile = ({ navigation, userData }) => {
             profilePicture={profilePicture}
             handleUploadPicture={handleUploadPicture}
             language={language}
+            isUploading={isUploading}
           />
 
           <Card containerStyle={styles.card}>

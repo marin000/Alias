@@ -1,6 +1,7 @@
 import { Alert } from 'react-native';
 import { newGame } from '../constants/newGameScreen';
 import shortid from 'shortid';
+import config from '../config/config';
 
 const validateTeamInput = (teams, values, language) => {
   const { alertPlayer, alertTeam, alertTeamName } = newGame;
@@ -83,12 +84,33 @@ const createRandomTeams = (playersArray, teamNumberValue, language) => {
     teams[teamIndex].players.push(newPlayer);
     teamIndex = (teamIndex + 1) % teamNumberValue;
   });
-  teams.forEach( team => {
+  teams.forEach(team => {
     team.players[0].explains = true;
   })
 
   return teams;
 };
+
+const uploadImage = async (img) => {
+  const { cloudinaryName, cloudinaryUploadPreset, cloudinaryFetchUrl } = config;
+  const formdata = new FormData();
+
+  formdata.append("file", {
+    uri: img.uri,
+    type: "image/jpeg",
+    name: "image.jpg"
+  });
+  formdata.append("cloud_name", cloudinaryName);
+  formdata.append("upload_preset", cloudinaryUploadPreset);
+
+  const res = await fetch(cloudinaryFetchUrl, {
+    method: "post",
+    mode: "cors",
+    body: formdata,
+  });
+  const json = await res.json();
+  return JSON.stringify(json.secure_url).replaceAll('"', '');
+}
 
 export {
   validateTeamInput,
@@ -96,5 +118,6 @@ export {
   teamWithHighestScore,
   shufflePlayers,
   isValidNumberOfTeams,
-  createRandomTeams
+  createRandomTeams,
+  uploadImage
 }
