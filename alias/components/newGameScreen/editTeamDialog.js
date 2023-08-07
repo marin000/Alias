@@ -3,9 +3,9 @@ import { ScrollView, View } from 'react-native';
 import { Button, Dialog, Text } from '@rneui/themed';
 import { Formik } from 'formik';
 import { TextInput } from 'react-native-gesture-handler';
-import { validateTeamInput } from '../utils/helper';
-import { newGame } from '../constants/newGameScreen';
-import { globalStyles } from '../styles/global';
+import { validateTeamInput } from '../../utils/helper';
+import { newGame } from '../../constants/newGameScreen';
+import { globalStyles } from '../../styles/global';
 
 export default function EditTeamDialog({ isVisible, onClose, teams, selectedTeam, language, onDeleteTeam, onUpdateTeam }) {
   const { teamInput, playerInput, buttonSaveTeam, buttonAddPlayer, buttonDelete } = newGame;

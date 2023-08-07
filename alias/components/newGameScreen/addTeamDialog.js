@@ -3,10 +3,10 @@ import { ScrollView, View } from 'react-native';
 import { Button, Dialog, Text } from '@rneui/themed';
 import { Formik } from 'formik';
 import { TextInput } from 'react-native-gesture-handler';
-import { validateTeamInput } from '../utils/helper';
-import { newGame } from '../constants/newGameScreen';
+import { validateTeamInput } from '../../utils/helper';
+import { newGame } from '../../constants/newGameScreen';
 import shortid from 'shortid';
-import { globalStyles } from '../styles/global';
+import { globalStyles } from '../../styles/global';
 
 export default function AddTeamDialog({ isVisible, onClose, teams, language, onAddTeam }) {
   const { teamInput, playerInput, buttonSaveTeam, buttonAddPlayer, buttonReset } = newGame;

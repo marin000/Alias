@@ -8,9 +8,9 @@ import { SettingsContext } from '../../utils/settings';
 import { getRandomWord, teamWithHighestScore } from '../../utils/helper';
 import { playGame } from '../../constants/playGameScreen';
 import backgroundImage from '../../assets/blurred-background.jpeg';
-import EndRoundDialog from '../../components/endRoundDialog';
-import WinnerDialog from '../../components/winnerDialog';
-import PauseDialog from '../../components/pauseDialog';
+import EndRoundDialog from '../../components/playGameScreen/endRoundDialog';
+import WinnerDialog from '../../components/playGameScreen/winnerDialog';
+import PauseDialog from '../../components/playGameScreen/pauseDialog';
 import { globalStyles } from '../../styles/global';
 
 const PlayGame = ({ teams, currentTeamIndex, maxScoreReached, oldWords, updateTeam, navigation }) => {

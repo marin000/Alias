@@ -17,11 +17,11 @@ import { useDispatch } from 'react-redux';
 import { SettingsContext } from '../../utils/settings';
 import { newGame } from '../../constants/newGameScreen';
 import backgroundImage from '../../assets/blurred-background.jpeg';
-import AddTeamDialog from '../../components/addTeamDialog';
-import EditTeamDialog from '../../components/editTeamDialog';
-import PreStartDialog from '../../components/preStartDialog';
-import ShowTeamResultDialog from '../../components/showTeamResultDialog';
-import RandomTeamDialog from '../../components/randomTeamDialog';
+import AddTeamDialog from '../../components/newGameScreen/addTeamDialog';
+import EditTeamDialog from '../../components/newGameScreen/editTeamDialog';
+import PreStartDialog from '../../components/newGameScreen/preStartDialog';
+import ShowTeamResultDialog from '../../components/newGameScreen/showTeamResultDialog';
+import RandomTeamDialog from '../../components/newGameScreen/randomTeamDialog';
 import BackButton from '../../components/backButton';
 import { globalStyles } from '../../styles/global';
 

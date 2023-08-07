@@ -1,13 +1,13 @@
 import React from 'react';
 import { ScrollView, View, StyleSheet, Image } from 'react-native';
 import { Button, Dialog, Text } from '@rneui/themed';
-import { playGame } from '../constants/playGameScreen';
-import { newGame } from '../constants/newGameScreen';
+import { playGame } from '../../constants/playGameScreen';
+import { newGame } from '../../constants/newGameScreen';
 import { connect } from 'react-redux';
-import { deleteAllTeams, gameStartEnd, updateMaxScoreReached, updateTeamIndex } from '../redux/actions';
+import { deleteAllTeams, gameStartEnd, updateMaxScoreReached, updateTeamIndex } from '../../redux/actions';
 import { useDispatch } from 'react-redux';
-import { globalStyles } from '../styles/global';
-import cupImage from '../assets/cup.jpeg';
+import { globalStyles } from '../../styles/global';
+import cupImage from '../../assets/cup.jpeg';
 
 const WinnerDialog = ({ isVisible, onClose, language, winnerTeam }) => {
   const { winner, finalScore } = playGame;
