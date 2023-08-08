@@ -7,12 +7,22 @@ const { playersLogger } = require('../logger/logger')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const config = require('../config/index')
+const cloudinary = require('cloudinary').v2
 
 const createModifiedError = (error) => {
   const fieldName = Object.keys(error.keyValue)[0]
   const capitalizedFieldName = fieldName.charAt(0)
     .toUpperCase() + fieldName.slice(1)
   return new Error(`${capitalizedFieldName} ${errorMessages.DEFAULT_DUPLICATE}`)
+}
+
+const deleteImageCloudinary = (oldImage) => {
+  const oldImageId = oldImage.split('/')
+    .pop()
+    .split('.')
+    .shift()
+  cloudinary.uploader
+    .destroy(oldImageId)
 }
 
 const create = async(req, res) => {
@@ -101,7 +111,10 @@ async function updatePlayer(req, res) {
     }
 
     if (image) {
-      updateFields.image = image
+      updateFields.image = image.newImage
+      if (image.oldImage) {
+        deleteImageCloudinary(image.oldImage)
+      }
     }
 
     const updatedPlayer = await Players.findByIdAndUpdate(id, updateFields, { new: true })

@@ -5,8 +5,15 @@ const app = express()
 const config = require('./config/index')
 const dbMessages = require('./constants/dbMessages')
 const { dbConnectionLogger, simpleLogger } = require('./logger/logger')
+const cloudinary = require('cloudinary').v2
 require('dotenv')
   .config()
+
+cloudinary.config({
+  cloud_name: config.cloudinaryName,
+  api_key: config.cloudinaryApiKey,
+  api_secret: config.cloudinaryApiSecret
+})
 const router = require('./router')
 
 app.use(express.json())

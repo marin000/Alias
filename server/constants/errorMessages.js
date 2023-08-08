@@ -6,5 +6,8 @@ module.exports = {
   INVALID_TOKEN: 'Token invalid or expired',
   DEFAULT_DUPLICATE: 'already exists',
   INVALID_LOGIN: 'Invalid email or password.',
-  NO_PLAYER: 'Player not found'
+  NO_PLAYER: 'Player not found',
+  MISSING_CLOUDINARY_NAME: 'Missing cloudinary name',
+  MISSING_CLOUDINARY_API_KEY: 'Missing cloudinary api key',
+  MISSING_CLOUDINARY_API_SECRET: 'Missing cloudinary api secret'
 }

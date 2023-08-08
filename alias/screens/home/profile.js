@@ -51,7 +51,6 @@ const Profile = ({ navigation, userData }) => {
       Alert.alert(cameraAccess[language]);
       return;
     }
-    
     const imageResult = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: true,
@@ -59,11 +58,15 @@ const Profile = ({ navigation, userData }) => {
       quality: 1
     });
     setIsUploading(true);
-    
+
     if (!imageResult.canceled && imageResult.assets.length > 0) {
       const image = imageResult.assets[0];
       const newImage = await uploadImage(image);
-      const updateFields = { id: userData._id, image: newImage };
+      const imageObj = { newImage };
+      if (profilePicture) {
+        imageObj.oldImage = profilePicture;
+      }
+      const updateFields = { id: userData._id, image: imageObj };
       const updatedPlayer = { ...userData, image: newImage };
       api.updatePLayer(updateFields)
         .then(() => {
