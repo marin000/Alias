@@ -89,18 +89,18 @@ export default function Register({ navigation }) {
           >
             {(props) => (
               <View style={styles.form}>
-                <View style={styles.inputContainer}>
+                <View style={globalStyles.entryInputContainer}>
                   <TextInput
-                    style={styles.input}
+                    style={globalStyles.entryInput}
                     placeholder={usernamePlaceholder[language]}
                     onChangeText={props.handleChange('name')}
                     value={props.values.name}
                   />
                 </View>
                 <Text style={globalStyles.errorText}>{props.touched.name && props.errors.name}{duplicateNameError}</Text>
-                <View style={styles.inputContainer}>
+                <View style={globalStyles.entryInputContainer}>
                   <TextInput
-                    style={styles.input}
+                    style={globalStyles.entryInput}
                     placeholder={emailPlaceholder[language]}
                     keyboardType='email-address'
                     autoCapitalize='none'
@@ -110,28 +110,28 @@ export default function Register({ navigation }) {
                   <Icon name="email-outline" size={24} color="black" style={styles.icon} />
                 </View>
                 <Text style={globalStyles.errorText}>{props.touched.email && props.errors.email}{duplicateEmailError}</Text>
-                <View style={styles.inputContainer}>
+                <View style={globalStyles.entryInputContainer}>
                   <TextInput
-                    style={styles.input}
+                    style={globalStyles.entryInput}
                     placeholder={passPlaceholder[language]}
                     secureTextEntry={!showPassword}
                     onChangeText={props.handleChange('password')}
                     value={props.values.password}
                   />
-                  <TouchableOpacity style={styles.icon} onPress={togglePasswordVisibility}>
+                  <TouchableOpacity style={globalStyles.eyeIcon} onPress={togglePasswordVisibility}>
                     <Icon name={showPassword ? 'eye-off' : 'eye'} size={24} color="black" />
                   </TouchableOpacity>
                 </View>
                 <Text style={globalStyles.errorText}>{props.touched.password && props.errors.password}</Text>
-                <View style={styles.inputContainer}>
+                <View style={globalStyles.entryInputContainer}>
                   <TextInput
-                    style={styles.input}
+                    style={globalStyles.entryInput}
                     placeholder={repeatPassPlaceholder[language]}
                     secureTextEntry={!showRepeatPassword}
                     onChangeText={props.handleChange('repeatPassword')}
                     value={props.values.repeatPassword}
                   />
-                  <TouchableOpacity style={styles.icon} onPress={toggleRepeatPasswordVisibility}>
+                  <TouchableOpacity style={globalStyles.eyeIcon} onPress={toggleRepeatPasswordVisibility}>
                     <Icon name={showRepeatPassword ? 'eye-off' : 'eye'} size={24} color="black" />
                   </TouchableOpacity>
                 </View>
@@ -158,26 +158,9 @@ const styles = StyleSheet.create({
   form: {
     paddingTop: 20
   },
-  inputContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 8,
-    paddingVertical: 8,
-    paddingHorizontal: 12,
-    marginBottom: 10,
-  },
-  input: {
-    flex: 1,
-    fontSize: 16,
-  },
   registerButton: {
     ...globalStyles.buttonSaveTeam,
     marginTop: 25
-  },
-  icon: {
-    marginRight: 0
   }
 });
 

@@ -71,9 +71,9 @@ const Login = ({ navigation }) => {
           >
             {(props) => (
               <View style={styles.form}>
-                <View style={styles.inputContainer}>
+                <View style={globalStyles.entryInputContainer}>
                   <TextInput
-                    style={styles.input}
+                    style={globalStyles.entryInput}
                     placeholder={emailPlaceholder[language]}
                     keyboardType='email-address'
                     autoCapitalize='none'
@@ -83,9 +83,9 @@ const Login = ({ navigation }) => {
                   <Icon name="email-outline" size={24} color="black" style={styles.icon} />
                 </View>
                 <Text style={globalStyles.errorText}>{props.touched.email && props.errors.email}</Text>
-                <View style={styles.inputContainer}>
+                <View style={globalStyles.entryInputContainer}>
                   <TextInput
-                    style={styles.input}
+                    style={globalStyles.entryInput}
                     placeholder={passwordPlaceholder[language]}
                     secureTextEntry={!showPassword}
                     onChangeText={props.handleChange('password')}
@@ -131,20 +131,6 @@ const styles = StyleSheet.create({
   },
   form: {
     paddingTop: 20
-  },
-  inputContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 8,
-    paddingVertical: 8,
-    paddingHorizontal: 12,
-    marginBottom: 10,
-  },
-  input: {
-    flex: 1,
-    fontSize: 16,
   },
   signInButton: {
     ...globalStyles.buttonSaveTeam,

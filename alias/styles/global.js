@@ -106,5 +106,22 @@ export const globalStyles = StyleSheet.create({
   profileDivider: {
     backgroundColor: 'gray',
     marginVertical: 5,
-  }
+  },
+  eyeIcon: {
+    marginRight: 0
+  },
+  entryInputContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 8,
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    marginBottom: 10,
+  },
+  entryInput: {
+    flex: 1,
+    fontSize: 16,
+  },
 });
