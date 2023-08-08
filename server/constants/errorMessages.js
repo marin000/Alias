@@ -9,5 +9,6 @@ module.exports = {
   NO_PLAYER: 'Player not found',
   MISSING_CLOUDINARY_NAME: 'Missing cloudinary name',
   MISSING_CLOUDINARY_API_KEY: 'Missing cloudinary api key',
-  MISSING_CLOUDINARY_API_SECRET: 'Missing cloudinary api secret'
+  MISSING_CLOUDINARY_API_SECRET: 'Missing cloudinary api secret',
+  INVALID_CURRENT_PASSWORD: 'Invalid current password.'
 }
