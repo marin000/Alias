@@ -5,6 +5,7 @@ import Login from '../screens/home/login';
 import Settings from '../screens/home/settings';
 import Register from '../screens/home/register';
 import Profile from '../screens/home/profile';
+import ChangePassword from '../screens/home/changePassword';
 
 const screens = {
 	Home: {
@@ -24,6 +25,9 @@ const screens = {
 	},
 	Profile: {
 		screen: Profile
+	},
+	ChangePassword: {
+		screen: ChangePassword
 	}
 };
 

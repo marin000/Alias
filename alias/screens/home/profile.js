@@ -2,15 +2,17 @@ import React, { useContext, useState } from 'react';
 import { connect } from 'react-redux';
 import { updateUser } from '../../redux/actions';
 import { useDispatch } from 'react-redux';
+import { removeToken } from '../../utils/auth';
 import {
   View,
   StyleSheet,
   ImageBackground,
   TouchableWithoutFeedback,
+  ScrollView,
   Keyboard,
   Alert
 } from 'react-native';
-import { Text, Card, Icon, Divider } from '@rneui/themed';
+import { Text, Card, Icon, Divider, Button } from '@rneui/themed';
 import { SettingsContext } from '../../utils/settings';
 import { profile } from '../../constants/profileScreen';
 import { register } from '../../constants/registerScreen';
@@ -27,9 +29,9 @@ import { globalStyles } from '../../styles/global';
 
 const Profile = ({ navigation, userData }) => {
   const { language } = useContext(SettingsContext);
-  const { playedTxt, wonTxt, lostTxt, cameraAccess } = profile;
+  const { playedTxt, wonTxt, lostTxt, cameraAccess, buttonChangePass, buttonLogout } = profile;
   const { duplicateEmailErrorTxt, duplicateNameErrorTxt } = register;
-  const { name, email, country, team, image, gamesPlayed, gamesWin, gamesLost } = userData;
+  const { name, email, country, team, image, gamesPlayed, gamesWin, gamesLost } = userData ?? {};
   const [showTeamStats, setShowTeamStats] = useState(false);
   const [profilePicture, setProfilePicture] = useState(image);
   const [isUploading, setIsUploading] = useState(false);
@@ -140,70 +142,96 @@ const Profile = ({ navigation, userData }) => {
     }
   }
 
+  const handleLogout = () => {
+    removeToken();
+    dispatch(updateUser(null));
+    navigation.navigate('Home');
+  }
+
   return (
     <ImageBackground source={backgroundImage} style={globalStyles.mainContainer} resizeMode={'cover'} >
-      <TouchableWithoutFeedback onPress={editEmailFlag || editNameFlag ? handleBackdropPress : null}>
-        <View>
-          <BackButton onPress={() => navigation.goBack()} />
+      <ScrollView>
+        {userData && (
+          <TouchableWithoutFeedback onPress={editEmailFlag || editNameFlag ? handleBackdropPress : null}>
+            <View>
+              <BackButton onPress={() => navigation.goBack()} />
 
-          <ProfilePictureComponent
-            profilePicture={profilePicture}
-            handleUploadPicture={handleUploadPicture}
-            language={language}
-            isUploading={isUploading}
-          />
-
-          <Card containerStyle={styles.card}>
-            <EditProfile
-              isEditing={editNameFlag}
-              value={editedName}
-              onChangeText={setEditedName}
-              onSave={handleUpdateName}
-              onEdit={() => setEditNameFlag(true)}
-              label={name}
-              errorText={nameError}
-            />
-            <Divider style={globalStyles.profileDivider} />
-            <EditProfile
-              isEditing={editEmailFlag}
-              value={editedEmail}
-              onChangeText={setEditedEmail}
-              onSave={handleUpdateEmail}
-              onEdit={() => setEditEmailFlag(true)}
-              label={email}
-              errorText={emailError}
-            />
-            <Divider style={globalStyles.profileDivider} />
-            <View style={globalStyles.profileRow}>
-              <Icon name="earth" type="material-community" size={24} />
-              <Text style={globalStyles.profileInfo}>{country}</Text>
-            </View>
-            <Divider style={globalStyles.profileDivider} />
-            {team && (
-              <TeamStats
-                showTeamStats={showTeamStats}
-                toggleTeamStats={toggleTeamStats}
-                team={team}
+              <ProfilePictureComponent
+                profilePicture={profilePicture}
+                handleUploadPicture={handleUploadPicture}
                 language={language}
+                isUploading={isUploading}
               />
-            )}
-            <View style={globalStyles.profileRow}>
-              <Icon name="gamepad-variant" type="material-community" size={24} />
-              <Text style={globalStyles.profileInfo}>{playedTxt[language]}{gamesPlayed}</Text>
+
+              <Card containerStyle={styles.card}>
+                <EditProfile
+                  isEditing={editNameFlag}
+                  value={editedName}
+                  onChangeText={setEditedName}
+                  onSave={handleUpdateName}
+                  onEdit={() => setEditNameFlag(true)}
+                  label={name}
+                  errorText={nameError}
+                />
+                <Divider style={globalStyles.profileDivider} />
+                <EditProfile
+                  isEditing={editEmailFlag}
+                  value={editedEmail}
+                  onChangeText={setEditedEmail}
+                  onSave={handleUpdateEmail}
+                  onEdit={() => setEditEmailFlag(true)}
+                  label={email}
+                  errorText={emailError}
+                />
+                <Divider style={globalStyles.profileDivider} />
+                <View style={globalStyles.profileRow}>
+                  <Icon name="earth" type="material-community" size={24} />
+                  <Text style={globalStyles.profileInfo}>{country}</Text>
+                </View>
+                <Divider style={globalStyles.profileDivider} />
+                {team && (
+                  <TeamStats
+                    showTeamStats={showTeamStats}
+                    toggleTeamStats={toggleTeamStats}
+                    team={team}
+                    language={language}
+                  />
+                )}
+                <View style={globalStyles.profileRow}>
+                  <Icon name="gamepad-variant" type="material-community" size={24} />
+                  <Text style={globalStyles.profileInfo}>{playedTxt[language]}{gamesPlayed}</Text>
+                </View>
+                <Divider style={globalStyles.profileDivider} />
+                <View style={globalStyles.profileRow}>
+                  <Icon name="trophy" type="material-community" size={24} />
+                  <Text style={globalStyles.profileInfo}>{wonTxt[language]}{gamesWin}</Text>
+                </View>
+                <Divider style={globalStyles.profileDivider} />
+                <View style={globalStyles.profileRow}>
+                  <Icon name="close" type="material-community" size={24} />
+                  <Text style={globalStyles.profileInfo}>{lostTxt[language]}{gamesLost}</Text>
+                </View>
+              </Card>
+              <View style={styles.buttonContainer}>
+                <View>
+                  <Button
+                    title={buttonChangePass[language]}
+                    color='#0000cc'
+                    onPress={() => navigation.navigate('ChangePassword')}
+                  />
+                </View>
+                <View style={styles.buttonLogout}>
+                  <Button
+                    title={buttonLogout[language]}
+                    color='error'
+                    onPress={handleLogout}
+                  />
+                </View>
+              </View>
             </View>
-            <Divider style={globalStyles.profileDivider} />
-            <View style={globalStyles.profileRow}>
-              <Icon name="trophy" type="material-community" size={24} />
-              <Text style={globalStyles.profileInfo}>{wonTxt[language]}{gamesWin}</Text>
-            </View>
-            <Divider style={globalStyles.profileDivider} />
-            <View style={globalStyles.profileRow}>
-              <Icon name="close" type="material-community" size={24} />
-              <Text style={globalStyles.profileInfo}>{lostTxt[language]}{gamesLost}</Text>
-            </View>
-          </Card>
-        </View>
-      </TouchableWithoutFeedback>
+          </TouchableWithoutFeedback>
+        )}
+      </ScrollView>
     </ImageBackground>
   );
 }
@@ -212,6 +240,13 @@ const styles = StyleSheet.create({
   card: {
     padding: 30,
     marginTop: 30
+  },
+  buttonContainer: {
+    marginHorizontal: 15,
+    marginTop: 80
+  },
+  buttonLogout: {
+    marginTop: 20
   }
 });
 

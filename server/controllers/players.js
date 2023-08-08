@@ -95,7 +95,7 @@ async function updatePlayer(req, res) {
         .json({ errors: errors.array() })
       return
     }
-    const { id, email, name, team, image } = req.body
+    const { id, email, name, team, image, password } = req.body
     const updateFields = {}
 
     if (email) {
@@ -114,6 +114,18 @@ async function updatePlayer(req, res) {
       updateFields.image = image.newImage
       if (image.oldImage) {
         deleteImageCloudinary(image.oldImage)
+      }
+    }
+
+    if (password) {
+      const player = await Players.findOne({ _id: id })
+      const passwordMatch = await bcrypt.compare(password.oldPassword, player.password)
+      if (passwordMatch) {
+        const hashedPassword = await bcrypt.hash(password.newPassword, 10)
+        updateFields.password = hashedPassword
+      } else {
+        return res.status(401)
+          .json({ error: errorMessages.INVALID_CURRENT_PASSWORD })
       }
     }
 

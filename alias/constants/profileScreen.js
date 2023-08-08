@@ -18,5 +18,13 @@ export const profile = {
   uploadPic: {
     hr: 'Postavi Profilnu Sliku',
     en: 'Upload Profile Picture'
+  },
+  buttonChangePass: {
+    hr: 'Promjeni lozinku',
+    en: 'Change password'
+  },
+  buttonLogout: {
+    hr: 'Odjavi se',
+    en: 'Logout'
   }
 }
