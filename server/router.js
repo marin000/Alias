@@ -2,6 +2,7 @@ const express = require('express')
 const playerController = require('./controllers/players')
 const teamController = require('./controllers/teams')
 const logController = require('./controllers/logs')
+const emailController = require('./controllers/email')
 const playerValidator = require('./validators/playersValidator')
 const teamValidator = require('./validators/teamsValidator')
 const logerValidator = require('./validators/loggerValidator')
@@ -19,5 +20,7 @@ router.get('/api/team', teamController.fetch)
 router.delete('/api/team/:id', teamValidator.validate('validateTeam'), teamController.deleteTeam)
 
 router.post('/logs', logerValidator.validate('logValidate'), logController.getLogs)
+
+router.post('/api/email', emailController.sendResetLink)
 
 module.exports = router

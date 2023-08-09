@@ -7,5 +7,6 @@ module.exports = {
   GET_LOGS: 'Successfully get all logs.',
   NEW_TEAM: 'New team created.',
   GET_TEAMS: 'Successfully get all teams.',
-  DELETE_TEAM: 'Team deleted successfully.'
+  DELETE_TEAM: 'Team deleted successfully.',
+  EMAIL_SENT: 'Email sent '
 }

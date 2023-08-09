@@ -10,5 +10,7 @@ module.exports = {
   MISSING_CLOUDINARY_NAME: 'Missing cloudinary name',
   MISSING_CLOUDINARY_API_KEY: 'Missing cloudinary api key',
   MISSING_CLOUDINARY_API_SECRET: 'Missing cloudinary api secret',
-  INVALID_CURRENT_PASSWORD: 'Invalid current password.'
+  INVALID_CURRENT_PASSWORD: 'Invalid current password.',
+  EMAIL_TEXT_MISSING: 'Email text missing!',
+  INVALID_EMAIL: 'Invalid email'
 }

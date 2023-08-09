@@ -30,7 +30,18 @@ const config = {
   token: process.env.JWT_TOKEN,
   cloudinaryName: process.env.CLOUDINARY_NAME,
   cloudinaryApiKey: process.env.CLOUDINARY_API_KEY,
-  cloudinaryApiSecret: process.env.CLOUDINARY_API_SECRET
+  cloudinaryApiSecret: process.env.CLOUDINARY_API_SECRET,
+  mailUsername: process.env.MAIL_USERNAME,
+  mailPassword: process.env.MAIL_PASSWORD,
+  mailFrom: 'Alias Team' || 'test@gmail.com',
+  mailConfig: {
+    service: process.env.MAIL_USERNAME && process.env.MAIL_PASSWORD
+      ? 'gmail'
+      : '',
+    host: 'smtp.ethereal.email',
+    port: 587,
+    secure: false
+  }
 }
 
 module.exports = config
