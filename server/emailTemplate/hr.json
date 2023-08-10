@@ -1,0 +1,7 @@
+{
+  "resetPasswordSubject": "Resetiranje Lozinke",
+  "resetPasswordWelcome": "Pozdrav ",
+  "resetPasswordIgnor": "Primili smo zahtjev za resetiranje vaše lozinke. Ako niste podnijeli ovaj zahtjev, možete zanemariti ovaj email.",
+  "resetPasswordLink": "Za ponovno postavljanje lozinke kliknite na sljedeću poveznicu: ",
+  "resetPasswordSupport": "Ako imate pitanja ili trebate pomoć, obratite nam se na support@example.com."
+}
