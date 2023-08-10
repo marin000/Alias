@@ -93,4 +93,17 @@ const ChangePasswordSchema = (language) => {
   });
 };
 
-export { RegisterSchema, LoginSchema, ChangePasswordSchema };
+const ForgotPasswordSchema = (language) => {
+  const {
+    emailReq,
+    emailFormat
+  } = formValidator;
+
+  return yup.object({
+    email: yup.string()
+      .email(emailFormat[language])
+      .required(emailReq[language])
+  });
+};
+
+export { RegisterSchema, LoginSchema, ChangePasswordSchema, ForgotPasswordSchema };

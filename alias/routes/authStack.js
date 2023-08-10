@@ -2,6 +2,7 @@ import { createStackNavigator } from 'react-navigation-stack';
 import Login from '../screens/auth/login';
 import Register from '../screens/auth/register';
 import ChangePassword from '../screens/auth/changePassword';
+import ForgotPassword from '../screens/auth/forgotPassword';
 
 const screens = {
 	Login: {
@@ -12,6 +13,9 @@ const screens = {
 	},
 	ChangePassword: {
 		screen: ChangePassword
+	},
+	ForgotPassword: {
+		screen: ForgotPassword
 	}
 };
 

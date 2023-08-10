@@ -96,7 +96,7 @@ const Login = ({ navigation }) => {
                   </TouchableOpacity>
                 </View>
                 <Text style={globalStyles.errorText}>{props.touched.password && props.errors.password}{invalidLoginError}</Text>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={() => navigation.navigate('ForgotPassword')}>
                   <Text style={styles.forgotPass}>{forgotPass[language]}</Text>
                 </TouchableOpacity>
                 <Button

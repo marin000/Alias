@@ -1,22 +1,43 @@
+const path = require('path')
 const nodemailer = require('nodemailer')
+const Handlebars = require('handlebars')
+const fs = require('fs')
+const util = require('util')
+const readFileAsync = util.promisify(fs.readFile)
 const { simpleLogger, emailLogger } = require('../logger/logger')
 const config = require('../config/index')
 const errorMessages = require('../constants/errorMessages')
 const infoMessages = require('../constants/infoMessages')
 
 async function sendEmail(options) {
-  const {
-    emailSubject,
-    emailMessage,
-    recipientAddress,
-    attachmentName = null,
-    attachmentPath = null
-  } = options
+  const { username, recipientAddress, language, resetLink } = options
+
+  const templateFilePath = path.resolve(__dirname, '../emailTemplate/template.html')
+  const languageFilePath = path.resolve(__dirname, `../emailTemplate/${language}.json`)
+
+  const templateFileContent = await readFileAsync(templateFilePath, 'utf8')
+  const languageFileContent = await readFileAsync(languageFilePath, 'utf8')
+  const languageFile = JSON.parse(languageFileContent)
+
+  const template = Handlebars.compile(templateFileContent)
+
+  const data = {
+    username,
+    resetLink,
+    resetPasswordSubject: languageFile.resetPasswordSubject,
+    resetPasswordWelcome: languageFile.resetPasswordWelcome,
+    resetPasswordIgnor: languageFile.resetPasswordIgnor,
+    resetPasswordLink: languageFile.resetPasswordLink,
+    resetPasswordSupport: languageFile.resetPasswordSupport
+  }
+  const customizedTemplate = template(data)
 
   const testAccount = await nodemailer.createTestAccount()
   const { user, pass } = testAccount
   const {
-    mailUsername, mailPassword, mailFrom,
+    mailUsername,
+    mailPassword,
+    mailFrom,
     mailConfig: { service, host, port, secure }
   } = config
 
@@ -34,15 +55,11 @@ async function sendEmail(options) {
   const mailOptions = {
     from: mailFrom,
     to: recipientAddress,
-    subject: emailSubject,
-    text: emailMessage,
-    attachments: attachmentName
-      ? [{
-        filename: attachmentName,
-        path: attachmentPath
-      }]
-      : null
+    subject: languageFile.resetPasswordSubject,
+    html: customizedTemplate,
+    text: languageFile.resetPasswordText
   }
+
   transporter.sendMail(mailOptions, function(error, info) {
     if (error) {
       emailLogger.error(error)
@@ -53,4 +70,5 @@ async function sendEmail(options) {
     }
   })
 }
+
 module.exports = { sendEmail }

@@ -28,7 +28,9 @@ const PlayersShema = new mongoose.Schema({
   gamesPlayed: Number,
   gamesWin: Number,
   gamesLost: Number,
-  image: String
+  image: String,
+  resetToken: String,
+  resetTokenExpiration: Date
 }, { timestamps: true }
 )
 
