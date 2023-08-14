@@ -8,5 +8,6 @@ module.exports = {
   NEW_TEAM: 'New team created.',
   GET_TEAMS: 'Successfully get all teams.',
   DELETE_TEAM: 'Team deleted successfully.',
-  EMAIL_SENT: 'Email sent '
+  EMAIL_SENT: 'Email sent ',
+  VALID_PIN: 'PIN is valid'
 }

@@ -188,11 +188,45 @@ async function getPlayerByToken(req, res) {
   }
 }
 
+const validatePin = async(req, res) => {
+  try {
+    const { email, pin } = req.body
+    const player = await Players.findOne({ email })
+
+    if (!player) {
+      return res.status(401)
+        .json({ error: errorMessages.INVALID_EMAIL })
+    }
+
+    if (player.resetPin !== pin) {
+      return res.status(401)
+        .json({ error: errorMessages.INVALID_PIN })
+    }
+
+    if (player.resetPinExpiration < Date.now()) {
+      return res.status(401)
+        .json({ error: errorMessages.EXPIRED_PIN })
+    }
+
+    player.resetPin = null
+    player.resetPinExpiration = null
+    await player.save()
+
+    res.status(200)
+      .json({ message: infoMessages.VALID_PIN })
+  } catch (error) {
+    playersLogger.error((error.message, { metadata: error.stack }))
+    res.status(500)
+      .send(error.message)
+  }
+}
+
 module.exports = {
   create,
   fetch,
   deletePlayer,
   updatePlayer,
   getPlayer,
-  getPlayerByToken
+  getPlayerByToken,
+  validatePin
 }

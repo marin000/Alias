@@ -4,8 +4,8 @@ export const forgotPassword = {
     en: 'Forgot your password'
   },
   subtitle: {
-    hr: "Unesite svoj email adresu i poslat ćemo vam poveznicu za resetiranje lozinke.",
-    en: "Enter your email and we'll send you a link to reset your password."
+    hr: "Unesite svoj email adresu i poslat ćemo vam pin za resetiranje lozinke.",
+    en: "Enter your email and we'll send you a pin to reset your password."
   },
 	emailPlaceholder: {
 		hr: 'Email',

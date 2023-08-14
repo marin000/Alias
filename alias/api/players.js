@@ -8,6 +8,7 @@ const getPlayerByToken = (header) => axiosInstance.get(`${url}/login`, header);
 const deletePlayer = (id) => axiosInstance.delete(`${url}/${id}`);
 const addNewPLayer = (player) => axiosInstance.post(url, player);
 const updatePLayer = (updateFields) => axiosInstance.put(url, updateFields);
+const validatePin = (data) => axiosInstance.post(`${url}/pin`, data)
 
 export default {
   getPlayers,
@@ -15,5 +16,6 @@ export default {
   deletePlayer,
   addNewPLayer,
   updatePLayer,
-  getPlayerByToken
+  getPlayerByToken,
+  validatePin
 }

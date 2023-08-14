@@ -25,7 +25,13 @@ export default function ForgotPassword({ navigation }) {
     };
     api.sendEmail(data)
       .then(() => {
-        Alert.alert(sentEmailAlert[language]);
+        Alert.alert(
+          sentEmailAlert[language], '', [{
+            text: 'OK',
+            onPress: () => {
+              navigation.navigate('EnterPin', { email: values.email });
+            }
+          }]);
       })
       .catch((err) => {
         setInvalidEmailError(invalidEmail[language]);

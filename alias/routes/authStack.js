@@ -4,6 +4,7 @@ import Register from '../screens/auth/register';
 import ChangePassword from '../screens/auth/changePassword';
 import ForgotPassword from '../screens/auth/forgotPassword';
 import ResetPassword from '../screens/auth/resetPassword';
+import EnterPin from '../screens/auth/enterPin';
 
 const screens = {
 	Login: {
@@ -20,6 +21,9 @@ const screens = {
 	},
 	ResetPassword: {
 		screen: ResetPassword
+	},
+	EnterPin: {
+		screen: EnterPin
 	}
 };
 

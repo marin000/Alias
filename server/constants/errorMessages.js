@@ -13,5 +13,7 @@ module.exports = {
   INVALID_CURRENT_PASSWORD: 'Invalid current password.',
   EMAIL_TEXT_MISSING: 'Email text missing!',
   INVALID_EMAIL: 'Invalid email',
-  PIN_LENGTH_MISSING: 'Pin length missing'
+  PIN_LENGTH_MISSING: 'Pin length missing',
+  INVALID_PIN: 'Invalid pin',
+  EXPIRED_PIN: 'Expired pin'
 }
