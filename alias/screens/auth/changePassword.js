@@ -71,7 +71,7 @@ const ChangePassword = ({ userData, navigation }) => {
   return (
     <ImageBackground source={backgroundImage} style={globalStyles.mainContainer} resizeMode={'cover'}>
       <View>
-        <BackButton onPress={() => navigation.goBack()} />
+        <BackButton onPress={() => navigation.navigate('Profile')} />
         <Text style={styles.title}>{title[language]}</Text>
         <Card>
           <Formik

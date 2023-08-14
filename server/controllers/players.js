@@ -144,6 +144,24 @@ async function updatePlayer(req, res) {
   }
 }
 
+async function resetPassword(req, res) {
+  try {
+    const { email, password } = req.body
+    const player = await Players.findOne({ email })
+
+    const hashedPassword = await bcrypt.hash(password, 10)
+    player.password = hashedPassword
+    await player.save()
+
+    playersLogger.info(infoMessages.UPDATE_PLAYER_PASSWORD)
+    res.status(200)
+      .json({ message: infoMessages.UPDATE_PLAYER_PASSWORD })
+  } catch (error) {
+    playersLogger.error((error.message, { metadata: error.stack }))
+    res.status(500)
+      .send(error.message)
+  }
+}
 async function getPlayer(req, res) {
   try {
     const { email, password } = req.body
@@ -228,5 +246,6 @@ module.exports = {
   updatePlayer,
   getPlayer,
   getPlayerByToken,
-  validatePin
+  validatePin,
+  resetPassword
 }

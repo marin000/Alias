@@ -4,6 +4,7 @@ module.exports = {
   GET_PLAYER: 'Successfully get player.',
   DELETE_PLAYER: 'PLayer deleted successfully.',
   UPDATE_PLAYER: 'Player updated successfully.',
+  UPDATE_PLAYER_PASSWORD: "Player's password updated successfully.",
   GET_LOGS: 'Successfully get all logs.',
   NEW_TEAM: 'New team created.',
   GET_TEAMS: 'Successfully get all teams.',

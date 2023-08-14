@@ -9,6 +9,7 @@ const deletePlayer = (id) => axiosInstance.delete(`${url}/${id}`);
 const addNewPLayer = (player) => axiosInstance.post(url, player);
 const updatePLayer = (updateFields) => axiosInstance.put(url, updateFields);
 const validatePin = (data) => axiosInstance.post(`${url}/pin`, data)
+const resetPlayerPassword = (data) => axiosInstance.post(`${url}/resetPassword`, data)
 
 export default {
   getPlayers,
@@ -17,5 +18,6 @@ export default {
   addNewPLayer,
   updatePLayer,
   getPlayerByToken,
-  validatePin
+  validatePin,
+  resetPlayerPassword
 }

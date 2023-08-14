@@ -16,6 +16,7 @@ export default function ResetPassword({ navigation }) {
   const { title, newPassPlaceholder, repeatPassPlaceholder, submitButton, passwordResetSuccess } = resetPassword;
   const [showPassword, setShowPassword] = useState(false);
   const [showRepeatPassword, setShowRepeatPassword] = useState(false);
+  const playerEmail = navigation.getParam('email');
 
   const togglePasswordVisibility = () => {
     setShowPassword((prevShowPassword) => !prevShowPassword);
@@ -26,12 +27,8 @@ export default function ResetPassword({ navigation }) {
   };
 
   const handleResetPassword = (values) => {
-    const passwordObj = {
-      oldPassword: values.oldPassword,
-      newPassword: values.password
-    };
-    const updateFields = { id: userData._id, password: passwordObj };
-    api.updatePLayer(updateFields)
+    const data = { email: playerEmail, password: values.password };
+    api.resetPlayerPassword(data)
       .then(() => {
         Alert.alert(
           passwordResetSuccess[language], '', [{

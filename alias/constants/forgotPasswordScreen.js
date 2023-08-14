@@ -20,7 +20,7 @@ export const forgotPassword = {
     en: 'Send'
   },
   sentEmailAlert: {
-    hr: 'Email poslan.',
-    en: 'Email sent'
+    hr: 'Pin za ponovno postavljanje lozinke poslan je na vaš email račun.',
+    en: 'The pin for resetting password has been sent to your email account.'
   }
 }

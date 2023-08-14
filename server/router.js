@@ -15,6 +15,7 @@ router.get('/api/player/all', playerController.fetch)
 router.delete('/api/player/:id', playerValidator.validate('validatePlayer'), playerController.deletePlayer)
 router.put('/api/player', playerValidator.validate('validatePlayer'), playerController.updatePlayer)
 router.post('/api/player/pin', playerController.validatePin)
+router.post('/api/player/resetPassword', playerController.resetPassword)
 
 router.post('/api/team', teamController.create)
 router.get('/api/team', teamController.fetch)

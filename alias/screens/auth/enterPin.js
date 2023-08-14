@@ -36,7 +36,7 @@ export default function EnterPin({ navigation }) {
     };
     api.validatePin(data)
       .then(() => {
-        navigation.navigate('ResetPassword');
+        navigation.navigate('ResetPassword', { email: playerEmail});
       })
       .catch((err) => {
         setInvalidPinError(invalidPinErrorTxt[language]);
