@@ -10,7 +10,7 @@ const errorMessages = require('../constants/errorMessages')
 const infoMessages = require('../constants/infoMessages')
 
 async function sendEmail(options) {
-  const { username, recipientAddress, language, resetLink } = options
+  const { username, recipientAddress, language, resetPin } = options
 
   const templateFilePath = path.resolve(__dirname, '../emailTemplate/template.html')
   const languageFilePath = path.resolve(__dirname, `../emailTemplate/${language}.json`)
@@ -23,11 +23,12 @@ async function sendEmail(options) {
 
   const data = {
     username,
-    resetLink,
+    resetPin,
     resetPasswordSubject: languageFile.resetPasswordSubject,
     resetPasswordWelcome: languageFile.resetPasswordWelcome,
     resetPasswordIgnor: languageFile.resetPasswordIgnor,
-    resetPasswordLink: languageFile.resetPasswordLink,
+    resetPasswordPin: languageFile.resetPasswordPin,
+    warning: languageFile.warning,
     resetPasswordSupport: languageFile.resetPasswordSupport
   }
   const customizedTemplate = template(data)

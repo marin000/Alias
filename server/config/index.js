@@ -7,7 +7,8 @@ const {
   TOKEN_MISSING,
   MISSING_CLOUDINARY_NAME,
   MISSING_CLOUDINARY_API_KEY,
-  MISSING_CLOUDINARY_API_SECRET
+  MISSING_CLOUDINARY_API_SECRET,
+  PIN_LENGTH_MISSING
 } = errorMessages
 
 if (!process.env.DB_URL) {
@@ -22,6 +23,8 @@ if (!process.env.DB_URL) {
   throw new Error(MISSING_CLOUDINARY_API_KEY)
 } else if (!process.env.CLOUDINARY_API_SECRET) {
   throw new Error(MISSING_CLOUDINARY_API_SECRET)
+} else if (!process.env.PIN_LENGTH) {
+  throw new Error(PIN_LENGTH_MISSING)
 }
 
 const config = {
@@ -41,7 +44,8 @@ const config = {
     host: 'smtp.ethereal.email',
     port: 587,
     secure: false
-  }
+  },
+  pinLength: process.env.PIN_LENGTH
 }
 
 module.exports = config
