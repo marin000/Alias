@@ -3,6 +3,7 @@ import Login from '../screens/auth/login';
 import Register from '../screens/auth/register';
 import ChangePassword from '../screens/auth/changePassword';
 import ForgotPassword from '../screens/auth/forgotPassword';
+import ResetPassword from '../screens/auth/resetPassword';
 
 const screens = {
 	Login: {
@@ -16,6 +17,9 @@ const screens = {
 	},
 	ForgotPassword: {
 		screen: ForgotPassword
+	},
+	ResetPassword: {
+		screen: ResetPassword
 	}
 };
 

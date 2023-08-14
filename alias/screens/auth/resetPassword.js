@@ -2,38 +2,20 @@ import React, { useState, useContext } from 'react';
 import { View, StyleSheet, ImageBackground, TouchableOpacity, Alert } from 'react-native';
 import { Text, Card, Button } from '@rneui/themed';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { connect } from 'react-redux';
-import { updateUser } from '../../redux/actions';
-import { useDispatch } from 'react-redux';
-import { removeToken } from '../../utils/auth';
 import { Formik } from 'formik';
 import { SettingsContext } from '../../utils/settings';
 import { TextInput } from 'react-native-gesture-handler';
-import { changePassword } from '../../constants/changePasswordScreen';
+import { resetPassword } from '../../constants/resetPasswordScreen';
 import api from '../../api/players'
 import backgroundImage from '../../assets/blurred-background.jpeg';
 import { globalStyles } from '../../styles/global';
-import { ChangePasswordSchema } from '../../utils/formValidator';
-import BackButton from '../../components/backButton';
+import { ResetPasswordSchema } from '../../utils/formValidator';
 
-const ChangePassword = ({ userData, navigation }) => {
+export default function ResetPassword({ navigation }) {
   const { language } = useContext(SettingsContext);
-  const { title,
-    currentPassPlaceholder,
-    newPassPlaceholder,
-    repeatPassPlaceholder,
-    submitButton,
-    invalidCurrentPassTxt,
-    passwordChangeSuccess } = changePassword;
-  const [showCurrentPassword, setShowCurrentPassword] = useState(false);
+  const { title, newPassPlaceholder, repeatPassPlaceholder, submitButton, passwordResetSuccess } = resetPassword;
   const [showPassword, setShowPassword] = useState(false);
   const [showRepeatPassword, setShowRepeatPassword] = useState(false);
-  const [invalidCurrentPass, setInvalidCurrentPass] = useState('');
-  const dispatch = useDispatch();
-
-  const toggleCurrentPasswordVisibility = () => {
-    setShowCurrentPassword((prevShowCurrentPassword) => !prevShowCurrentPassword);
-  };
 
   const togglePasswordVisibility = () => {
     setShowPassword((prevShowPassword) => !prevShowPassword);
@@ -43,8 +25,7 @@ const ChangePassword = ({ userData, navigation }) => {
     setShowRepeatPassword((prevShowRepeatPassword) => !prevShowRepeatPassword);
   };
 
-  const handleChangePassword = (values) => {
-    setInvalidCurrentPass('');
+  const handleResetPassword = (values) => {
     const passwordObj = {
       oldPassword: values.oldPassword,
       newPassword: values.password
@@ -53,17 +34,14 @@ const ChangePassword = ({ userData, navigation }) => {
     api.updatePLayer(updateFields)
       .then(() => {
         Alert.alert(
-          passwordChangeSuccess[language], '', [{
+          passwordResetSuccess[language], '', [{
             text: 'OK',
             onPress: () => {
-              removeToken();
-              dispatch(updateUser(null));
               navigation.navigate('Login');
             }
           }]);
       })
       .catch((err) => {
-        setInvalidCurrentPass(invalidCurrentPassTxt[language]);
         console.log(err);
       });
   };
@@ -71,29 +49,15 @@ const ChangePassword = ({ userData, navigation }) => {
   return (
     <ImageBackground source={backgroundImage} style={globalStyles.mainContainer} resizeMode={'cover'}>
       <View>
-        <BackButton onPress={() => navigation.goBack()} />
         <Text style={styles.title}>{title[language]}</Text>
         <Card>
           <Formik
-            initialValues={{ oldPassword: '', password: '', repeatPassword: '' }}
-            validationSchema={ChangePasswordSchema(language)}
-            onSubmit={handleChangePassword}
+            initialValues={{ password: '', repeatPassword: '' }}
+            validationSchema={ResetPasswordSchema(language)}
+            onSubmit={handleResetPassword}
           >
             {(props) => (
               <View style={styles.form}>
-                <View style={globalStyles.entryInputContainer}>
-                  <TextInput
-                    style={globalStyles.entryInput}
-                    placeholder={currentPassPlaceholder[language]}
-                    secureTextEntry={!showCurrentPassword}
-                    onChangeText={props.handleChange('oldPassword')}
-                    value={props.values.oldPassword}
-                  />
-                  <TouchableOpacity style={globalStyles.eyeIcon} onPress={toggleCurrentPasswordVisibility}>
-                    <Icon name={showCurrentPassword ? 'eye-off' : 'eye'} size={24} color="black" />
-                  </TouchableOpacity>
-                </View>
-                <Text style={globalStyles.errorText}>{props.touched.oldPassword && props.errors.oldPassword}{invalidCurrentPass}</Text>
                 <View style={globalStyles.entryInputContainer}>
                   <TextInput
                     style={globalStyles.entryInput}
@@ -121,7 +85,7 @@ const ChangePassword = ({ userData, navigation }) => {
                 </View>
                 <Text style={globalStyles.errorText}>{props.touched.repeatPassword && props.errors.repeatPassword}</Text>
                 <Button
-                  containerStyle={styles.changePassButton}
+                  containerStyle={styles.resetPassButton}
                   title={submitButton[language]}
                   onPress={props.handleSubmit}
                 />
@@ -142,22 +106,12 @@ const styles = StyleSheet.create({
   form: {
     paddingTop: 20
   },
-  changePassButton: {
+  resetPassButton: {
     ...globalStyles.buttonSaveTeam,
     marginTop: 25
   }
 });
 
-ChangePassword.navigationOptions = {
+ResetPassword.navigationOptions = {
   headerShown: false,
 };
-
-const mapStateToProps = (state) => ({
-  userData: state.userReducer.userData
-});
-
-const mapDispatchToProps = {
-  updateUser
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(ChangePassword);

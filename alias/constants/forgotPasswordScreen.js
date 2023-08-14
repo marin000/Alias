@@ -1,7 +1,7 @@
 export const forgotPassword = {
   title: {
-    hr: 'Resetiranje lozinke',
-    en: 'Reset password'
+    hr: 'Zaboravili ste lozinku',
+    en: 'Forgot your password'
   },
   subtitle: {
     hr: "Unesite svoj email adresu i poslat ćemo vam poveznicu za resetiranje lozinke.",

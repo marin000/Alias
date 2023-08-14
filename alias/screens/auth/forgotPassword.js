@@ -28,7 +28,7 @@ export default function ForgotPassword({ navigation }) {
         Alert.alert(sentEmailAlert[language]);
       })
       .catch((err) => {
-        invalidEmailError(invalidEmail[language]);
+        setInvalidEmailError(invalidEmail[language]);
         console.log(err.response.data);
       });
   }
