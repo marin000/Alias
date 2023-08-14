@@ -3,6 +3,6 @@
   "resetPasswordWelcome": "Pozdrav ",
   "resetPasswordIgnor": "Primili smo zahtjev za resetiranje vaše lozinke. Ako niste podnijeli zahtjev, možete zanemariti ovaj email.",
   "resetPasswordPin": "Za ponovno postavljanje lozinke upišite sljedeći pin: ",
-  "warning": "Upozorenje: Pin ističi za 1 minut.",
+  "warning": "Upozorenje: Pin ističe za 1 minut.",
   "resetPasswordSupport": "Ako imate pitanja ili trebate pomoć, obratite nam se na support@example.com."
 }
