@@ -173,6 +173,7 @@ async function getPlayer(req, res) {
       const token = jwt.sign({ playerId: player._id }, config.token, { expiresIn: '4d' })
       res.json({ player, token })
     } else {
+      playersLogger.error(errorMessages.INVALID_LOGIN)
       res.status(401)
         .json({ error: errorMessages.INVALID_LOGIN })
     }
@@ -196,11 +197,13 @@ async function getPlayerByToken(req, res) {
       .populate('team')
 
     if (!player) {
+      playersLogger.info(infoMessages.GET_PLAYER)
       return res.status(404)
         .json({ message: errorMessages.NO_PLAYER })
     }
     res.json(player)
   } catch (error) {
+    playersLogger.error(error.message, { metadata: error.stack })
     res.status(401)
       .json({ message: errorMessages.INVALID_TOKEN })
   }
@@ -230,6 +233,7 @@ const validatePin = async(req, res) => {
     player.resetPinExpiration = null
     await player.save()
 
+    playersLogger.info(infoMessages.VALID_PIN)
     res.status(200)
       .json({ message: infoMessages.VALID_PIN })
   } catch (error) {
