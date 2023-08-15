@@ -5,6 +5,7 @@ const errorMessages = require('../constants/errorMessages')
 const { emailLogger } = require('../logger/logger')
 const crypto = require('crypto')
 const config = require('../config/index')
+const infoMessages = require('../constants/infoMessages')
 
 const generateRandomPin = () => {
   const pinLength = parseInt(config.pinLength)
@@ -27,7 +28,8 @@ const sendResetLink = async(req, res) => {
     player.resetPinExpiration = Date.now() + 60000
     await player.save()
 
-    emailService.sendEmail({ username: player.name, recipientAddress: email, language, resetPin })
+    await emailService.sendEmail({ username: player.name, recipientAddress: email, language, resetPin })
+    emailLogger.info(infoMessages.EMAIL_SENT)
     res.status(201)
       .send()
   } catch (error) {

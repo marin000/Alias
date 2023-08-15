@@ -87,7 +87,7 @@ const styles = StyleSheet.create({
   },
   sendPin: {
     ...globalStyles.buttonSaveTeam,
-    marginTop: 25
+    marginTop: 10
   },
   pinContainer: {
     flexDirection: 'row',
