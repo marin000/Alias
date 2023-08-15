@@ -52,7 +52,7 @@ export default function ForgotPassword({ navigation }) {
             onSubmit={handleResetPassword}
           >
             {(props) => (
-              <View style={styles.form}>
+              <View style={globalStyles.form}>
                 <View style={globalStyles.entryInputContainer}>
                   <TextInput
                     style={globalStyles.entryInput}
@@ -90,12 +90,9 @@ const styles = StyleSheet.create({
     color: 'white',
     marginBottom: 10
   },
-  form: {
-    paddingTop: 20
-  },
   signInButton: {
     ...globalStyles.buttonSaveTeam,
-    marginTop: 25
+    marginTop: 10
   }
 });
 

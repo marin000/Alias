@@ -10,5 +10,17 @@ export const enterPin = {
   sendPinButton: {
     hr: 'OK',
     en: 'OK'
+  },
+  timerSecLeft: {
+    hr: 'Preostalo vrijeme: ',
+    en: 'Time left: '
+  },
+  timerSecTxt: {
+    hr: 'sekundi',
+    en: 'seconds'
+  },
+  timerExpiredTxt: {
+    hr: 'Pin je istekao',
+    en: 'Pin expired'
   }
 }

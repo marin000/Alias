@@ -88,7 +88,7 @@ export default function Register({ navigation }) {
             onSubmit={handleRegistration}
           >
             {(props) => (
-              <View style={styles.form}>
+              <View style={globalStyles.form}>
                 <View style={globalStyles.entryInputContainer}>
                   <TextInput
                     style={globalStyles.entryInput}
@@ -154,9 +154,6 @@ const styles = StyleSheet.create({
   title: {
     ...globalStyles.screenTitle,
     marginBottom: 20
-  },
-  form: {
-    paddingTop: 20
   },
   registerButton: {
     ...globalStyles.buttonSaveTeam,

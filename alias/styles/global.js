@@ -124,4 +124,7 @@ export const globalStyles = StyleSheet.create({
     flex: 1,
     fontSize: 16,
   },
+  form: {
+    paddingTop: 20
+  }
 });

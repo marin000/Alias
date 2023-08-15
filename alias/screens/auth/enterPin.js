@@ -1,5 +1,5 @@
-import React, { useContext, useState, useRef } from 'react';
-import { View, StyleSheet, ImageBackground } from 'react-native';
+import React, { useContext, useState, useRef, useEffect } from 'react';
+import { View, StyleSheet, ImageBackground, Alert } from 'react-native';
 import { Text, Card, Button } from '@rneui/themed';
 import { TextInput } from 'react-native-gesture-handler';
 import { SettingsContext } from '../../utils/settings';
@@ -11,17 +11,33 @@ import api from '../../api/players';
 
 export default function EnterPin({ navigation }) {
   const { language } = useContext(SettingsContext);
-  const { title, sendPinButton, invalidPinErrorTxt } = enterPin;
+  const { title, sendPinButton, invalidPinErrorTxt, timerSecLeft, timerSecTxt, timerExpiredTxt } = enterPin;
   const [pinDigits, setPinDigits] = useState(['', '', '', '']);
   const [invalidPinError, setInvalidPinError] = useState('');
+  const [remainingTime, setRemainingTime] = useState(60);
+  const [timerExpired, setTimerExpired] = useState(false);
   const inputRefs = useRef([]);
   const playerEmail = navigation.getParam('email');
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      if (remainingTime > 0) {
+        setRemainingTime(remainingTime - 1);
+      } else {
+        setTimerExpired(true);
+        clearInterval(timer);
+      }
+    }, 1000);
+
+    return () => {
+      clearInterval(timer);
+    };
+  }, [remainingTime]);
 
   const handleDigitChange = (digit, index) => {
     if (index < 3) {
       inputRefs.current[index + 1].focus();
     }
-
     const newPinDigits = [...pinDigits];
     newPinDigits[index] = digit;
     setPinDigits(newPinDigits);
@@ -29,6 +45,16 @@ export default function EnterPin({ navigation }) {
 
   const handleSubmit = () => {
     setInvalidPinError('');
+    if (timerExpired) {
+      Alert.alert(
+        timerExpiredTxt[language], '', [{
+          text: 'OK',
+          onPress: () => {
+            navigation.navigate('ForgotPassword', { email: playerEmail });
+          }
+        }]);
+      return;
+    }
     const pin = pinDigits.join('');
     const data = {
       email: playerEmail,
@@ -36,7 +62,7 @@ export default function EnterPin({ navigation }) {
     };
     api.validatePin(data)
       .then(() => {
-        navigation.navigate('ResetPassword', { email: playerEmail});
+        navigation.navigate('ResetPassword', { email: playerEmail });
       })
       .catch((err) => {
         setInvalidPinError(invalidPinErrorTxt[language]);
@@ -49,8 +75,14 @@ export default function EnterPin({ navigation }) {
       <View>
         <BackButton onPress={() => navigation.goBack()} />
         <Text style={styles.title}>{title[language]}</Text>
+        <Text style={styles.timerText}>
+          {remainingTime > 0 ?
+            `${timerSecLeft[language]}${remainingTime} ${timerSecTxt[language]}`
+            : timerExpiredTxt[language]
+          }
+        </Text>
         <Card>
-          <View style={styles.form}>
+          <View style={globalStyles.form}>
             <View style={styles.pinContainer}>
               {pinDigits.map((digit, index) => (
                 <TextInput
@@ -64,7 +96,7 @@ export default function EnterPin({ navigation }) {
                 />
               ))}
             </View>
-            <Text style={globalStyles.errorText}>{invalidPinError}</Text> 
+            <Text style={globalStyles.errorText}>{invalidPinError}</Text>
             <Button
               containerStyle={styles.sendPin}
               title={sendPinButton[language]}
@@ -81,9 +113,6 @@ const styles = StyleSheet.create({
   title: {
     ...globalStyles.screenTitle,
     marginBottom: 20
-  },
-  form: {
-    paddingTop: 20
   },
   sendPin: {
     ...globalStyles.buttonSaveTeam,
@@ -102,6 +131,12 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     textAlign: 'center',
     marginRight: 10
+  },
+  timerText: {
+    textAlign: 'center',
+    fontSize: 20,
+    color: 'white',
+    marginBottom: 10
   }
 });
 
