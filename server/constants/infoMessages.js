@@ -10,5 +10,7 @@ module.exports = {
   GET_TEAMS: 'Successfully get all teams.',
   DELETE_TEAM: 'Team deleted successfully.',
   EMAIL_SENT: 'Email sent ',
-  VALID_PIN: 'PIN is valid'
+  VALID_PIN: 'PIN is valid',
+  PLAYER_EXISTS: 'Player exists',
+  NO_PLAYER_EXISTS: "Player doesn't exists"
 }

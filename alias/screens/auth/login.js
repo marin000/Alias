@@ -1,8 +1,11 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { updateUser } from '../../redux/actions';
 import { useDispatch } from 'react-redux';
 import { storeToken } from '../../utils/auth';
+import * as WebBrowser from 'expo-web-browser';
+import * as Google from 'expo-auth-session/providers/google';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { View, StyleSheet, ImageBackground, TouchableOpacity } from 'react-native';
 import { Text, Card, Button } from '@rneui/themed';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -14,8 +17,13 @@ import backgroundImage from '../../assets/blurred-background.jpeg';
 import { globalStyles } from '../../styles/global';
 import LoginDivider from '../../components/customLoginDivider';
 import { LoginSchema } from '../../utils/formValidator';
+import { getGoogleUserInfo } from '../../utils/helper';
 import BackButton from '../../components/backButton';
 import api from '../../api/players';
+import config from '../../config/config';
+import countriesCode from '../../assets/countryCodes.json';
+
+WebBrowser.maybeCompleteAuthSession();
 
 const GoogleSignInButton = ({ language, onPress }) => {
   return (
@@ -31,9 +39,18 @@ const GoogleSignInButton = ({ language, onPress }) => {
 const Login = ({ navigation }) => {
   const { language } = useContext(SettingsContext);
   const { emailPlaceholder, passwordPlaceholder, signIn, forgotPass, dividerTxt, newToAlias, registerTxt, invalidCredentials } = login;
+  const { webClientId, androidClientId } = config;
   const [showPassword, setShowPassword] = useState(false);
   const [invalidLoginError, setInvalidLoginError] = useState('');
+  const [request, response, promptAsync] = Google.useAuthRequest({
+    androidClientId,
+    webClientId
+  })
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    handleSignInGoogle();
+  }, [response]);
 
   const togglePasswordVisibility = () => {
     setShowPassword((prevShowPassword) => !prevShowPassword);
@@ -46,16 +63,52 @@ const Login = ({ navigation }) => {
       password: values.password
     };
     api.getPlayer(credentials)
-      .then((res) => { 
+      .then((res) => {
         const { player, token } = res.data;
         dispatch(updateUser(player));
         storeToken(token);
-        navigation.navigate('Home'); 
+        navigation.navigate('Home');
       })
       .catch((err) => {
         setInvalidLoginError(invalidCredentials[language]);
         console.log(err.response.data);
       });
+  }
+
+  const handleSignInGoogle = async () => {
+    if (response?.type === 'success') {
+      const user = await getGoogleUserInfo(response.authentication.accessToken);
+      const data = { email: user.email };
+
+      api.checkPlayer(data)
+        .then((res) => {
+          if (res.data.exists) {
+            const { player, token } = res.data;
+            dispatch(updateUser(player));
+            storeToken(token);
+            navigation.navigate('Home');
+          } else {
+            const newPlayer = {
+              name: user.name,
+              email: user.email,
+              country: countriesCode[user.locale.toUpperCase()]
+            };
+            api.addNewPLayerGoogle(newPlayer)
+              .then((res) => {
+                const { savedPlayer, token } = res.data;
+                dispatch(updateUser(savedPlayer));
+                storeToken(token);
+                navigation.navigate('Home')
+              })
+              .catch((err) => {
+                console.log(err);
+              });
+          }
+        })
+        .catch((err) => {
+          console.log(err.response.data);
+        });
+    }
   }
 
   return (
@@ -110,7 +163,7 @@ const Login = ({ navigation }) => {
           <LoginDivider text={dividerTxt[language]} />
           <GoogleSignInButton
             language={language}
-          // onPress={props.handleSubmit}
+            onPress={promptAsync}
           />
           <View style={styles.registerContainer}>
             <Text style={styles.registerText}>{newToAlias[language]}</Text>

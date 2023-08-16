@@ -53,6 +53,22 @@ const create = async(req, res) => {
   }
 }
 
+const createWithGoogle = async(req, res) => {
+  try {
+    const { name, email, country } = req.body
+    const newPlayer = Players({ name, email, country, gamesPlayed: 0, gamesWin: 0, gamesLost: 0 })
+    const savedPlayer = await newPlayer.save()
+
+    const token = jwt.sign({ playerId: savedPlayer._id }, config.token, { expiresIn: '4d' })
+    playersLogger.info(infoMessages.NEW_PLAYER)
+    res.json({ savedPlayer, token })
+  } catch (error) {
+    playersLogger.error((error.message, { metadata: error.stack }))
+    res.status(500)
+      .send(error.message)
+  }
+}
+
 const fetch = async(req, res) => {
   try {
     const data = await Players.find({})
@@ -167,15 +183,43 @@ async function getPlayer(req, res) {
     const { email, password } = req.body
     const player = await Players.findOne({ email })
       .populate('team')
-    const passwordMatch = await bcrypt.compare(password, player.password)
+    if (!player) {
+      playersLogger.error(errorMessages.INVALID_LOGIN)
+      return res.status(401)
+        .json({ error: errorMessages.INVALID_LOGIN })
+    }
+    const passwordMatch = bcrypt.compare(password, player.password)
     if (passwordMatch) {
-      playersLogger.info(infoMessages.GET_PLAYER)
       const token = jwt.sign({ playerId: player._id }, config.token, { expiresIn: '4d' })
+      playersLogger.info(infoMessages.GET_PLAYER)
       res.json({ player, token })
     } else {
       playersLogger.error(errorMessages.INVALID_LOGIN)
       res.status(401)
         .json({ error: errorMessages.INVALID_LOGIN })
+    }
+  } catch (error) {
+    playersLogger.error(error.message, { metadata: error.stack })
+    res.status(500)
+      .send(error.message)
+  }
+}
+
+async function checkPlayer(req, res) {
+  try {
+    const { email } = req.body
+    const player = await Players.findOne({ email })
+      .populate('team')
+
+    if (player) {
+      const token = jwt.sign({ playerId: player._id }, config.token, { expiresIn: '4d' })
+      playersLogger.info(infoMessages.PLAYER_EXISTS)
+      return res.status(200)
+        .json({ player, token, exists: true })
+    } else {
+      playersLogger.info(infoMessages.NO_PLAYER_EXISTS)
+      return res.status(200)
+        .json({ exists: false })
     }
   } catch (error) {
     playersLogger.error(error.message, { metadata: error.stack })
@@ -245,11 +289,13 @@ const validatePin = async(req, res) => {
 
 module.exports = {
   create,
+  createWithGoogle,
   fetch,
   deletePlayer,
   updatePlayer,
   getPlayer,
   getPlayerByToken,
   validatePin,
-  resetPassword
+  resetPassword,
+  checkPlayer
 }

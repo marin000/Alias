@@ -16,8 +16,7 @@ const PlayersShema = new mongoose.Schema({
       'Please fill a valid email address']
   },
   password: {
-    type: String,
-    required: true
+    type: String
   },
   team:
   {
