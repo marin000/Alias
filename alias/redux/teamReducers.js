@@ -37,35 +37,34 @@ const teamReducer = (state = initialState, action) => {
         teams: []
       };
     case 'UPDATE_PLAYER_EXPLAINS':
-      const teamToUpdate = state.teams.map(team => {
-        if (team.id === action.payload.teamId) {
-          let currentPlayerIndex
-          const currentPlayer = team.players.find((player, index) => {
-            if (player.explains) {
-              currentPlayerIndex = index;
-              return true;
-            }
-          });
-          const updatedPlayers = [...team.players];
-
-          if (currentPlayer) {
-            updatedPlayers[currentPlayerIndex] = {
-              ...updatedPlayers[currentPlayerIndex],
-              explains: false,
-              score: action.payload.playerScore + currentPlayer.score
-            };
-          }
-
-          const nextPlayerIndex = (currentPlayerIndex + 1) % team.players.length;
-          updatedPlayers[nextPlayerIndex] = { ...updatedPlayers[nextPlayerIndex], explains: true };
-
-          return { ...team, players: updatedPlayers };
-        }
-        return team;
-      });
       return {
         ...state,
-        teams: teamToUpdate
+        teams: state.teams.map(team => {
+          if (team.id === action.payload.teamId) {
+            const currentPlayerIndex = team.players.findIndex(player => player.explains);
+
+            const updatedPlayers = team.players.map((player, index) => {
+              if (index === currentPlayerIndex) {
+                return {
+                  ...player,
+                  explains: false,
+                  scoreExplains: action.payload.playerScore + player.scoreExplains
+                };
+              } else {
+                return {
+                  ...player,
+                  scoreGuess: action.payload.playerScore + player.scoreGuess
+                };
+              }
+            });
+
+            const nextPlayerIndex = (currentPlayerIndex + 1) % team.players.length;
+            updatedPlayers[nextPlayerIndex] = { ...updatedPlayers[nextPlayerIndex], explains: true };
+
+            return { ...team, players: updatedPlayers };
+          }
+          return team;
+        })
       };
     default:
       return state;

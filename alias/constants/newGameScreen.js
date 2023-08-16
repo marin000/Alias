@@ -98,5 +98,17 @@ export const newGame = {
 	teamTxt: {
 		hr: 'Tim',
 		en: 'Team'
+	},
+	playerScore: {
+		hr: 'Bodovi igrača',
+		en: 'Player scores'
+	},
+	explainScore: {
+		hr: 'Objašnjava:',
+		en: 'Explains:'
+	},
+	guessScore: {
+		hr: 'Pogađa:',
+		en: 'Guess:'
 	}
 }

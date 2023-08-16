@@ -20,7 +20,8 @@ export default function AddTeamDialog({ isVisible, onClose, teams, language, onA
       .map((player, index) => {
         return {
           name: player,
-          score: 0,
+          scoreExplains: 0,
+          scoreGuess: 0,
           explains: index === 0 ? true : false
         }
       });

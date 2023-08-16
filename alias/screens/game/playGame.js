@@ -97,7 +97,7 @@ const PlayGame = ({ teams, currentTeamIndex, maxScoreReached, oldWords, updateTe
     let maxScoreFlag = false;
     const newScore = currentTeam.score + selectedWordsCount - unselectedWordsCount;
     dispatch(updateTeam({ ...currentTeam, score: newScore }));
-    dispatch(updatePlayerExplains(currentTeam.id, correctAnswers - skippedAnswers));
+    dispatch(updatePlayerExplains(currentTeam.id, selectedWordsCount - unselectedWordsCount));
     dispatch(updateTeamIndex((currentTeamIndex + 1) % teams.length));
     dispatch(addOldWords(oldWordsArr));
     if (newScore >= maxScore) {

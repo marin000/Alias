@@ -21,7 +21,8 @@ export default function EditTeamDialog({ isVisible, onClose, teams, selectedTeam
       .map((player, index) => {
         return {
           name: player,
-          score: 0,
+          scoreExplains: 0,
+          scoreGuess: 0,
           explains: index === 0 ? true : false
         }
       });
@@ -34,7 +35,7 @@ export default function EditTeamDialog({ isVisible, onClose, teams, selectedTeam
     onUpdateTeam(updatedTeam);
     onClose();
   }
-  
+
   return (
     <Dialog
       isVisible={isVisible}

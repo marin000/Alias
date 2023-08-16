@@ -61,7 +61,7 @@ const Login = ({ navigation }) => {
   return (
     <ImageBackground source={backgroundImage} style={globalStyles.mainContainer} resizeMode={'cover'}>
       <View>
-        <BackButton onPress={() => navigation.goBack()} />
+        <BackButton onPress={() => navigation.navigate('Home')} />
         <Text style={styles.title}>{signIn[language]}</Text>
         <Card>
           <Formik

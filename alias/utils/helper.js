@@ -78,7 +78,8 @@ const createRandomTeams = (playersArray, teamNumberValue, language) => {
     teams[teamIndex].name = `${teamTxt[language]} ${teamIndex + 1}`;
     const newPlayer = {
       name: player,
-      score: 0,
+      scoreExplains: 0,
+      scoreGuess: 0,
       explains: false
     }
     teams[teamIndex].players.push(newPlayer);

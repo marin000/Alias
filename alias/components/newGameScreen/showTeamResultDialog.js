@@ -1,13 +1,23 @@
-import React from 'react';
-import { View } from 'react-native';
-import { Button, Dialog, Text } from '@rneui/themed';
+import React, { useState } from 'react';
+import { View, TouchableHighlight, StyleSheet } from 'react-native';
+import { Button, Dialog, Text, Icon, Divider } from '@rneui/themed';
 import { playGame } from '../../constants/playGameScreen';
 import { newGame } from '../../constants/newGameScreen';
 import { globalStyles } from '../../styles/global';
 
 export default function ShowTeamResultDialog({ isVisible, onClose, language, selectedTeam }) {
   const { team } = playGame;
-  const { totalPoints, closeButton } = newGame;
+  const { totalPoints, closeButton, playerScore, explainScore, guessScore } = newGame;
+
+  const [openPlayerStats, setOpenPlayerStats] = useState({});
+
+  const togglePlayerStats = (playerName) => {
+    setOpenPlayerStats((prevOpenPlayerStats) => ({
+      ...prevOpenPlayerStats,
+      [playerName]: !prevOpenPlayerStats[playerName]
+    }));
+  };
+
   return (
     <Dialog
       isVisible={isVisible}
@@ -22,13 +32,33 @@ export default function ShowTeamResultDialog({ isVisible, onClose, language, sel
         <Text style={globalStyles.dialogScoreText}>{totalPoints[language]} {selectedTeam ? selectedTeam.score : ''}</Text>
       </View>
       {
-        selectedTeam ? selectedTeam.players
-          .map((player, index) => (
-            <View key={index} style={globalStyles.dialogScoreContainer}>
-              <Text style={globalStyles.dialogScoreText}>{player.name}: {player.score}</Text>
-            </View>
-          )) : null
+        selectedTeam ? selectedTeam.players.map((player, index) => (
+          <View key={index} style={globalStyles.dialogScoreContainer}>
+            <Text style={globalStyles.dialogScoreText}>{player.name}: </Text>
+            <TouchableHighlight onPress={() => togglePlayerStats(player.name)} underlayColor="transparent">
+              <View>
+                <View style={styles.playerScoreContainer}>
+                  <Text style={styles.togglePlayerScore}>{playerScore[language]}</Text>
+                  <Icon
+                    name={openPlayerStats[player.name] ? 'chevron-up' : 'chevron-down'}
+                    type="material-community"
+                    size={24}
+                    color={'#6e88a1'}
+                  />
+                </View>
+                {openPlayerStats[player.name] && (
+                  <View style={styles.scoreContainer}>
+                    <Text style={styles.playerScore}>{explainScore[language]} {player.scoreExplains}</Text>
+                    <Divider style={globalStyles.profileDivider} />
+                    <Text style={styles.playerScore}>{guessScore[language]} {player.scoreGuess}</Text>
+                  </View>
+                )}
+              </View>
+            </TouchableHighlight>
+          </View>
+        )) : null
       }
+
       <Button
         containerStyle={globalStyles.dialogButton}
         title={closeButton[language]}
@@ -38,3 +68,20 @@ export default function ShowTeamResultDialog({ isVisible, onClose, language, sel
     </Dialog>
   );
 }
+
+const styles = StyleSheet.create({
+  playerScoreContainer: {
+    flexDirection: 'row',
+    alignItems: 'center'
+  },
+  togglePlayerScore: {
+    marginLeft: 2
+  },
+  scoreContainer: {
+    marginLeft: 10,
+    marginTop: 5
+  },
+  playerScore: {
+    color: 'gray'
+  }
+});
