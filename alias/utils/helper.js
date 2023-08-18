@@ -113,20 +113,6 @@ const uploadImage = async (img) => {
   return JSON.stringify(json.secure_url).replaceAll('"', '');
 }
 
-const getGoogleUserInfo = async (token) => {
-  if (!token) return
-  try {
-    const response = await fetch(config.googleUserInfoUrl, {
-      headers: { Authorization: `Bearer ${token}` }
-    });
-    const user = await response.json();
-    return user;
-  }
-  catch (error) {
-    console.log(error);
-  }
-}
-
 export {
   validateTeamInput,
   getRandomWord,
@@ -134,6 +120,5 @@ export {
   shufflePlayers,
   isValidNumberOfTeams,
   createRandomTeams,
-  uploadImage,
-  getGoogleUserInfo
+  uploadImage
 }

@@ -3,9 +3,6 @@ import { connect } from 'react-redux';
 import { updateUser } from '../../redux/actions';
 import { useDispatch } from 'react-redux';
 import { storeToken } from '../../utils/auth';
-import * as WebBrowser from 'expo-web-browser';
-import * as Google from 'expo-auth-session/providers/google';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { View, StyleSheet, ImageBackground, TouchableOpacity } from 'react-native';
 import { Text, Card, Button } from '@rneui/themed';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -17,40 +14,16 @@ import backgroundImage from '../../assets/blurred-background.jpeg';
 import { globalStyles } from '../../styles/global';
 import LoginDivider from '../../components/customLoginDivider';
 import { LoginSchema } from '../../utils/formValidator';
-import { getGoogleUserInfo } from '../../utils/helper';
 import BackButton from '../../components/backButton';
 import api from '../../api/players';
-import config from '../../config/config';
 import countriesCode from '../../assets/countryCodes.json';
-
-WebBrowser.maybeCompleteAuthSession();
-
-const GoogleSignInButton = ({ language, onPress }) => {
-  return (
-    <TouchableOpacity style={styles.googleButton} onPress={onPress}>
-      <View style={styles.googleIcon}>
-        <Icon name="google" size={24} color="black" />
-      </View>
-      <Text style={styles.googleButtonText}>{login.googleSignIn[language]}</Text>
-    </TouchableOpacity>
-  );
-};
 
 const Login = ({ navigation }) => {
   const { language } = useContext(SettingsContext);
   const { emailPlaceholder, passwordPlaceholder, signIn, forgotPass, dividerTxt, newToAlias, registerTxt, invalidCredentials } = login;
-  const { webClientId, androidClientId } = config;
   const [showPassword, setShowPassword] = useState(false);
   const [invalidLoginError, setInvalidLoginError] = useState('');
-  const [request, response, promptAsync] = Google.useAuthRequest({
-    androidClientId,
-    webClientId
-  })
   const dispatch = useDispatch();
-
-  useEffect(() => {
-    handleSignInGoogle();
-  }, [response]);
 
   const togglePasswordVisibility = () => {
     setShowPassword((prevShowPassword) => !prevShowPassword);
@@ -73,42 +46,6 @@ const Login = ({ navigation }) => {
         setInvalidLoginError(invalidCredentials[language]);
         console.log(err.response.data);
       });
-  }
-
-  const handleSignInGoogle = async () => {
-    if (response?.type === 'success') {
-      const user = await getGoogleUserInfo(response.authentication.accessToken);
-      const data = { email: user.email };
-
-      api.checkPlayer(data)
-        .then((res) => {
-          if (res.data.exists) {
-            const { player, token } = res.data;
-            dispatch(updateUser(player));
-            storeToken(token);
-            navigation.navigate('Home');
-          } else {
-            const newPlayer = {
-              name: user.name,
-              email: user.email,
-              country: countriesCode[user.locale.toUpperCase()]
-            };
-            api.addNewPLayerGoogle(newPlayer)
-              .then((res) => {
-                const { savedPlayer, token } = res.data;
-                dispatch(updateUser(savedPlayer));
-                storeToken(token);
-                navigation.navigate('Home')
-              })
-              .catch((err) => {
-                console.log(err);
-              });
-          }
-        })
-        .catch((err) => {
-          console.log(err.response.data);
-        });
-    }
   }
 
   return (
@@ -161,10 +98,6 @@ const Login = ({ navigation }) => {
             )}
           </Formik>
           <LoginDivider text={dividerTxt[language]} />
-          <GoogleSignInButton
-            language={language}
-            onPress={promptAsync}
-          />
           <View style={styles.registerContainer}>
             <Text style={styles.registerText}>{newToAlias[language]}</Text>
             <TouchableOpacity onPress={() => navigation.navigate('Register')}>
@@ -194,31 +127,10 @@ const styles = StyleSheet.create({
     color: '#0066ff',
     fontWeight: 'bold'
   },
-  googleButton: {
-    ...globalStyles.buttonSaveTeam,
-    marginTop: -5,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderWidth: 1,
-    borderColor: 'gray',
-    backgroundColor: 'transparent',
-    paddingHorizontal: 20,
-    borderRadius: 30,
-    height: 45
-  },
-  googleIcon: {
-    marginRight: 10
-  },
-  googleButtonText: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: 'gray'
-  },
   registerContainer: {
     flexDirection: 'row',
     justifyContent: 'center',
-    marginTop: 20,
+    marginTop: 10,
     paddingBottom: 20
   },
   registerText: {

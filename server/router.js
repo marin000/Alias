@@ -9,7 +9,6 @@ const logerValidator = require('./validators/loggerValidator')
 const router = express.Router()
 
 router.post('/api/player', playerValidator.validate('create'), playerController.create)
-router.post('/api/player/googleSignIn', playerController.createWithGoogle)
 router.post('/api/player/login', playerController.getPlayer)
 router.get('/api/player/login', playerController.getPlayerByToken)
 router.get('/api/player/all', playerController.fetch)
@@ -17,7 +16,6 @@ router.delete('/api/player/:id', playerValidator.validate('validatePlayer'), pla
 router.put('/api/player', playerValidator.validate('validatePlayer'), playerController.updatePlayer)
 router.post('/api/player/pin', playerController.validatePin)
 router.post('/api/player/resetPassword', playerController.resetPassword)
-router.post('/api/player/check', playerController.checkPlayer)
 
 router.post('/api/team', teamController.create)
 router.get('/api/team', teamController.fetch)

@@ -7,11 +7,9 @@ const getPlayer = (credentials) => axiosInstance.post(`${url}/login`, credential
 const getPlayerByToken = (header) => axiosInstance.get(`${url}/login`, header);
 const deletePlayer = (id) => axiosInstance.delete(`${url}/${id}`);
 const addNewPLayer = (player) => axiosInstance.post(url, player);
-const addNewPLayerGoogle = (player) => axiosInstance.post(`${url}/googleSignIn`, player);
 const updatePLayer = (updateFields) => axiosInstance.put(url, updateFields);
 const validatePin = (data) => axiosInstance.post(`${url}/pin`, data)
 const resetPlayerPassword = (data) => axiosInstance.post(`${url}/resetPassword`, data)
-const checkPlayer = (data) => axiosInstance.post(`${url}/check`, data)
 
 export default { 
   getPlayers,
@@ -21,7 +19,5 @@ export default {
   updatePLayer,
   getPlayerByToken,
   validatePin,
-  resetPlayerPassword,
-  checkPlayer,
-  addNewPLayerGoogle
+  resetPlayerPassword
 }
