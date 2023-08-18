@@ -16,7 +16,7 @@ import LoginDivider from '../../components/customLoginDivider';
 import { LoginSchema } from '../../utils/formValidator';
 import BackButton from '../../components/backButton';
 import api from '../../api/players';
-import countriesCode from '../../assets/countryCodes.json';
+import { getCountryFromIP } from '../../utils/helper';
 
 const Login = ({ navigation }) => {
   const { language } = useContext(SettingsContext);
@@ -29,15 +29,19 @@ const Login = ({ navigation }) => {
     setShowPassword((prevShowPassword) => !prevShowPassword);
   };
 
-  const handleLogin = (values) => {
+  const handleLogin = async (values) => {
     setInvalidLoginError('');
     const credentials = {
       email: values.email,
       password: values.password
     };
+    const country = await getCountryFromIP();
     api.getPlayer(credentials)
       .then((res) => {
         const { player, token } = res.data;
+        if (player.country !== country) {
+          player.country = country;
+        }
         dispatch(updateUser(player));
         storeToken(token);
         navigation.navigate('Home');

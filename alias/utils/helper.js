@@ -2,6 +2,9 @@ import { Alert } from 'react-native';
 import { newGame } from '../constants/newGameScreen';
 import shortid from 'shortid';
 import config from '../config/config';
+import { errorMsg } from '../constants/errorMessages';
+import countriesCodes from '../assets/countryCodes.json';
+import axios from 'axios';
 
 const validateTeamInput = (teams, values, language) => {
   const { alertPlayer, alertTeam, alertTeamName } = newGame;
@@ -113,6 +116,15 @@ const uploadImage = async (img) => {
   return JSON.stringify(json.secure_url).replaceAll('"', '');
 }
 
+const getCountryFromIP = async () => {
+  try {
+    const response = await axios.get('http://ipinfo.io');
+    return countriesCodes[response.data.country.toUpperCase()];
+  } catch (error) {
+    console.error(errorMsg.ipInfo, error);
+  }
+};
+
 export {
   validateTeamInput,
   getRandomWord,
@@ -120,5 +132,6 @@ export {
   shufflePlayers,
   isValidNumberOfTeams,
   createRandomTeams,
-  uploadImage
+  uploadImage,
+  getCountryFromIP
 }

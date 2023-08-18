@@ -11,9 +11,7 @@ import backgroundImage from '../../assets/blurred-background.jpeg';
 import { globalStyles } from '../../styles/global';
 import { RegisterSchema } from '../../utils/formValidator';
 import BackButton from '../../components/backButton';
-import axios from 'axios';
-import { errorMsg } from '../../constants/errorMessages';
-import countriesCodes from '../../assets/countryCodes.json';
+import { getCountryFromIP } from '../../utils/helper';
 
 export default function Register({ navigation }) {
   const { language } = useContext(SettingsContext);
@@ -29,19 +27,6 @@ export default function Register({ navigation }) {
   const [showRepeatPassword, setShowRepeatPassword] = useState(false);
   const [duplicateEmailError, setDuplicateEmailError] = useState('');
   const [duplicateNameError, setDuplicateNameError] = useState('');
-  const [country, setCountry] = useState('');
-
-  useEffect(() => {
-    const getCountryFromIP = async () => {
-      try {
-        const response = await axios.get('http://ipinfo.io');
-        setCountry(countriesCodes[response.data.country]);
-      } catch (error) {
-        console.error(errorMsg.ipInfo, error);
-      }
-    };
-    getCountryFromIP();
-  }, []);
 
   const togglePasswordVisibility = () => {
     setShowPassword((prevShowPassword) => !prevShowPassword);
@@ -51,9 +36,10 @@ export default function Register({ navigation }) {
     setShowRepeatPassword((prevShowRepeatPassword) => !prevShowRepeatPassword);
   };
 
-  const handleRegistration = (values) => {
+  const handleRegistration = async (values) => {
     setDuplicateEmailError('');
     setDuplicateNameError('');
+    const country = await getCountryFromIP();
     const newPlayer = {
       name: values.name,
       email: values.email,
