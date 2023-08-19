@@ -9,7 +9,7 @@ export const home = {
 	},
 	instructions: {
 		hr: 'Kako se igra?',
-		en: 'How to play'
+		en: 'How to play?'
 	},
 	settings: {
 		hr: 'Postavke',

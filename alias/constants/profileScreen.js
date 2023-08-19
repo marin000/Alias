@@ -1,14 +1,14 @@
 export const profile = {
 	playedTxt: {
-		hr: 'Odigranih: ',
+		hr: 'Odigranih Igara: ',
 		en: 'Games Played: '
 	},
   wonTxt: {
-    hr: 'Pobjeda: ',
+    hr: 'Ukupno Pobjeda: ',
     en: 'Games Won: '
   },
   lostTxt: {
-    hr: 'Poraza: ',
+    hr: 'Ukupno Poraza: ',
     en: 'Games Lost: '
   },
   cameraAccess: {

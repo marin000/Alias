@@ -19,10 +19,6 @@ export const login = {
 		hr: 'ili',
 		en: 'or'
 	},
-	googleSignIn: {
-		hr: 'Prijavite se preko Google računa',
-		en: 'Sign in with Google'
-	},
 	newToAlias: {
 		hr: 'Niste član?',
 		en: 'Not a member?'

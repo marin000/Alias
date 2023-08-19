@@ -68,7 +68,7 @@ export const newGame = {
 		en: 'Close'
 	},
 	targetResultTxt: {
-		hr: 'Ciljni rezultat',
+		hr: 'Krajnji rezultat',
 		en: 'Target result'
 	},
 	newGameSameTeamsButton: {
@@ -109,6 +109,6 @@ export const newGame = {
 	},
 	guessScore: {
 		hr: 'Pogađa:',
-		en: 'Guess:'
+		en: 'Guessing:'
 	}
 }

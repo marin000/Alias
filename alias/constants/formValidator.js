@@ -1,7 +1,7 @@
 export const formValidator = {
 	usernameMin: {
 		hr: 'Korisničko ime mora imati najmanje 2 znaka',
-		en: 'Username must be at least 2 characters'
+		en: 'Username must contain at least 2 characters'
 	},
 	usernameReq: {
 		hr: 'Korisničko ime je obavezno',
@@ -21,18 +21,18 @@ export const formValidator = {
 	},
 	passwordMin: {
 		hr: 'Lozinka mora imati najmanje 8 znakova',
-		en: 'Password must be at least 8 characters'
+		en: 'Password must contain at least 8 characters'
 	},
 	passwordFormat: {
 		hr: 'Lozinka mora sadržavati najmanje jedno veliko slovo, jedno malo slovo, jedan broj i jedan poseban znak',
 		en: 'Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character'
 	},
 	repeatPasswordReq: {
-		hr: 'Morate ponovitit lozinku',
-		en: 'You must repeat the password'
+		hr: 'Molim vas ponovite lozinku',
+		en: 'Please repeat the password'
 	},
 	repeatPasswordMatch: {
 		hr: 'Lozinke moraju biti iste',
-		en: 'Passwords must match'
+		en: 'Passwords must be same'
 	}
 }

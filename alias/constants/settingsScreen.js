@@ -8,7 +8,7 @@ export const settings = {
 		en: 'Round time'
 	},
 	targetScore: {
-		hr: 'Ciljni rezultat',
+		hr: 'Krajnji rezultat',
 		en: 'Target result'
 	}
 }

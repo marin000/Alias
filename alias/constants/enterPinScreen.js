@@ -1,11 +1,11 @@
 export const enterPin = {
   title: {
     hr: 'Unesite Pin',
-    en: 'Enter the Pin'
+    en: 'Enter Pin'
   },
   invalidPinErrorTxt: {
     hr: 'Pin nije ispravan ili je istekao',
-    en: 'The pin is invalid or has expired'
+    en: 'Pin is invalid or has expired'
   },
   sendPinButton: {
     hr: 'OK',
