@@ -187,6 +187,7 @@ const NewGame = ({ teams, currentTeamIndex, gameStarted, maxScoreReached, addTea
           onAddTeam={(newTeam) => {
             addTeam(newTeam);
           }}
+          userData={userData}
         />
         {/* Edit team */}
         <EditTeamDialog
@@ -230,6 +231,7 @@ const NewGame = ({ teams, currentTeamIndex, gameStarted, maxScoreReached, addTea
             onAddAllTeams={(randomTeams) => {
               dispatch(addAllTeams(randomTeams));
             }}
+            userData={userData}
           />
         }
       </View>

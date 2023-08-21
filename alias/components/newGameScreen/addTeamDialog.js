@@ -8,7 +8,7 @@ import { newGame } from '../../constants/newGameScreen';
 import shortid from 'shortid';
 import { globalStyles } from '../../styles/global';
 
-export default function AddTeamDialog({ isVisible, onClose, teams, language, onAddTeam }) {
+export default function AddTeamDialog({ isVisible, onClose, teams, language, onAddTeam, userData }) {
   const { teamInput, playerInput, buttonSaveTeam, buttonAddPlayer, buttonReset } = newGame;
 
   const handleAddNewTeam = (values) => {
@@ -40,7 +40,7 @@ export default function AddTeamDialog({ isVisible, onClose, teams, language, onA
     <Dialog isVisible={isVisible} onBackdropPress={onClose}>
       <ScrollView keyboardShouldPersistTaps='handled'>
         <Formik
-          initialValues={{ teamName: '', players: [] }}
+          initialValues={{ teamName: '', players: userData ? [userData.name] : [] }}
           onSubmit={handleAddNewTeam}
         >
           {(props) => (

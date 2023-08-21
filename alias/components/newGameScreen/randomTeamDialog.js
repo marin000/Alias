@@ -7,7 +7,7 @@ import { newGame } from '../../constants/newGameScreen';
 import { shufflePlayers, isValidNumberOfTeams, createRandomTeams } from '../../utils/helper';
 import { globalStyles } from '../../styles/global';
 
-export default function RandomTeamDialog({ isVisible, onClose, language, onAddAllTeams }) {
+export default function RandomTeamDialog({ isVisible, onClose, language, onAddAllTeams, userData }) {
   const { playerInput, numberOfTeamsTxt, buttonGenerateRandom, buttonAddPlayer, buttonReset, buttonSaveTeam } = newGame;
   const [showTeamsDialog, setShowTeamsDialog] = useState(false);
   const [randomTeams, setRandomTeams] = useState([]);
@@ -42,7 +42,7 @@ export default function RandomTeamDialog({ isVisible, onClose, language, onAddAl
       <ScrollView keyboardShouldPersistTaps='handled'>
         {!showTeamsDialog ?
           <Formik
-            initialValues={{ numberOfTeams: '', players: [] }}
+            initialValues={{ numberOfTeams: '', players: userData ? [userData.name] : [] }}
             onSubmit={handleGenerateRandomTeans}
           >
             {(props) => (
