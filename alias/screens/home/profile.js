@@ -1,6 +1,12 @@
 import React, { useContext, useState } from 'react';
 import { connect } from 'react-redux';
-import { updateUser } from '../../redux/actions';
+import {
+  updateUser,
+  deleteAllTeams,
+  gameStartEnd,
+  updateMaxScoreReached,
+  updateTeamIndex
+} from '../../redux/actions';
 import { useDispatch } from 'react-redux';
 import { removeToken } from '../../utils/auth';
 import {
@@ -145,6 +151,10 @@ const Profile = ({ navigation, userData }) => {
   const handleLogout = () => {
     removeToken();
     dispatch(updateUser(null));
+    dispatch(deleteAllTeams());
+    dispatch(gameStartEnd(false));
+    dispatch(updateMaxScoreReached(false));
+    dispatch(updateTeamIndex(0));
     navigation.navigate('Home');
   }
 

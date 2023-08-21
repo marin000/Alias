@@ -40,7 +40,7 @@ export default function AddTeamDialog({ isVisible, onClose, teams, language, onA
     <Dialog isVisible={isVisible} onBackdropPress={onClose}>
       <ScrollView keyboardShouldPersistTaps='handled'>
         <Formik
-          initialValues={{ teamName: '', players: userData ? [userData.name] : [] }}
+          initialValues={{ teamName: '', players: userData && teams.length === 0 ? [userData.name] : [] }}
           onSubmit={handleAddNewTeam}
         >
           {(props) => (
@@ -61,6 +61,7 @@ export default function AddTeamDialog({ isVisible, onClose, teams, language, onA
                   placeholder={`${playerInput[language]} ${index + 1}`}
                   onChangeText={props.handleChange(`players.${index}`)}
                   value={player}
+                  editable={!(index === 0 && userData)}
                 />
               ))}
               <View style={globalStyles.buttonsAddResetContainer}>

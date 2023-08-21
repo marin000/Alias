@@ -5,10 +5,7 @@ const TeamsShema = new mongoose.Schema({
     type: String,
     required: 'Team must have a name!'
   },
-  players: [{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Players'
-  }],
+  players: [String],
   gamesPlayed: Number,
   gamesWin: Number,
   gamesLost: Number

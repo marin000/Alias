@@ -1,7 +1,6 @@
 import React, { useContext, useState } from 'react';
-import { View, StyleSheet, ImageBackground, ScrollView, TouchableHighlight } from 'react-native';
-import { Text, ListItem, Button } from '@rneui/themed';
-import { LinearGradient } from 'expo-linear-gradient';
+import { View, StyleSheet, ImageBackground, Alert } from 'react-native';
+import { Text, Button } from '@rneui/themed';
 import { connect } from 'react-redux';
 import {
   addTeam,
@@ -23,17 +22,20 @@ import PreStartDialog from '../../components/newGameScreen/preStartDialog';
 import ShowTeamResultDialog from '../../components/newGameScreen/showTeamResultDialog';
 import RandomTeamDialog from '../../components/newGameScreen/randomTeamDialog';
 import BackButton from '../../components/backButton';
+import TeamList from '../../components/newGameScreen/teamList';
 import { globalStyles } from '../../styles/global';
+import api from '../../api/teams';
 
 const NewGame = ({ teams, currentTeamIndex, gameStarted, maxScoreReached, addTeam, updateTeam, deleteTeam, gameStartEnd, userData, navigation }) => {
   const { language, maxScore } = useContext(SettingsContext);
-  const { title, newTeam, buttonStart, score, targetResultTxt, headerTitle, newGameSameTeamsButton, createRandomTeams } = newGame;
+  const { title, newTeam, buttonStart, targetResultTxt, headerTitle, newGameSameTeamsButton, createRandomTeams, saveAsMyTeam, saveAsMyTeamAlert, importMyTeam } = newGame;
   const [addTeamDialog, setAddTeamDialog] = useState(false);
   const [selectedTeam, setSelectedTeam] = useState(null);
   const [editTeamDialog, setEditTeamDialog] = useState(false);
   const [preStartDialog, setPreStartDialog] = useState(false);
   const [showTeamResultDialog, setShowTeamResultDialog] = useState(false);
   const [randomTeamDialog, setRandomTeamDialog] = useState(false);
+  const [myTeamFlag, setMyTeamFlag] = useState(false);
   const dispatch = useDispatch();
 
   const handleTeamToEdit = (team) => {
@@ -79,6 +81,46 @@ const NewGame = ({ teams, currentTeamIndex, gameStarted, maxScoreReached, addTea
     dispatch(updateTeamIndex(0));
   }
 
+  const handleSaveAsMyTeam = () => {
+    const myTeam = teams.find(team => team.players.some(player => player.name === userData.name));
+    const players = myTeam.players.map(player => player.name);
+
+    const newTeam = {
+      name: myTeam.name,
+      players,
+      playerId: userData._id
+    }
+
+    api.addNewTeam(newTeam)
+      .then(() => {
+        Alert.alert(saveAsMyTeamAlert[language]);
+        setMyTeamFlag(true);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
+  const handleImportMyTeam = () => {
+    const playersArray = userData.team.players
+      .map((player, index) => {
+        return {
+          name: player,
+          scoreExplains: 0,
+          scoreGuess: 0,
+          explains: index === 0 ? true : false
+        }
+      });
+    const myTeam = {
+      id: userData.team._id,
+      name: userData.team.name,
+      players: playersArray,
+      score: 0
+    };
+    addTeam(myTeam);
+    setMyTeamFlag(true);
+  }
+
   return (
     <ImageBackground source={backgroundImage} style={globalStyles.mainContainer} resizeMode={'cover'}>
       {/* List of teams */}
@@ -90,52 +132,36 @@ const NewGame = ({ teams, currentTeamIndex, gameStarted, maxScoreReached, addTea
             gameStarted &&
             <Text style={styles.targetResult}>{targetResultTxt[language]}: {maxScore}</Text>
           }
-          <ScrollView>
-            {teams ? teams
-              .slice()
-              .sort((a, b) => b.score - a.score)
-              .map((team, index) => (
-                <TouchableHighlight
-                  key={index}
-                  onPress={() => gameStarted ? showTeamResult(team) : handleTeamToEdit(team)}
-                  underlayColor="transparent"
-                >
-                  <ListItem
-                    style={styles.team}
-                    linearGradientProps={{
-                      colors: ['#FF9800', '#F44336'],
-                      start: { x: 1, y: 0 },
-                      end: { x: 0.2, y: 0 },
-                    }}
-                    ViewComponent={LinearGradient}
-                  >
-                    {
-                      gameStarted &&
-                      <View style={styles.orderNumberCircle}>
-                        <Text style={styles.orderNumber}>{index + 1}</Text>
-                      </View>
-                    }
-                    <ListItem.Content>
-                      <ListItem.Title style={{ color: 'white', fontWeight: 'bold' }}>
-                        {team.name}
-                      </ListItem.Title>
-                      {
-                        gameStarted &&
-                        <ListItem.Subtitle style={{ color: 'white', fontWeight: 'bold' }}>
-                          {score[language]} {team.score}
-                        </ListItem.Subtitle>
-                      }
-                    </ListItem.Content>
-                    <ListItem.Chevron color="white" />
-                  </ListItem>
-                </TouchableHighlight>
-              )) : null}
-          </ScrollView>
+          <TeamList
+            teams={teams}
+            gameStarted={gameStarted}
+            showTeamResult={showTeamResult}
+            handleTeamToEdit={handleTeamToEdit}
+          />
         </View>
         <View style={styles.startGame}>
+          {/* Save team as my team */}
+          {
+            teams.length >= 2 && userData && !myTeamFlag &&
+            <Button
+              title={saveAsMyTeam[language]}
+              color='#0000cc'
+              onPress={() => handleSaveAsMyTeam()}
+            />
+          }
+          {/* Import my team */}
+          {
+            teams.length === 0 && userData && userData.team &&
+            <Button
+              title={importMyTeam[language]}
+              color='#0000cc'
+              onPress={() => handleImportMyTeam()}
+            />
+          }
           {
             !gameStarted &&
             <Button
+              containerStyle={styles.preGameButtons}
               title={newTeam[language]}
               color='#0000cc'
               onPress={() => setAddTeamDialog(true)}
@@ -144,7 +170,7 @@ const NewGame = ({ teams, currentTeamIndex, gameStarted, maxScoreReached, addTea
           {
             !gameStarted && teams.length === 0 &&
             <Button
-              containerStyle={styles.buttonRandomTeams}
+              containerStyle={styles.preGameButtons}
               title={createRandomTeams[language]}
               color='#0000cc'
               onPress={() => setRandomTeamDialog(true)}
@@ -195,6 +221,7 @@ const NewGame = ({ teams, currentTeamIndex, gameStarted, maxScoreReached, addTea
           onClose={() => setEditTeamDialog(false)}
           teams={teams}
           selectedTeam={selectedTeam}
+          myTeamEditing={myTeamFlag ? userData?.team.name === selectedTeam?.name : false}
           language={language}
           onDeleteTeam={() => handleDeleteTeam()}
           onUpdateTeam={(updatedTeam) => { handleUpdateTeam(updatedTeam) }
@@ -246,21 +273,6 @@ const styles = StyleSheet.create({
   teamList: {
     flex: 1
   },
-  team: {
-    marginBottom: 10
-  },
-  orderNumberCircle: {
-    width: 20,
-    height: 20,
-    borderRadius: 30,
-    backgroundColor: 'white',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  orderNumber: {
-    fontWeight: 'bold'
-  },
   startGame: {
     padding: 15
   },
@@ -277,7 +289,7 @@ const styles = StyleSheet.create({
     color: 'white',
     marginBottom: 10
   },
-  buttonRandomTeams: {
+  preGameButtons: {
     marginTop: 15
   }
 });

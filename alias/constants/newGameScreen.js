@@ -110,5 +110,17 @@ export const newGame = {
 	guessScore: {
 		hr: 'Pogađa:',
 		en: 'Guessing:'
+	},
+	saveAsMyTeam: {
+		hr: 'Spremi trenutni tim kao Moj tim',
+		en: 'Save current team as My team'
+	},
+	saveAsMyTeamAlert: {
+		hr: 'Uspješno ste spremili vaš tim!',
+		en: 'You have successfully saved your team!'
+	},
+	importMyTeam: {
+		hr: 'Uvezi Moj Tim',
+		en: 'Import My Team'
 	}
 }

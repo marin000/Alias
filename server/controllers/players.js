@@ -95,7 +95,7 @@ async function updatePlayer(req, res) {
         .json({ errors: errors.array() })
       return
     }
-    const { id, email, name, team, image, password } = req.body
+    const { id, email, name, image, password } = req.body
     const updateFields = {}
 
     if (email) {
@@ -104,10 +104,6 @@ async function updatePlayer(req, res) {
 
     if (name) {
       updateFields.name = name
-    }
-
-    if (team) {
-      updateFields.team = team
     }
 
     if (image) {
@@ -119,7 +115,7 @@ async function updatePlayer(req, res) {
 
     if (password) {
       const player = await Players.findOne({ _id: id })
-      const passwordMatch = await bcrypt.compare(password.oldPassword, player.password)
+      const passwordMatch = bcrypt.compare(password.oldPassword, player.password)
       if (passwordMatch) {
         const hashedPassword = await bcrypt.hash(password.newPassword, 10)
         updateFields.password = hashedPassword

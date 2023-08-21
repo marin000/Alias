@@ -1,21 +1,17 @@
 /* eslint-disable new-cap */
 const Teams = require('../Models/Teams')
+const Players = require('../Models/Players')
 const { validationResult } = require('express-validator')
 const infoMessages = require('../constants/infoMessages')
 const { teamsLogger } = require('../logger/logger')
 
 const create = async(req, res, next) => {
   try {
-    const errors = validationResult(req)
-    if (!errors.isEmpty()) {
-      teamsLogger.error(errors)
-      res.status(403)
-        .json({ errors: errors.array() })
-      return
-    }
-    const { name, players, gamesPlayed, gamesWin, gamesLost } = req.body
-    const newTeam = Teams({ name, players, gamesPlayed, gamesWin, gamesLost })
-    await newTeam.save()
+    const { name, players, playerId } = req.body
+    const newTeam = Teams({ name, players, gamesPlayed: 0, gamesWin: 0, gamesLost: 0 })
+    const savedTeam = await newTeam.save()
+
+    await Players.findByIdAndUpdate(playerId, { team: savedTeam })
     teamsLogger.info(infoMessages.NEW_TEAM)
     res.status(201)
       .send(newTeam)

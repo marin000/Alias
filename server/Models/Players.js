@@ -1,6 +1,4 @@
 const mongoose = require('mongoose')
-const Teams = require('./Teams')
-const { playersLogger } = require('../logger/logger')
 
 const PlayersShema = new mongoose.Schema({
   name: {
@@ -32,26 +30,5 @@ const PlayersShema = new mongoose.Schema({
   resetPinExpiration: Date
 }, { timestamps: true }
 )
-
-PlayersShema.pre('findOneAndUpdate', function(next) {
-  const update = this.getUpdate()
-  const teamId = update.$set ? update.team : null
-
-  if (teamId) {
-    Teams.findById(teamId)
-      .exec((error, t) => {
-        if (error) {
-          playersLogger.error(error)
-          return next(error)
-        }
-        t.players.push(this._conditions._id)
-        t.save(() => {
-          next()
-        })
-      })
-  } else {
-    next()
-  }
-})
 
 module.exports = mongoose.model('Players', PlayersShema)

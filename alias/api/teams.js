@@ -6,7 +6,7 @@ const getTeams = () => axiosInstance.get();
 
 const deleteTeam = (id) => axiosInstance.delete(`${url}/${id}`);
 
-const addNewTeam = (player) => axiosInstance.post(url, player);
+const addNewTeam = (data) => axiosInstance.post(url, data);
 
 export default {
   getTeams,
