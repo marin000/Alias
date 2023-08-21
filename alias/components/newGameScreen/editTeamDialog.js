@@ -7,7 +7,7 @@ import { validateTeamInput } from '../../utils/helper';
 import { newGame } from '../../constants/newGameScreen';
 import { globalStyles } from '../../styles/global';
 
-export default function EditTeamDialog({ isVisible, onClose, teams, selectedTeam, myTeamEditing, language, onDeleteTeam, onUpdateTeam }) {
+export default function EditTeamDialog({ isVisible, onClose, teams, selectedTeam, myTeamEditing, language, onDeleteTeam, onUpdateTeam, userData }) {
   const { teamInput, playerInput, buttonSaveTeam, buttonAddPlayer, buttonDelete } = newGame;
 
   const handleEditTeam = (values) => {
@@ -69,7 +69,7 @@ export default function EditTeamDialog({ isVisible, onClose, teams, selectedTeam
                     placeholder={player}
                     onChangeText={props.handleChange(`players.${index}`)}
                     value={player}
-                    editable={!myTeamEditing}
+                    editable={!myTeamEditing && !(userData?.name === player)}
                   />
                 </View>
               ))}

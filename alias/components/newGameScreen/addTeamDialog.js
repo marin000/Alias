@@ -61,7 +61,7 @@ export default function AddTeamDialog({ isVisible, onClose, teams, language, onA
                   placeholder={`${playerInput[language]} ${index + 1}`}
                   onChangeText={props.handleChange(`players.${index}`)}
                   value={player}
-                  editable={!(index === 0 && userData)}
+                  editable={!(index === 0 && userData && teams.length === 0)}
                 />
               ))}
               <View style={globalStyles.buttonsAddResetContainer}>

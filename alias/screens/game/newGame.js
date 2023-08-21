@@ -222,6 +222,7 @@ const NewGame = ({ teams, currentTeamIndex, gameStarted, maxScoreReached, addTea
           teams={teams}
           selectedTeam={selectedTeam}
           myTeamEditing={myTeamFlag ? userData?.team.name === selectedTeam?.name : false}
+          userData={userData}
           language={language}
           onDeleteTeam={() => handleDeleteTeam()}
           onUpdateTeam={(updatedTeam) => { handleUpdateTeam(updatedTeam) }
