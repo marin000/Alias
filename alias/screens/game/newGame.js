@@ -115,8 +115,10 @@ const NewGame = ({ teams, currentTeamIndex, gameStarted, maxScoreReached, addTea
       id: userData.team._id,
       name: userData.team.name,
       players: playersArray,
-      score: 0
+      score: 0,
+      myTeam: true
     };
+
     addTeam(myTeam);
     setMyTeamFlag(true);
   }
@@ -136,13 +138,14 @@ const NewGame = ({ teams, currentTeamIndex, gameStarted, maxScoreReached, addTea
             teams={teams}
             gameStarted={gameStarted}
             showTeamResult={showTeamResult}
+            language={language}
             handleTeamToEdit={handleTeamToEdit}
           />
         </View>
         <View style={styles.startGame}>
           {/* Save team as my team */}
           {
-            teams.length >= 2 && userData && !myTeamFlag &&
+            teams.length >= 2 && userData && !myTeamFlag && !gameStarted &&
             <Button
               title={saveAsMyTeam[language]}
               color='#0000cc'

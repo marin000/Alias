@@ -7,7 +7,7 @@ import countriesCodes from '../assets/countryCodes.json';
 import axios from 'axios';
 
 const validateTeamInput = (teams, values, language) => {
-  const { alertPlayer, alertTeam, alertTeamName } = newGame;
+  const { alertPlayer, alertTeam, alertTeamName, alertPlayerUnique } = newGame;
 
   if (values.teamName.length === 0) {
     Alert.alert(alertTeam[language]);
@@ -15,6 +15,10 @@ const validateTeamInput = (teams, values, language) => {
   }
   if (values.players.length < 2 || values.players.filter(player => player.trim() !== '').length < 2) {
     Alert.alert(alertPlayer[language]);
+    return;
+  }
+  if (new Set(values.players).size !== values.players.length) {
+    Alert.alert(alertPlayerUnique[language]);
     return;
   }
   if (teams.findIndex(team => team.name.trim().toLowerCase() === values.teamName.trim().toLowerCase()) !== -1) {
@@ -58,33 +62,40 @@ const shufflePlayers = (players) => {
   return shuffledPlayers;
 }
 
-const isValidNumberOfTeams = (numberOfPlayers, numberOfTeams, language) => {
-  const { alertTeamNumber, alertMinTeamNumber } = newGame;
+const isFormValid = (numberOfTeams, players, language) => {
+  const { alertTeamNumber, alertMinTeamNumber, alertPlayerUnique } = newGame;
   if (numberOfTeams < 2) {
     Alert.alert(alertMinTeamNumber[language]);
     return;
   }
-  const maxTeams = Math.floor(numberOfPlayers / 2);
+  const maxTeams = Math.floor(players.length / 2);
   if (numberOfTeams > maxTeams) {
     Alert.alert(alertTeamNumber[language]);
+    return;
+  }
+  if (new Set(players).size !== players.length) {
+    Alert.alert(alertPlayerUnique[language]);
     return;
   }
   return true
 }
 
-const createRandomTeams = (playersArray, teamNumberValue, language) => {
+const createRandomTeams = (playersArray, teamNumberValue, userData, language) => {
   const { teamTxt } = newGame;
   const teams = Array.from({ length: teamNumberValue }, () => ({ id: shortid.generate(), name: '', players: [], score: 0 }));
   let teamIndex = 0;
 
   playersArray.forEach((player) => {
     teams[teamIndex].name = `${teamTxt[language]} ${teamIndex + 1}`;
+    if (!teams[teamIndex]?.myTeam) {
+      teams[teamIndex].myTeam = userData?.name === player;
+    }
     const newPlayer = {
       name: player,
       scoreExplains: 0,
       scoreGuess: 0,
       explains: false
-    }
+    };
     teams[teamIndex].players.push(newPlayer);
     teamIndex = (teamIndex + 1) % teamNumberValue;
   });
@@ -130,7 +141,7 @@ export {
   getRandomWord,
   teamWithHighestScore,
   shufflePlayers,
-  isValidNumberOfTeams,
+  isFormValid,
   createRandomTeams,
   uploadImage,
   getCountryFromIP

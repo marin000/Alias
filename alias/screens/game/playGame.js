@@ -13,7 +13,7 @@ import WinnerDialog from '../../components/playGameScreen/winnerDialog';
 import PauseDialog from '../../components/playGameScreen/pauseDialog';
 import { globalStyles } from '../../styles/global';
 
-const PlayGame = ({ teams, currentTeamIndex, maxScoreReached, oldWords, updateTeam, navigation }) => {
+const PlayGame = ({ teams, currentTeamIndex, maxScoreReached, oldWords, updateTeam, userData, navigation }) => {
   const { language, timer, maxScore } = useContext(SettingsContext);
   const { buttonSave, buttonSkip, correctAnswersTxt, skippedAnswersTxt } = playGame;
   const [gameTimer, setGameTimer] = useState(timer);
@@ -284,7 +284,8 @@ const mapStateToProps = (state) => ({
   teams: state.teamReducer.teams,
   currentTeamIndex: state.gameReducer.currentTeamIndex,
   maxScoreReached: state.gameReducer.maxScoreReached,
-  oldWords: state.gameReducer.oldWords
+  oldWords: state.gameReducer.oldWords,
+  userData: state.userReducer.userData
 });
 
 const mapDispatchToProps = (dispatch) => {

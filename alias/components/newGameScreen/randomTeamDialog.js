@@ -4,7 +4,7 @@ import { Button, Dialog, Text } from '@rneui/themed';
 import { Formik } from 'formik';
 import { TextInput } from 'react-native-gesture-handler';
 import { newGame } from '../../constants/newGameScreen';
-import { shufflePlayers, isValidNumberOfTeams, createRandomTeams } from '../../utils/helper';
+import { shufflePlayers, isFormValid, createRandomTeams } from '../../utils/helper';
 import { globalStyles } from '../../styles/global';
 
 export default function RandomTeamDialog({ isVisible, onClose, language, onAddAllTeams, userData }) {
@@ -12,16 +12,16 @@ export default function RandomTeamDialog({ isVisible, onClose, language, onAddAl
   const [showTeamsDialog, setShowTeamsDialog] = useState(false);
   const [randomTeams, setRandomTeams] = useState([]);
 
-  const handleGenerateRandomTeans = (values) => {
+  const handleGenerateRandomTeams = (values) => {
     const playersArray = values.players
       .filter(player => player.length > 0);
     const shuffledPLayers = shufflePlayers(playersArray);
     const numericInput = values.numberOfTeams.replace(/[^0-9]/g, '');
     const teamNumberValue = parseInt(numericInput, 10);
-    if (!isValidNumberOfTeams(shuffledPLayers.length, teamNumberValue, language)) {
+    if (!isFormValid(teamNumberValue, shuffledPLayers, language)) {
       return;
     }
-    const newRandomTeams = createRandomTeams(shuffledPLayers, teamNumberValue, language);
+    const newRandomTeams = createRandomTeams(shuffledPLayers, teamNumberValue, userData, language);
     setRandomTeams(newRandomTeams);
     setShowTeamsDialog(true);
   }
@@ -43,7 +43,7 @@ export default function RandomTeamDialog({ isVisible, onClose, language, onAddAl
         {!showTeamsDialog ?
           <Formik
             initialValues={{ numberOfTeams: '', players: userData ? [userData.name] : [] }}
-            onSubmit={handleGenerateRandomTeans}
+            onSubmit={handleGenerateRandomTeams}
           >
             {(props) => (
               <View>
@@ -65,6 +65,7 @@ export default function RandomTeamDialog({ isVisible, onClose, language, onAddAl
                     placeholder={`${playerInput[language]} ${index + 1}`}
                     onChangeText={props.handleChange(`players.${index}`)}
                     value={player}
+                    editable={!(index === 0 && userData)}
                   />
                 ))}
                 <View style={globalStyles.buttonsAddResetContainer}>

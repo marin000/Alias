@@ -30,7 +30,12 @@ export default function AddTeamDialog({ isVisible, onClose, teams, language, onA
       name: values.teamName,
       players: playersArray,
       score: 0,
+      myTeam: userData?.name === playersArray[0]?.name 
     };
+
+    if (userData && teams.length === 0) {
+      newTeam.players[0].loggedIn = true;
+    }
 
     onAddTeam(newTeam);
     onClose();

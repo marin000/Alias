@@ -4,7 +4,7 @@ import { ListItem, Text } from '@rneui/themed';
 import { LinearGradient } from 'expo-linear-gradient';
 import { newGame } from '../../constants/newGameScreen';
 
-const TeamList = ({ teams, gameStarted, showTeamResult, handleTeamToEdit }) => {
+const TeamList = ({ teams, gameStarted, showTeamResult, language, handleTeamToEdit }) => {
   const { score } = newGame; 
 
   return (

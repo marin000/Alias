@@ -51,6 +51,10 @@ export const newGame = {
 		hr: 'Potrebna su najmanje 2 igraca!',
 		en: 'At least 2 players are required!'
 	},
+	alertPlayerUnique: {
+		hr: 'Postoji više igrača s istim imenom!',
+		en: 'There are multiple players with the same name!'
+	},
 	score: {
 		hr: 'Rezultat:',
 		en: 'Result:'

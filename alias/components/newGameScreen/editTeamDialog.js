@@ -31,6 +31,7 @@ export default function EditTeamDialog({ isVisible, onClose, teams, selectedTeam
       name: values.teamName,
       players: playersArray,
       score: 0,
+      myTeam: selectedTeam.myTeam
     }
     onUpdateTeam(updatedTeam);
     onClose();
@@ -75,14 +76,15 @@ export default function EditTeamDialog({ isVisible, onClose, teams, selectedTeam
               ))}
 
               <View style={globalStyles.buttonsAddResetContainer}>
-                <Button
-                  containerStyle={globalStyles.buttonAdd}
-                  title={buttonAddPlayer[language]}
-                  color='primary'
-                  onPress={() => {
-                    props.setFieldValue(`players.${props.values.players.length}`, '');
-                  }}
-                />
+                {!myTeamEditing &&
+                  <Button
+                    containerStyle={globalStyles.buttonAdd}
+                    title={buttonAddPlayer[language]}
+                    color='primary'
+                    onPress={() => {
+                      props.setFieldValue(`players.${props.values.players.length}`, '');
+                    }}
+                  />}
                 <Button
                   containerStyle={globalStyles.buttonResetDel}
                   title={buttonDelete[language]}
@@ -90,12 +92,14 @@ export default function EditTeamDialog({ isVisible, onClose, teams, selectedTeam
                   onPress={() => onDeleteTeam()}
                 />
               </View>
-              <Button
-                containerStyle={globalStyles.buttonSaveTeam}
-                title={buttonSaveTeam[language]}
-                color='success'
-                onPress={props.handleSubmit}
-              />
+              {!myTeamEditing &&
+                <Button
+                  containerStyle={globalStyles.buttonSaveTeam}
+                  title={buttonSaveTeam[language]}
+                  color='success'
+                  onPress={props.handleSubmit}
+                />
+              }
             </View>
           )}
         </Formik>
