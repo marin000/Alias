@@ -26,5 +26,21 @@ export const profile = {
   buttonLogout: {
     hr: 'Odjavi se',
     en: 'Logout'
+  },
+  alertConfirmation: {
+    hr: 'Potvrda',
+    en: 'Confirmation'
+  },
+  alertLogOutTxt: {
+    hr: 'Da li želite nastaviti? Rezultati trenutne igre će biti izgubljeni!',
+    en: 'Do you want to proceed? Current game results will be lost!'
+  },
+  alertCancelTxt: {
+    hr: 'OTKAŽI',
+    en: 'CANCEL'
+  },
+  alertContinueTxt: {
+    hr: 'NASTAVI',
+    en: 'CONTINUE'
   }
 }

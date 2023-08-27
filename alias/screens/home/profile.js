@@ -33,9 +33,10 @@ import EditProfile from '../../components/profileScreen/editProfile';
 import TeamStats from '../../components/profileScreen/teamStats';
 import { globalStyles } from '../../styles/global';
 
-const Profile = ({ navigation, userData }) => {
+const Profile = ({ navigation, userData, teams }) => {
   const { language } = useContext(SettingsContext);
-  const { playedTxt, wonTxt, lostTxt, cameraAccess, buttonChangePass, buttonLogout } = profile;
+  const { playedTxt, wonTxt, lostTxt, cameraAccess, buttonChangePass,
+    buttonLogout, alertConfirmation, alertLogOutTxt, alertCancelTxt, alertContinueTxt } = profile;
   const { duplicateEmailErrorTxt, duplicateNameErrorTxt } = register;
   const { name, email, country, team, image, gamesPlayed, gamesWin, gamesLost } = userData ?? {};
   const [showTeamStats, setShowTeamStats] = useState(false);
@@ -149,13 +150,33 @@ const Profile = ({ navigation, userData }) => {
   }
 
   const handleLogout = () => {
-    removeToken();
-    dispatch(updateUser(null));
-    dispatch(deleteAllTeams());
-    dispatch(gameStartEnd(false));
-    dispatch(updateMaxScoreReached(false));
-    dispatch(updateTeamIndex(0));
-    navigation.navigate('Home');
+    const logoutAndRedirect = () => {
+      removeToken();
+      dispatch(updateUser(null));
+      navigation.navigate('Home');
+    }
+    if (teams.length > 0) {
+      Alert.alert(
+        alertConfirmation[language],
+        alertLogOutTxt[language],
+        [
+          {
+            text: alertCancelTxt[language],
+            style: 'cancel'
+          },
+          {
+            text: alertContinueTxt[language],
+            onPress: () => {
+              dispatch(deleteAllTeams());
+              dispatch(gameStartEnd(false));
+              dispatch(updateMaxScoreReached(false));
+              dispatch(updateTeamIndex(0));
+              logoutAndRedirect();
+            },
+          },]);
+    } else {
+      logoutAndRedirect();
+    }
   }
 
   return (
@@ -265,7 +286,8 @@ Profile.navigationOptions = {
 };
 
 const mapStateToProps = (state) => ({
-  userData: state.userReducer.userData
+  userData: state.userReducer.userData,
+  teams: state.teamReducer.teams
 });
 
 const mapDispatchToProps = {

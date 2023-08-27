@@ -95,7 +95,7 @@ async function updatePlayer(req, res) {
         .json({ errors: errors.array() })
       return
     }
-    const { id, email, name, image, password } = req.body
+    const { id, email, name, image, password, gamesPlayed, gamesWin, gamesLost } = req.body
     const updateFields = {}
 
     if (email) {
@@ -123,6 +123,16 @@ async function updatePlayer(req, res) {
         return res.status(401)
           .json({ error: errorMessages.INVALID_CURRENT_PASSWORD })
       }
+    }
+
+    if (gamesPlayed) {
+      updateFields.gamesPlayed = gamesPlayed
+    }
+    if (gamesWin) {
+      updateFields.gamesWin = gamesWin
+    }
+    if (gamesLost) {
+      updateFields.gamesLost = gamesLost
     }
 
     const updatedPlayer = await Players.findByIdAndUpdate(id, updateFields, { new: true })

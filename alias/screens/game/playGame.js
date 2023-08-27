@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { updateTeam, updateTeamIndex, updatePlayerExplains, updateMaxScoreReached, addOldWords } from '../../redux/actions';
 import { useDispatch } from 'react-redux';
 import { SettingsContext } from '../../utils/settings';
-import { getRandomWord, teamWithHighestScore } from '../../utils/helper';
+import { getRandomWord, teamWithHighestScore, updatePlayerTeamStatsDB } from '../../utils/helper';
 import { playGame } from '../../constants/playGameScreen';
 import backgroundImage from '../../assets/blurred-background.jpeg';
 import EndRoundDialog from '../../components/playGameScreen/endRoundDialog';
@@ -113,6 +113,9 @@ const PlayGame = ({ teams, currentTeamIndex, maxScoreReached, oldWords, updateTe
       setWinnerTeam(highestScoreTeam);
       setEndDialog(false);
       setWinnerDialog(true);
+      if (userData) {
+        updatePlayerTeamStatsDB(highestScoreTeam, teams, userData, dispatch);
+      }
     } else {
       setEndDialog(false);
       navigation.navigate('NewGame');
@@ -137,9 +140,7 @@ const PlayGame = ({ teams, currentTeamIndex, maxScoreReached, oldWords, updateTe
   return (
     <ImageBackground source={backgroundImage} style={styles.container} resizeMode={'cover'}>
       <View style={styles.teamInfo}>
-        <View style={styles.teamNameContainer}>
           <Text style={styles.teamNameText}>{currentTeam.name}</Text>
-        </View>
       </View>
       <View style={styles.answersContainer}>
         <View style={styles.correctAnswersContainer}>
@@ -211,7 +212,7 @@ const styles = StyleSheet.create({
   container: {
     ...globalStyles.mainContainer,
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   word: {
     fontSize: 50,
@@ -242,12 +243,9 @@ const styles = StyleSheet.create({
   },
   teamInfo: {
     position: 'absolute',
-    top: 20,
+    top: 35,
     flexDirection: 'row',
     alignItems: 'center'
-  },
-  teamNameContainer: {
-    paddingRight: 30,
   },
   teamNameText: {
     fontSize: 30,
@@ -277,7 +275,7 @@ const styles = StyleSheet.create({
 });
 
 PlayGame.navigationOptions = {
-	headerShown: false,
+  headerShown: false,
 };
 
 const mapStateToProps = (state) => ({

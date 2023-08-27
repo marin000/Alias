@@ -1,23 +1,27 @@
 import { Alert } from 'react-native';
 import { newGame } from '../constants/newGameScreen';
+import { updateUser } from '../redux/actions';
 import shortid from 'shortid';
 import config from '../config/config';
 import { errorMsg } from '../constants/errorMessages';
 import countriesCodes from '../assets/countryCodes.json';
 import axios from 'axios';
+import apiPlayer from '../api/players';
+import apiTeam from '../api/teams';
 
 const validateTeamInput = (teams, values, language) => {
   const { alertPlayer, alertTeam, alertTeamName, alertPlayerUnique } = newGame;
+  const players = values.players.filter(player => player.trim() !== '');
 
   if (values.teamName.length === 0) {
     Alert.alert(alertTeam[language]);
     return;
   }
-  if (values.players.length < 2 || values.players.filter(player => player.trim() !== '').length < 2) {
+  if (players.length < 2) {
     Alert.alert(alertPlayer[language]);
     return;
   }
-  if (new Set(values.players).size !== values.players.length) {
+  if (new Set(players).size !== players.length) {
     Alert.alert(alertPlayerUnique[language]);
     return;
   }
@@ -64,16 +68,18 @@ const shufflePlayers = (players) => {
 
 const isFormValid = (numberOfTeams, players, language) => {
   const { alertTeamNumber, alertMinTeamNumber, alertPlayerUnique } = newGame;
+  const filteredPlayers = players.filter(player => player.trim() !== '');
+
   if (numberOfTeams < 2) {
     Alert.alert(alertMinTeamNumber[language]);
     return;
   }
-  const maxTeams = Math.floor(players.length / 2);
+  const maxTeams = Math.floor(filteredPlayers.length / 2);
   if (numberOfTeams > maxTeams) {
     Alert.alert(alertTeamNumber[language]);
     return;
   }
-  if (new Set(players).size !== players.length) {
+  if (new Set(filteredPlayers).size !== filteredPlayers.length) {
     Alert.alert(alertPlayerUnique[language]);
     return;
   }
@@ -136,6 +142,46 @@ const getCountryFromIP = async () => {
   }
 };
 
+const updatePlayerTeamStatsDB = async (highestScoreTeam, teams, userData, dispatch) => {
+  const playersTeam = teams.find(team => team.myTeam);
+  const winnerTeam = highestScoreTeam.name === playersTeam.name;
+  const gamesPlayedPlayer = userData.gamesPlayed + 1;
+  const gamesWinPlayer = winnerTeam ? userData.gamesWin + 1 : userData.gamesWin;
+  const gamesLostPlayer = winnerTeam ? userData.gamesLost : userData.gamesLost + 1;
+
+  const updateFieldsPlayer = {
+    id: userData._id,
+    gamesPlayed: gamesPlayedPlayer,
+    gamesWin: gamesWinPlayer,
+    gamesLost: gamesLostPlayer
+  };
+  try {
+    await apiPlayer.updatePLayer(updateFieldsPlayer);
+
+    if (userData.saveTeamResult) {
+      const { _id, gamesPlayed, gamesWin, gamesLost } = userData.team;
+      const updateFieldsTeam = {
+        id: _id,
+        gamesPlayed: gamesPlayed + 1,
+        gamesWin: winnerTeam ? gamesWin + 1 : gamesWin,
+        gamesLost: winnerTeam ? gamesLost : gamesLost + 1
+      };
+
+      const res = await apiTeam.updateTeam(updateFieldsTeam);
+      userData = { ...userData, team: res.data };
+    }
+
+    dispatch(updateUser({
+      ...userData,
+      gamesPlayed: gamesPlayedPlayer,
+      gamesWin: gamesWinPlayer,
+      gamesLost: gamesLostPlayer
+    }));
+  } catch (err) {
+    console.log(err);
+  }
+}
+
 export {
   validateTeamInput,
   getRandomWord,
@@ -144,5 +190,6 @@ export {
   isFormValid,
   createRandomTeams,
   uploadImage,
-  getCountryFromIP
+  getCountryFromIP,
+  updatePlayerTeamStatsDB
 }

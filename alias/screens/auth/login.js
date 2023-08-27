@@ -1,15 +1,22 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { connect } from 'react-redux';
-import { updateUser } from '../../redux/actions';
+import {
+  updateUser,
+  deleteAllTeams,
+  gameStartEnd,
+  updateMaxScoreReached,
+  updateTeamIndex
+} from '../../redux/actions';
 import { useDispatch } from 'react-redux';
 import { storeToken } from '../../utils/auth';
-import { View, StyleSheet, ImageBackground, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, ImageBackground, TouchableOpacity, Alert } from 'react-native';
 import { Text, Card, Button } from '@rneui/themed';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { Formik } from 'formik';
 import { TextInput } from 'react-native-gesture-handler';
 import { SettingsContext } from '../../utils/settings';
 import { login } from '../../constants/loginScreen';
+import { profile } from '../../constants/profileScreen';
 import backgroundImage from '../../assets/blurred-background.jpeg';
 import { globalStyles } from '../../styles/global';
 import LoginDivider from '../../components/customLoginDivider';
@@ -18,9 +25,10 @@ import BackButton from '../../components/backButton';
 import api from '../../api/players';
 import { getCountryFromIP } from '../../utils/helper';
 
-const Login = ({ navigation }) => {
+const Login = ({ teams, navigation }) => {
   const { language } = useContext(SettingsContext);
   const { emailPlaceholder, passwordPlaceholder, signIn, forgotPass, dividerTxt, newToAlias, registerTxt, invalidCredentials } = login;
+  const { alertConfirmation, alertLogOutTxt, alertCancelTxt, alertContinueTxt } = profile;
   const [showPassword, setShowPassword] = useState(false);
   const [invalidLoginError, setInvalidLoginError] = useState('');
   const dispatch = useDispatch();
@@ -29,12 +37,8 @@ const Login = ({ navigation }) => {
     setShowPassword((prevShowPassword) => !prevShowPassword);
   };
 
-  const handleLogin = async (values) => {
-    setInvalidLoginError('');
-    const credentials = {
-      email: values.email,
-      password: values.password
-    };
+  const loginAndRedirect = async (email, password) => {
+    const credentials = { email, password };
     const country = await getCountryFromIP();
     api.getPlayer(credentials)
       .then((res) => {
@@ -50,6 +54,32 @@ const Login = ({ navigation }) => {
         setInvalidLoginError(invalidCredentials[language]);
         console.log(err.response.data);
       });
+  }
+
+  const handleLogin = async (values) => {
+    setInvalidLoginError('');
+    if (teams.length > 0) {
+      Alert.alert(
+        alertConfirmation[language],
+        alertLogOutTxt[language],
+        [
+          {
+            text: alertCancelTxt[language],
+            style: 'cancel',
+          },
+          {
+            text: alertContinueTxt[language],
+            onPress: async () => {
+              dispatch(deleteAllTeams());
+              dispatch(gameStartEnd(false));
+              dispatch(updateMaxScoreReached(false));
+              dispatch(updateTeamIndex(0));
+              await loginAndRedirect(values.email, values.password)
+            },
+          },]);
+    } else {
+      await loginAndRedirect(values.email, values.password);
+    }
   }
 
   return (
@@ -153,8 +183,12 @@ Login.navigationOptions = {
   headerShown: false,
 };
 
+const mapStateToProps = (state) => ({
+  teams: state.teamReducer.teams
+});
+
 const mapDispatchToProps = {
   updateUser
 };
 
-export default connect(null, mapDispatchToProps)(Login);
+export default connect(mapStateToProps, mapDispatchToProps)(Login);

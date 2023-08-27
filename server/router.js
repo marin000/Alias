@@ -20,6 +20,7 @@ router.post('/api/player/resetPassword', playerController.resetPassword)
 router.post('/api/team', teamController.create)
 router.get('/api/team', teamController.fetch)
 router.delete('/api/team/:id', teamValidator.validate('validateTeam'), teamController.deleteTeam)
+router.put('/api/team', teamValidator.validate('validateTeam'), teamController.updateTeam)
 
 router.post('/logs', logerValidator.validate('logValidate'), logController.getLogs)
 

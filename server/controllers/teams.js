@@ -14,7 +14,7 @@ const create = async(req, res, next) => {
     await Players.findByIdAndUpdate(playerId, { team: savedTeam })
     teamsLogger.info(infoMessages.NEW_TEAM)
     res.status(201)
-      .send(newTeam)
+      .send(savedTeam)
   } catch (error) {
     teamsLogger.error((error.message, { metadata: error.stack }))
     return next(error)
@@ -55,8 +55,45 @@ const deleteTeam = async(req, res) => {
   }
 }
 
+async function updateTeam(req, res) {
+  try {
+    const errors = validationResult(req)
+    if (!errors.isEmpty()) {
+      teamsLogger.error(errors)
+      res.status(403)
+        .json({ errors: errors.array() })
+      return
+    }
+    const { id, name, gamesPlayed, gamesWin, gamesLost } = req.body
+    const updateFields = {}
+
+    if (name) {
+      updateFields.name = name
+    }
+
+    if (gamesPlayed) {
+      updateFields.gamesPlayed = gamesPlayed
+    }
+    if (gamesWin) {
+      updateFields.gamesWin = gamesWin
+    }
+    if (gamesLost) {
+      updateFields.gamesLost = gamesLost
+    }
+
+    const updatedTeam = await Teams.findByIdAndUpdate(id, updateFields, { new: true })
+    teamsLogger.info(infoMessages.UPDATE_TEAM)
+    res.json(updatedTeam)
+  } catch (error) {
+    teamsLogger.error((error.message, { metadata: error.stack }))
+    res.status(500)
+      .send(error.message)
+  }
+}
+
 module.exports = {
   create,
   fetch,
-  deleteTeam
+  deleteTeam,
+  updateTeam
 }

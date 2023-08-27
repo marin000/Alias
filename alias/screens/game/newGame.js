@@ -10,7 +10,8 @@ import {
   deleteAllTeams,
   updateMaxScoreReached,
   updateTeamIndex,
-  addAllTeams
+  addAllTeams,
+  updateUser
 } from '../../redux/actions';
 import { useDispatch } from 'react-redux';
 import { SettingsContext } from '../../utils/settings';
@@ -35,7 +36,6 @@ const NewGame = ({ teams, currentTeamIndex, gameStarted, maxScoreReached, addTea
   const [preStartDialog, setPreStartDialog] = useState(false);
   const [showTeamResultDialog, setShowTeamResultDialog] = useState(false);
   const [randomTeamDialog, setRandomTeamDialog] = useState(false);
-  const [myTeamFlag, setMyTeamFlag] = useState(false);
   const dispatch = useDispatch();
 
   const handleTeamToEdit = (team) => {
@@ -92,9 +92,13 @@ const NewGame = ({ teams, currentTeamIndex, gameStarted, maxScoreReached, addTea
     }
 
     api.addNewTeam(newTeam)
-      .then(() => {
+      .then((res) => {
+        dispatch(updateUser({
+          ...userData,
+          team: res.data,
+          saveTeamResult: true
+        }));
         Alert.alert(saveAsMyTeamAlert[language]);
-        setMyTeamFlag(true);
       })
       .catch((err) => {
         console.log(err);
@@ -120,7 +124,7 @@ const NewGame = ({ teams, currentTeamIndex, gameStarted, maxScoreReached, addTea
     };
 
     addTeam(myTeam);
-    setMyTeamFlag(true);
+    dispatch(updateUser({ ...userData, saveTeamResult: true }));
   }
 
   return (
@@ -145,7 +149,7 @@ const NewGame = ({ teams, currentTeamIndex, gameStarted, maxScoreReached, addTea
         <View style={styles.startGame}>
           {/* Save team as my team */}
           {
-            teams.length >= 2 && userData && !myTeamFlag && !gameStarted &&
+            teams.length >= 2 && userData && !userData.saveTeamResult && !gameStarted &&
             <Button
               title={saveAsMyTeam[language]}
               color='#0000cc'
@@ -180,7 +184,7 @@ const NewGame = ({ teams, currentTeamIndex, gameStarted, maxScoreReached, addTea
             />
           }
           {
-            teams.length >= 2 && !maxScoreReached &&
+            teams.length >= 2 && (!maxScoreReached || (maxScoreReached && currentTeamIndex !== 0)) &&
             <Button
               containerStyle={globalStyles.buttonSaveTeam}
               title={buttonStart[language]}
@@ -189,7 +193,7 @@ const NewGame = ({ teams, currentTeamIndex, gameStarted, maxScoreReached, addTea
             />
           }
           {
-            maxScoreReached &&
+            maxScoreReached && currentTeamIndex === 0 &&
             <Button
               title={headerTitle[language]}
               color='#0000cc'
@@ -197,7 +201,7 @@ const NewGame = ({ teams, currentTeamIndex, gameStarted, maxScoreReached, addTea
             />
           }
           {
-            maxScoreReached &&
+            maxScoreReached && currentTeamIndex === 0 &&
             <Button
               containerStyle={globalStyles.buttonSaveTeam}
               title={newGameSameTeamsButton[language]}
@@ -224,7 +228,7 @@ const NewGame = ({ teams, currentTeamIndex, gameStarted, maxScoreReached, addTea
           onClose={() => setEditTeamDialog(false)}
           teams={teams}
           selectedTeam={selectedTeam}
-          myTeamEditing={myTeamFlag ? userData?.team.name === selectedTeam?.name : false}
+          myTeamEditing={userData?.saveTeamResult ? userData?.team.name === selectedTeam?.name : false}
           userData={userData}
           language={language}
           onDeleteTeam={() => handleDeleteTeam()}
