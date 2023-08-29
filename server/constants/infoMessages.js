@@ -13,5 +13,8 @@ module.exports = {
   EMAIL_SENT: 'Email sent ',
   VALID_PIN: 'PIN is valid',
   PLAYER_EXISTS: 'Player exists',
-  NO_PLAYER_EXISTS: "Player doesn't exists"
+  NO_PLAYER_EXISTS: "Player doesn't exists",
+  NEW_RESULT: 'New result created.',
+  GET_RESULTS: 'Successfully get all results.',
+  DELETE_RESULT: 'Result deleted successfully.'
 }

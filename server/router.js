@@ -3,9 +3,11 @@ const playerController = require('./controllers/players')
 const teamController = require('./controllers/teams')
 const logController = require('./controllers/logs')
 const emailController = require('./controllers/email')
+const resultController = require('./controllers/results')
 const playerValidator = require('./validators/playersValidator')
 const teamValidator = require('./validators/teamsValidator')
 const logerValidator = require('./validators/loggerValidator')
+const resultValidator = require('./validators/resultValidator')
 const router = express.Router()
 
 router.post('/api/player', playerValidator.validate('create'), playerController.create)
@@ -21,6 +23,10 @@ router.post('/api/team', teamController.create)
 router.get('/api/team', teamController.fetch)
 router.delete('/api/team/:id', teamValidator.validate('validateTeam'), teamController.deleteTeam)
 router.put('/api/team', teamValidator.validate('validateTeam'), teamController.updateTeam)
+
+router.post('/api/result', resultValidator.validate('create'), resultController.create)
+router.get('/api/result/:id', resultValidator.validate('validateGetDelete'), resultController.fetch)
+router.delete('/api/result/:id', resultValidator.validate('validateGetDelete'), resultController.deleteResult)
 
 router.post('/logs', logerValidator.validate('logValidate'), logController.getLogs)
 
