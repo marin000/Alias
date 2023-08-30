@@ -11,7 +11,8 @@ import {
   updateMaxScoreReached,
   updateTeamIndex,
   addAllTeams,
-  updateUser
+  updateUser,
+  resetPlayersScore
 } from '../../redux/actions';
 import { useDispatch } from 'react-redux';
 import { SettingsContext } from '../../utils/settings';
@@ -27,7 +28,7 @@ import TeamList from '../../components/newGameScreen/teamList';
 import { globalStyles } from '../../styles/global';
 import api from '../../api/teams';
 
-const NewGame = ({ teams, currentTeamIndex, gameStarted, maxScoreReached, addTeam, updateTeam, deleteTeam, gameStartEnd, userData, navigation }) => {
+const NewGame = ({ teams, currentTeamIndex, gameStarted, maxScoreReached, addTeam, updateTeam, deleteTeam, gameStartEnd, resetPlayersScore, userData, navigation }) => {
   const { language, maxScore } = useContext(SettingsContext);
   const { title, newTeam, buttonStart, targetResultTxt, headerTitle, newGameSameTeamsButton, createRandomTeams, saveAsMyTeam, saveAsMyTeamAlert, importMyTeam } = newGame;
   const [addTeamDialog, setAddTeamDialog] = useState(false);
@@ -79,6 +80,7 @@ const NewGame = ({ teams, currentTeamIndex, gameStarted, maxScoreReached, addTea
     dispatch(gameStartEnd(false));
     dispatch(updateMaxScoreReached(false));
     dispatch(updateTeamIndex(0));
+    dispatch(resetPlayersScore());
   }
 
   const handleSaveAsMyTeam = () => {
@@ -322,7 +324,8 @@ const mapDispatchToProps = {
   deleteAllTeams,
   updateMaxScoreReached,
   updateTeamIndex,
-  addAllTeams
+  addAllTeams,
+  resetPlayersScore
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(NewGame);

@@ -66,6 +66,22 @@ const teamReducer = (state = initialState, action) => {
           return team;
         })
       };
+    case 'RESET_PLAYERS_SCORE':
+      return {
+        ...state,
+        teams: state.teams.map(team => {
+          const updatedPlayers = team.players.map(player => ({
+            ...player,
+            scoreExplains: 0,
+            scoreGuess: 0
+          }));
+
+          return {
+            ...team,
+            players: updatedPlayers
+          };
+        })
+      };
     default:
       return state;
   }

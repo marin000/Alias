@@ -51,3 +51,7 @@ export const updateUser = (userData) => ({
   type: 'UPDATE_USER',
   payload: userData
 });
+
+export const resetPlayersScore = () => ({
+  type: 'RESET_PLAYERS_SCORE'
+})
