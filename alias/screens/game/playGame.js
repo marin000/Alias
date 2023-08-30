@@ -106,15 +106,27 @@ const PlayGame = ({ teams, currentTeamIndex, maxScoreReached, oldWords, updateTe
     }
     if (currentTeamIndex === teams.length - 1 && (maxScoreReached || maxScoreFlag)) {
       const currentRoundTeam = {
+        id: currentTeam.id,
         name: currentTeam.name,
-        score: newScore
-      }
-      const highestScoreTeam = teamWithHighestScore(teams, currentRoundTeam);
+        score: newScore,
+        players: currentTeam.players.map(player => ({
+          ...player,
+          scoreExplains: player.explains
+            ? player.scoreExplains + selectedWordsCount - unselectedWordsCount
+            : player.scoreExplains,
+          scoreGuess: !player.explains
+            ? player.scoreGuess + selectedWordsCount - unselectedWordsCount
+            : player.scoreGuess
+        }))
+      };
+      const updatedTeams = [...teams]
+      updatedTeams[currentTeamIndex] = currentRoundTeam;
+      const highestScoreTeam = teamWithHighestScore(updatedTeams);
       setWinnerTeam(highestScoreTeam);
       setEndDialog(false);
       setWinnerDialog(true);
       if (userData) {
-        updatePlayerTeamStatsDB(highestScoreTeam, teams, userData, dispatch);
+        updatePlayerTeamStatsDB(highestScoreTeam, updatedTeams, userData, dispatch);
       }
     } else {
       setEndDialog(false);
@@ -140,7 +152,7 @@ const PlayGame = ({ teams, currentTeamIndex, maxScoreReached, oldWords, updateTe
   return (
     <ImageBackground source={backgroundImage} style={styles.container} resizeMode={'cover'}>
       <View style={styles.teamInfo}>
-          <Text style={styles.teamNameText}>{currentTeam.name}</Text>
+        <Text style={styles.teamNameText}>{currentTeam.name}</Text>
       </View>
       <View style={styles.answersContainer}>
         <View style={styles.correctAnswersContainer}>

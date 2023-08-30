@@ -8,6 +8,7 @@ import countriesCodes from '../assets/countryCodes.json';
 import axios from 'axios';
 import apiPlayer from '../api/players';
 import apiTeam from '../api/teams';
+import apiResult from '../api/results';
 
 const validateTeamInput = (teams, values, language) => {
   const { alertPlayer, alertTeam, alertTeamName, alertPlayerUnique } = newGame;
@@ -39,9 +40,9 @@ const getRandomWord = (gameWordList) => {
   return word.charAt(0).toUpperCase() + word.slice(1);
 }
 
-const teamWithHighestScore = (allTeams, currentTeam) => {
+const teamWithHighestScore = (allTeams) => {
   let teamWithHighestScore = allTeams[0];
-  for (const team of [...allTeams, currentTeam]) {
+  for (const team of allTeams) {
     if (team.score > teamWithHighestScore.score) {
       teamWithHighestScore = team;
     }
@@ -155,8 +156,10 @@ const updatePlayerTeamStatsDB = async (highestScoreTeam, teams, userData, dispat
     gamesWin: gamesWinPlayer,
     gamesLost: gamesLostPlayer
   };
+  const result = { playerId: userData._id, teamResults: teams };
   try {
     await apiPlayer.updatePLayer(updateFieldsPlayer);
+    await apiResult.addNewResult(result);
 
     if (userData.saveTeamResult) {
       const { _id, gamesPlayed, gamesWin, gamesLost } = userData.team;
@@ -170,7 +173,6 @@ const updatePlayerTeamStatsDB = async (highestScoreTeam, teams, userData, dispat
       const res = await apiTeam.updateTeam(updateFieldsTeam);
       userData = { ...userData, team: res.data };
     }
-
     dispatch(updateUser({
       ...userData,
       gamesPlayed: gamesPlayedPlayer,

@@ -6,6 +6,14 @@ const { resultsLogger } = require('../logger/logger')
 
 const create = async(req, res, next) => {
   try {
+    const errors = validationResult(req)
+    if (!errors.isEmpty()) {
+      resultsLogger.error(errors)
+      res.status(403)
+        .json({ errors: errors.array() })
+      return
+    }
+
     const { playerId, teamResults } = req.body
     const newResult = Results({ playerId, teamResults })
     const savedResult = await newResult.save()
