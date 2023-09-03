@@ -14,7 +14,8 @@ const teamResultSchema = new mongoose.Schema({
 
 const mainResultSchema = new mongoose.Schema({
   playerId: String,
+  winnerTeam: String,
   teamResults: [teamResultSchema]
-})
+}, { timestamps: true, toJSON: { getters: true } })
 
 module.exports = mongoose.model('Results', mainResultSchema)

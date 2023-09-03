@@ -12,7 +12,7 @@ import api from '../../api/players';
 
 const Home = ({ teams, userData, navigation }) => {
 	const { language } = useContext(SettingsContext);
-	const { newGame, continueGame, instructions, settings, login, profile } = home;
+	const { newGame, continueGame, instructions, settings, login, profile, statistics } = home;
 	const dispatch = useDispatch();
 
 	useEffect(() => {
@@ -105,6 +105,15 @@ const Home = ({ teams, userData, navigation }) => {
 							color='#0000cc'
 							onPress={() => navigation.navigate('Login')}
 						/>
+					}
+				</View>
+				<View style={styles.button}>
+					{userData ?
+						<Button
+							title={statistics[language]}
+							color='#0000cc'
+							onPress={() => navigation.navigate('Statistics')}
+						/> : null
 					}
 				</View>
 			</View>

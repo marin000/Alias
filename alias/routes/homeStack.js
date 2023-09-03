@@ -3,6 +3,7 @@ import Home from "../screens/home/home";
 import HowToPlay from '../screens/home/howToPlay';
 import Settings from '../screens/home/settings';
 import Profile from '../screens/home/profile';
+import Statistics from '../screens/home/statistics';
 
 const screens = {
 	Home: {
@@ -16,6 +17,9 @@ const screens = {
 	},
 	Profile: {
 		screen: Profile
+	},
+	Statistics: {
+		screen: Statistics
 	}
 };
 

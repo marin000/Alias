@@ -117,7 +117,8 @@ const PlayGame = ({ teams, currentTeamIndex, maxScoreReached, oldWords, updateTe
           scoreGuess: !player.explains
             ? player.scoreGuess + selectedWordsCount - unselectedWordsCount
             : player.scoreGuess
-        }))
+        })),
+        myTeam: currentTeam.myTeam ? true : false
       };
       const updatedTeams = [...teams]
       updatedTeams[currentTeamIndex] = currentRoundTeam;

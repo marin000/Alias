@@ -12,7 +12,7 @@ export const resetPassword = {
 		en: 'Repeat password'
 	},
 	submitButton: {
-		hr: 'Sačuvaj',
+		hr: 'Spremi',
 		en: 'Save'
 	},
   passwordResetSuccess: {

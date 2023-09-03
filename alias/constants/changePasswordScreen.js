@@ -16,7 +16,7 @@ export const changePassword = {
 		en: 'Repeat password'
 	},
 	submitButton: {
-		hr: 'Sačuvaj',
+		hr: 'Spremi',
 		en: 'Save'
 	},
   invalidCurrentPassTxt: {

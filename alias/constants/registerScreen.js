@@ -20,7 +20,7 @@ export const register = {
 		en: 'Register'
 	},
 	submitButton: {
-		hr: 'Sačuvaj',
+		hr: 'Spremi',
 		en: 'Save'
 	},
 	duplicateEmailErrorTxt: {

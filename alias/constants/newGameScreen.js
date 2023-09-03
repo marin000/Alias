@@ -108,12 +108,12 @@ export const newGame = {
 		en: 'Player scores'
 	},
 	explainScore: {
-		hr: 'Objašnjava:',
-		en: 'Explains:'
+		hr: 'Objašnjenih:',
+		en: 'Explained:'
 	},
 	guessScore: {
-		hr: 'Pogađa:',
-		en: 'Guessing:'
+		hr: 'Pogođenih:',
+		en: 'Guessed:'
 	},
 	saveAsMyTeam: {
 		hr: 'Spremi trenutni tim kao Moj tim',

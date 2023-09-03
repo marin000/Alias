@@ -156,7 +156,11 @@ const updatePlayerTeamStatsDB = async (highestScoreTeam, teams, userData, dispat
     gamesWin: gamesWinPlayer,
     gamesLost: gamesLostPlayer
   };
-  const result = { playerId: userData._id, teamResults: teams };
+  const result = {
+    playerId: userData._id,
+    teamResults: teams,
+    winnerTeam: highestScoreTeam.name
+  };
   try {
     await apiPlayer.updatePLayer(updateFieldsPlayer);
     await apiResult.addNewResult(result);

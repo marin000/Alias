@@ -22,5 +22,9 @@ export const home = {
 	profile: {
 		hr: 'Profil',
 		en: 'Profile'
+	},
+	statistics: {
+		hr: 'Statistika',
+		en: 'Statistics'
 	}
 };

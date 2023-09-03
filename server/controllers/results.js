@@ -14,8 +14,8 @@ const create = async(req, res, next) => {
       return
     }
 
-    const { playerId, teamResults } = req.body
-    const newResult = Results({ playerId, teamResults })
+    const { playerId, winnerTeam, teamResults } = req.body
+    const newResult = Results({ playerId, winnerTeam, teamResults })
     const savedResult = await newResult.save()
 
     resultsLogger.info(infoMessages.NEW_RESULT)
