@@ -1,4 +1,5 @@
 import { Alert } from 'react-native';
+import { Audio } from 'expo-av';
 import { newGame } from '../constants/newGameScreen';
 import { updateUser } from '../redux/actions';
 import shortid from 'shortid';
@@ -188,6 +189,47 @@ const updatePlayerTeamStatsDB = async (highestScoreTeam, teams, userData, dispat
   }
 }
 
+const getWords = (language, oldWords) => {
+  try {
+    switch (language) {
+      case 'hr':
+        return require('../assets/words/hr.json').filter(word => !oldWords.includes(word));
+      case 'en':
+        return require('../assets/words/en.json').filter(word => !oldWords.includes(word));
+      default:
+        break;
+    }
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+const playSound = async (soundType, soundPermission) => {
+  try {
+    if (!soundPermission) return
+    let sound;
+    switch (soundType) {
+      case 'correct':
+        sound = (await Audio.Sound.createAsync(require('../assets/sounds/correct.wav'))).sound;
+        await sound.playAsync();
+        break;
+      case 'wrong':
+        sound = (await Audio.Sound.createAsync(require('../assets/sounds/wrong.mp3'))).sound;
+        await sound.playAsync();
+        break;
+      case 'turnOnOff':
+        sound = (await Audio.Sound.createAsync(require('../assets/sounds/soundOn.mp3'))).sound;
+        await sound.playAsync();
+        break;
+      default:
+        break;
+    }
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+
 export {
   validateTeamInput,
   getRandomWord,
@@ -197,5 +239,7 @@ export {
   createRandomTeams,
   uploadImage,
   getCountryFromIP,
-  updatePlayerTeamStatsDB
+  updatePlayerTeamStatsDB,
+  getWords,
+  playSound
 }

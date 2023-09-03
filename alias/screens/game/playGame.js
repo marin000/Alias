@@ -4,9 +4,8 @@ import { Text, Button, Icon } from '@rneui/themed';
 import { connect } from 'react-redux';
 import { updateTeam, updateTeamIndex, updatePlayerExplains, updateMaxScoreReached, addOldWords } from '../../redux/actions';
 import { useDispatch } from 'react-redux';
-import { Audio } from 'expo-av';
 import { SettingsContext } from '../../utils/settings';
-import { getRandomWord, teamWithHighestScore, updatePlayerTeamStatsDB } from '../../utils/helper';
+import { getRandomWord, teamWithHighestScore, updatePlayerTeamStatsDB, getWords, playSound } from '../../utils/helper';
 import { playGame } from '../../constants/playGameScreen';
 import backgroundImage from '../../assets/blurred-background.jpeg';
 import EndRoundDialog from '../../components/playGameScreen/endRoundDialog';
@@ -31,13 +30,7 @@ const PlayGame = ({ teams, currentTeamIndex, maxScoreReached, oldWords, updateTe
   const [skippedWords, setSkippedWords] = useState([]);
 
   const dispatch = useDispatch();
-  let gameWordList = [];
-
-  if (language === 'hr') {
-    gameWordList = require('../../assets/words/hr.json').filter(word => !oldWords.includes(word));
-  } else if (language === 'en') {
-    gameWordList = require('../../assets/words/en.json').filter(word => !oldWords.includes(word));
-  }
+  let gameWordList = getWords(language, oldWords);
 
   useEffect(() => {
     setCurrentWord((prevWord) => {
@@ -74,10 +67,7 @@ const PlayGame = ({ teams, currentTeamIndex, maxScoreReached, oldWords, updateTe
   }, [gameTimer, paused]);
 
   const handleSave = async () => {
-    if (gameSound) {
-      const { sound } = await Audio.Sound.createAsync(require('../../assets/sounds/correct.wav'));
-      await sound.playAsync();
-    }
+    playSound('correct', gameSound);
     setCurrentWord((prevWord) => {
       const newWord = getRandomWord(gameWordList);
       setOldWordsArr((prevWords) => [...prevWords, prevWord]);
@@ -88,10 +78,7 @@ const PlayGame = ({ teams, currentTeamIndex, maxScoreReached, oldWords, updateTe
   };
 
   const handleSkip = async () => {
-    if (gameSound) {
-      const { sound } = await Audio.Sound.createAsync(require('../../assets/sounds/wrong.mp3'));
-      await sound.playAsync();
-    }
+    playSound('wrong', gameSound);
     setSkippedWords((prevWords) => [...prevWords, currentWord]);
     setCurrentWord((prevWord) => {
       const newWord = getRandomWord(gameWordList);

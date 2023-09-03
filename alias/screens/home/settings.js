@@ -1,8 +1,8 @@
 import React, { useContext, useState } from 'react';
 import { View, StyleSheet, ImageBackground, TouchableOpacity } from 'react-native';
 import { Text, Card, CheckBox, Image, Slider, Icon } from '@rneui/themed';
-import { Audio } from 'expo-av';
 import { SettingsContext } from '../../utils/settings';
+import { playSound } from '../../utils/helper';
 import { settings } from '../../constants/settingsScreen';
 import backgroundImage from '../../assets/blurred-background.jpeg';
 import { globalStyles } from '../../styles/global';
@@ -34,10 +34,7 @@ export default function Settings({ navigation }) {
   }
 
   const setGameSound = async () => {
-    if (!gameSoundValue) {
-      const { sound } = await Audio.Sound.createAsync(require('../../assets/sounds/soundOn.mp3'));
-      await sound.playAsync();
-    }
+    playSound('turnOnOff', !gameSoundValue);
     setGameSoundValue(!gameSoundValue);
     updateGameSound(!gameSoundValue);
   }
