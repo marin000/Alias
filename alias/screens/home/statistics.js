@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { connect } from 'react-redux';
-import { View, StyleSheet, ImageBackground, FlatList, TouchableHighlight } from 'react-native';
+import { View, StyleSheet, ImageBackground, FlatList, TouchableHighlight, ActivityIndicator } from 'react-native';
 import { Text } from '@rneui/themed';
 import { SettingsContext } from '../../utils/settings';
 import { statistics } from '../../constants/statisticsScreen';
@@ -30,12 +30,14 @@ const Statistics = ({ userData, navigation }) => {
 	const [playersData, setPlayerData] = useState(null);
 	const [dialog, setDialog] = useState(false);
 	const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+	const [loading, setLoading] = useState(true);
 
 	useEffect(() => {
 		apiResults.getResults(userData._id)
 			.then((res) => {
 				const sortedResults = _.sortBy(res.data, 'updatedAt').reverse();
 				setResults(sortedResults);
+				setLoading(false);
 			})
 			.catch((err) => {
 				console.log(err);
@@ -57,7 +59,11 @@ const Statistics = ({ userData, navigation }) => {
 			<View>
 				<BackButton onPress={() => navigation.goBack()} />
 				<Text style={globalStyles.screenTitle}>{title[language]}</Text>
-				{results.length > 0 ? (
+				{loading ? (
+					<View style={styles.loadingContainer}>
+						<ActivityIndicator size={80} color="#0000ff" />
+					</View>
+				) : results.length > 0 ? (
 					<View style={styles.resultContainer}>
 						<FlatList
 							data={results}
@@ -65,7 +71,7 @@ const Statistics = ({ userData, navigation }) => {
 							renderItem={({ item }) => (
 								<TouchableHighlight onPress={() => handleOpenDialog(item)} underlayColor="transparent" >
 									<CustomCard>
-									<Text style={styles.dateText}>{moment(item.updatedAt).tz(userTimeZone).format('DD-MM-YYYY')}</Text>
+										<Text style={styles.dateText}>{moment(item.updatedAt).tz(userTimeZone).format('DD-MM-YYYY')}</Text>
 										<FlatList
 											data={item.teamResults}
 											keyExtractor={(teamItem, index) => index.toString()}
@@ -127,7 +133,12 @@ const styles = StyleSheet.create({
 		marginBottom: 10,
 		color: '#a6a6a6',
 		fontSize: 13
-
+	},
+	loadingContainer: {
+		flex: 1,
+		justifyContent: 'center',
+		alignItems: 'center',
+		marginTop: '100%'
 	}
 });
 
