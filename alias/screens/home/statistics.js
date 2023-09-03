@@ -60,7 +60,7 @@ const Statistics = ({ userData, navigation }) => {
 				<BackButton onPress={() => navigation.goBack()} />
 				<Text style={globalStyles.screenTitle}>{title[language]}</Text>
 				{loading ? (
-					<View style={styles.loadingContainer}>
+					<View style={globalStyles.loadingContainer}>
 						<ActivityIndicator size={80} color="#0000ff" />
 					</View>
 				) : results.length > 0 ? (
@@ -133,12 +133,6 @@ const styles = StyleSheet.create({
 		marginBottom: 10,
 		color: '#a6a6a6',
 		fontSize: 13
-	},
-	loadingContainer: {
-		flex: 1,
-		justifyContent: 'center',
-		alignItems: 'center',
-		marginTop: '100%'
 	}
 });
 

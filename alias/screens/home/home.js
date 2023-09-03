@@ -1,18 +1,20 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { deleteAllTeams, gameStartEnd, updateMaxScoreReached, updateTeamIndex, updateUser } from '../../redux/actions';
 import { useDispatch } from 'react-redux';
 import { getToken } from '../../utils/auth';
-import { View, StyleSheet, ImageBackground } from 'react-native';
+import { View, StyleSheet, ImageBackground, ActivityIndicator } from 'react-native';
 import { Button, Text } from '@rneui/themed';
 import { SettingsContext } from '../../utils/settings';
 import { home } from '../../constants/homeScreen';
 import backgroundImage from '../../assets/blurred-background.jpeg';
 import api from '../../api/players';
+import { globalStyles } from '../../styles/global';
 
 const Home = ({ teams, userData, navigation }) => {
 	const { language } = useContext(SettingsContext);
 	const { newGame, continueGame, instructions, settings, login, profile, statistics } = home;
+	const [loading, setLoading] = useState(true);
 	const dispatch = useDispatch();
 
 	useEffect(() => {
@@ -28,10 +30,13 @@ const Home = ({ teams, userData, navigation }) => {
 					api.getPlayerByToken(header)
 						.then((res) => {
 							dispatch(updateUser(res.data));
+							setLoading(false);
 						})
 						.catch((err) => {
 							console.log(err.response.data);
 						});
+				} else {
+					setLoading(false);
 				}
 			} catch (error) {
 				console.log(error);
@@ -61,62 +66,69 @@ const Home = ({ teams, userData, navigation }) => {
 			<View style={styles.header}>
 				<Text style={styles.headerText}>Alias</Text>
 			</View>
-			<View style={styles.options}>
-				{
-					teams.length > 0 &&
-					<View style={styles.button}>
-						<Button
-							title={continueGame[language]}
-							color='#0000cc'
-							onPress={handleContinueGame}
-						/>
+			{loading ?
+				(
+					<View style={styles.loadingContainer}>
+						<ActivityIndicator size={80} color="#0000ff" />
 					</View>
-				}
-				<View style={styles.button}>
-					<Button
-						title={newGame[language]}
-						color='#0000cc'
-						onPress={handleNewGame}
-					/>
-				</View>
-				<View style={styles.button}>
-					<Button
-						title={instructions[language]}
-						color='#0000cc'
-						onPress={() => navigation.navigate('HowToPlay')}
-					/>
-				</View>
-				<View style={styles.button}>
-					<Button
-						title={settings[language]}
-						color='#0000cc'
-						onPress={handleSettings}
-					/>
-				</View>
-				<View style={styles.button}>
-					{userData ?
-						<Button
-							title={profile[language]}
-							color='#0000cc'
-							onPress={() => navigation.navigate('Profile')}
-						/> :
-						<Button
-							title={login[language]}
-							color='#0000cc'
-							onPress={() => navigation.navigate('Login')}
-						/>
-					}
-				</View>
-				<View style={styles.button}>
-					{userData ?
-						<Button
-							title={statistics[language]}
-							color='#0000cc'
-							onPress={() => navigation.navigate('Statistics')}
-						/> : null
-					}
-				</View>
-			</View>
+				) : (
+					<View style={styles.options}>
+						{
+							teams.length > 0 &&
+							<View style={styles.button}>
+								<Button
+									title={continueGame[language]}
+									color='#0000cc'
+									onPress={handleContinueGame}
+								/>
+							</View>
+						}
+						<View style={styles.button}>
+							<Button
+								title={newGame[language]}
+								color='#0000cc'
+								onPress={handleNewGame}
+							/>
+						</View>
+						<View style={styles.button}>
+							<Button
+								title={instructions[language]}
+								color='#0000cc'
+								onPress={() => navigation.navigate('HowToPlay')}
+							/>
+						</View>
+						<View style={styles.button}>
+							<Button
+								title={settings[language]}
+								color='#0000cc'
+								onPress={handleSettings}
+							/>
+						</View>
+						<View style={styles.button}>
+							{userData ?
+								<Button
+									title={profile[language]}
+									color='#0000cc'
+									onPress={() => navigation.navigate('Profile')}
+								/> :
+								<Button
+									title={login[language]}
+									color='#0000cc'
+									onPress={() => navigation.navigate('Login')}
+								/>
+							}
+						</View>
+						<View style={styles.button}>
+							{userData ?
+								<Button
+									title={statistics[language]}
+									color='#0000cc'
+									onPress={() => navigation.navigate('Statistics')}
+								/> : null
+							}
+						</View>
+					</View>
+				)}
 		</ImageBackground>
 	);
 }
@@ -140,6 +152,10 @@ const styles = StyleSheet.create({
 	},
 	button: {
 		marginTop: 20
+	},
+	loadingContainer: {
+		...globalStyles.loadingContainer, 
+		marginTop: '-100%'
 	}
 });
 
