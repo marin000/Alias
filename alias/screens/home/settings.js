@@ -1,6 +1,7 @@
 import React, { useContext, useState } from 'react';
-import { View, StyleSheet, ImageBackground } from 'react-native';
+import { View, StyleSheet, ImageBackground, TouchableOpacity } from 'react-native';
 import { Text, Card, CheckBox, Image, Slider, Icon } from '@rneui/themed';
+import { Audio } from 'expo-av';
 import { SettingsContext } from '../../utils/settings';
 import { settings } from '../../constants/settingsScreen';
 import backgroundImage from '../../assets/blurred-background.jpeg';
@@ -10,10 +11,11 @@ import croFlag from '../../assets/cro-flag.png';
 import ukFlag from '../../assets/uk-flag.png';
 
 export default function Settings({ navigation }) {
-  const { language, updateLanguage, timer, updateTimer, maxScore, updateMaxScore } = useContext(SettingsContext);
+  const { language, updateLanguage, timer, updateTimer, maxScore, updateMaxScore, gameSound, updateGameSound } = useContext(SettingsContext);
   const [selectedRadio, setRadio] = useState(language);
   const [timerValue, setTimerValue] = useState(timer);
   const [maxScoreValue, setMaxScoreValue] = useState(maxScore);
+  const [gameSoundValue, setGameSoundValue] = useState(gameSound);
   const { title, roundTime, targetScore } = settings;
 
   const setLanguage = (selectedLang) => {
@@ -31,11 +33,27 @@ export default function Settings({ navigation }) {
     updateMaxScore(String(value));
   }
 
+  const setGameSound = async () => {
+    if (!gameSoundValue) {
+      const { sound } = await Audio.Sound.createAsync(require('../../assets/sounds/soundOn.mp3'));
+      await sound.playAsync();
+    }
+    setGameSoundValue(!gameSoundValue);
+    updateGameSound(!gameSoundValue);
+  }
+
   return (
     <ImageBackground source={backgroundImage} style={globalStyles.mainContainer} resizeMode={'cover'}>
       <View>
         <BackButton onPress={() => navigation.goBack()} />
         <Text style={globalStyles.screenTitle}>{title[language]}</Text>
+        <TouchableOpacity style={styles.soundToggle} onPress={setGameSound}>
+          <Icon
+            name={gameSoundValue ? 'volume-up' : 'volume-off'}
+            type="font-awesome"
+            size={30}
+          />
+        </TouchableOpacity>
         <Card>
           <View style={styles.radioContainer}>
             <View style={styles.radio}>
@@ -146,6 +164,11 @@ const styles = StyleSheet.create({
   slideValue: {
     padding: 10,
     fontSize: 15
+  },
+  soundToggle: {
+    position: 'absolute',
+    top: 18,
+    right: 25,
   }
 });
 

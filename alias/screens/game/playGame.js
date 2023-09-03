@@ -15,7 +15,7 @@ import PauseDialog from '../../components/playGameScreen/pauseDialog';
 import { globalStyles } from '../../styles/global';
 
 const PlayGame = ({ teams, currentTeamIndex, maxScoreReached, oldWords, updateTeam, userData, navigation }) => {
-  const { language, timer, maxScore } = useContext(SettingsContext);
+  const { language, timer, maxScore, gameSound } = useContext(SettingsContext);
   const { buttonSave, buttonSkip, correctAnswersTxt, skippedAnswersTxt } = playGame;
   const [gameTimer, setGameTimer] = useState(timer);
   const [currentWord, setCurrentWord] = useState('');
@@ -74,8 +74,10 @@ const PlayGame = ({ teams, currentTeamIndex, maxScoreReached, oldWords, updateTe
   }, [gameTimer, paused]);
 
   const handleSave = async () => {
-    const { sound } = await Audio.Sound.createAsync( require('../../assets/sounds/correct.wav'));
-    await sound.playAsync();
+    if (gameSound) {
+      const { sound } = await Audio.Sound.createAsync(require('../../assets/sounds/correct.wav'));
+      await sound.playAsync();
+    }
     setCurrentWord((prevWord) => {
       const newWord = getRandomWord(gameWordList);
       setOldWordsArr((prevWords) => [...prevWords, prevWord]);
@@ -85,9 +87,11 @@ const PlayGame = ({ teams, currentTeamIndex, maxScoreReached, oldWords, updateTe
     setCorrectAnswers(correctAnswers + 1);
   };
 
-  const handleSkip = async() => {
-    const { sound } = await Audio.Sound.createAsync( require('../../assets/sounds/wrong.mp3'));
-    await sound.playAsync();
+  const handleSkip = async () => {
+    if (gameSound) {
+      const { sound } = await Audio.Sound.createAsync(require('../../assets/sounds/wrong.mp3'));
+      await sound.playAsync();
+    }
     setSkippedWords((prevWords) => [...prevWords, currentWord]);
     setCurrentWord((prevWord) => {
       const newWord = getRandomWord(gameWordList);

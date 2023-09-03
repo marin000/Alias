@@ -6,7 +6,8 @@ export const SettingsContext = createContext();
 export const SettingsProvider = ({ children }) => {
 	const [language, setLanguage] = useState('hr');
 	const [timer, setTimer] = useState('60');
-  const [maxScore, setMaxScore] = useState('60');
+	const [maxScore, setMaxScore] = useState('60');
+	const [gameSound, setGameSound] = useState(true);
 
 	useEffect(() => {
 		const retrieveSettings = async () => {
@@ -22,6 +23,10 @@ export const SettingsProvider = ({ children }) => {
 				const storedMaxScore = await AsyncStorage.getItem('maxScore');
 				if (storedMaxScore) {
 					setMaxScore(storedMaxScore);
+				}
+				const storedGameSound = await AsyncStorage.getItem('gameSound');
+				if (storedGameSound) {
+					setGameSound(storedGameSound);
 				}
 			} catch (error) {
 				console.log('Error retrieving settings from AsyncStorage:', error);
@@ -57,8 +62,17 @@ export const SettingsProvider = ({ children }) => {
 		}
 	};
 
+	const updateGameSound = async (newSound) => {
+		try {
+			setGameSound(newSound);
+			await AsyncStorage.setItem('gameSound', newSound.toString());
+		} catch (error) {
+			console.log('Error updating game sound in AsyncStorage:', error);
+		}
+	};
+
 	return (
-		<SettingsContext.Provider value={{ language, updateLanguage, timer, updateTimer, maxScore, updateMaxScore }}>
+		<SettingsContext.Provider value={{ language, updateLanguage, timer, updateTimer, maxScore, updateMaxScore, gameSound, updateGameSound }}>
 			{children}
 		</SettingsContext.Provider>
 	);
