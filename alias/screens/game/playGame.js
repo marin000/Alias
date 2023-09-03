@@ -4,6 +4,7 @@ import { Text, Button, Icon } from '@rneui/themed';
 import { connect } from 'react-redux';
 import { updateTeam, updateTeamIndex, updatePlayerExplains, updateMaxScoreReached, addOldWords } from '../../redux/actions';
 import { useDispatch } from 'react-redux';
+import { Audio } from 'expo-av';
 import { SettingsContext } from '../../utils/settings';
 import { getRandomWord, teamWithHighestScore, updatePlayerTeamStatsDB } from '../../utils/helper';
 import { playGame } from '../../constants/playGameScreen';
@@ -72,7 +73,9 @@ const PlayGame = ({ teams, currentTeamIndex, maxScoreReached, oldWords, updateTe
     };
   }, [gameTimer, paused]);
 
-  const handleSave = () => {
+  const handleSave = async () => {
+    const { sound } = await Audio.Sound.createAsync( require('../../assets/sounds/correct.wav'));
+    await sound.playAsync();
     setCurrentWord((prevWord) => {
       const newWord = getRandomWord(gameWordList);
       setOldWordsArr((prevWords) => [...prevWords, prevWord]);
@@ -82,7 +85,9 @@ const PlayGame = ({ teams, currentTeamIndex, maxScoreReached, oldWords, updateTe
     setCorrectAnswers(correctAnswers + 1);
   };
 
-  const handleSkip = () => {
+  const handleSkip = async() => {
+    const { sound } = await Audio.Sound.createAsync( require('../../assets/sounds/wrong.mp3'));
+    await sound.playAsync();
     setSkippedWords((prevWords) => [...prevWords, currentWord]);
     setCurrentWord((prevWord) => {
       const newWord = getRandomWord(gameWordList);
