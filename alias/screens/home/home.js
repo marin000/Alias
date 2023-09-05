@@ -10,6 +10,7 @@ import { home } from '../../constants/homeScreen';
 import backgroundImage from '../../assets/blurred-background.jpeg';
 import api from '../../api/players';
 import { globalStyles } from '../../styles/global';
+import { BannerAd, BannerAdSize, TestIds } from 'react-native-google-mobile-ads';
 
 const Home = ({ teams, userData, navigation }) => {
 	const { language } = useContext(SettingsContext);
@@ -127,6 +128,15 @@ const Home = ({ teams, userData, navigation }) => {
 								/> : null
 							}
 						</View>
+						<View style={styles.banner}>
+							<BannerAd
+								unitId={TestIds.BANNER}
+								size={BannerAdSize.FULL_BANNER}
+								requestOptions={{
+									requestNonPersonalizedAdsOnly: true,
+								}}
+							/>
+						</View>
 					</View>
 				)}
 		</ImageBackground>
@@ -148,15 +158,21 @@ const styles = StyleSheet.create({
 	},
 	options: {
 		flex: 1,
-		justifyContent: 'center'
+		justifyContent: 'center',
+		bottom: 35
 	},
 	button: {
 		marginTop: 20
 	},
 	loadingContainer: {
-		...globalStyles.loadingContainer, 
+		...globalStyles.loadingContainer,
 		marginTop: '-100%'
-	}
+	},
+	banner: {
+    position: 'absolute', 
+    bottom: -70,            
+    alignSelf: 'center'
+  },
 });
 
 Home.navigationOptions = {

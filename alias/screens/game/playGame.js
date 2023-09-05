@@ -12,6 +12,7 @@ import EndRoundDialog from '../../components/playGameScreen/endRoundDialog';
 import WinnerDialog from '../../components/playGameScreen/winnerDialog';
 import PauseDialog from '../../components/playGameScreen/pauseDialog';
 import { globalStyles } from '../../styles/global';
+import { showRewardedAd } from '../../utils/adService';
 
 const PlayGame = ({ teams, currentTeamIndex, maxScoreReached, oldWords, updateTeam, userData, navigation }) => {
   const { language, timer, maxScore, gameSound } = useContext(SettingsContext);
@@ -126,6 +127,7 @@ const PlayGame = ({ teams, currentTeamIndex, maxScoreReached, oldWords, updateTe
         updatePlayerTeamStatsDB(highestScoreTeam, updatedTeams, userData, dispatch);
       }
     } else {
+      showRewardedAd();
       setEndDialog(false);
       navigation.navigate('NewGame');
     }
@@ -142,6 +144,7 @@ const PlayGame = ({ teams, currentTeamIndex, maxScoreReached, oldWords, updateTe
   }
 
   const handleCloseWinnerDialog = () => {
+    showRewardedAd();
     setWinnerDialog(false);
     navigation.navigate('NewGame');
   }

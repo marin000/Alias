@@ -27,6 +27,7 @@ import BackButton from '../../components/backButton';
 import TeamList from '../../components/newGameScreen/teamList';
 import { globalStyles } from '../../styles/global';
 import api from '../../api/teams';
+import { showInterstitialAd } from '../../utils/adService';
 
 const NewGame = ({ teams, currentTeamIndex, gameStarted, maxScoreReached, addTeam, updateTeam, deleteTeam, gameStartEnd, resetPlayersScore, userData, navigation }) => {
   const { language, maxScore } = useContext(SettingsContext);
@@ -71,6 +72,7 @@ const NewGame = ({ teams, currentTeamIndex, gameStarted, maxScoreReached, addTea
     dispatch(gameStartEnd(false));
     dispatch(updateMaxScoreReached(false));
     dispatch(updateTeamIndex(0));
+    showInterstitialAd();
   }
 
   const handleNewGameSameTeams = () => {
@@ -81,6 +83,7 @@ const NewGame = ({ teams, currentTeamIndex, gameStarted, maxScoreReached, addTea
     dispatch(updateMaxScoreReached(false));
     dispatch(updateTeamIndex(0));
     dispatch(resetPlayersScore());
+    showInterstitialAd();
   }
 
   const handleSaveAsMyTeam = () => {
