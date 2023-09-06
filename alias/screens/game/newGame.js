@@ -137,7 +137,7 @@ const NewGame = ({ teams, currentTeamIndex, gameStarted, maxScoreReached, addTea
       {/* List of teams */}
       <View style={styles.containerData}>
         <View style={styles.teamList} >
-          <Text style={styles.title}>{title[language]}</Text>
+          <Text style={globalStyles.screenTitle}>{title[language]}</Text>
           <BackButton onPress={() => navigation.navigate('Home')} />
           {
             gameStarted &&
@@ -159,6 +159,7 @@ const NewGame = ({ teams, currentTeamIndex, gameStarted, maxScoreReached, addTea
               title={saveAsMyTeam[language]}
               color='#0000cc'
               onPress={() => handleSaveAsMyTeam()}
+              buttonStyle={globalStyles.roundButton}
             />
           }
           {/* Import my team */}
@@ -168,6 +169,7 @@ const NewGame = ({ teams, currentTeamIndex, gameStarted, maxScoreReached, addTea
               title={importMyTeam[language]}
               color='#0000cc'
               onPress={() => handleImportMyTeam()}
+              buttonStyle={globalStyles.roundButton}
             />
           }
           {
@@ -177,6 +179,7 @@ const NewGame = ({ teams, currentTeamIndex, gameStarted, maxScoreReached, addTea
               title={newTeam[language]}
               color='#0000cc'
               onPress={() => setAddTeamDialog(true)}
+              buttonStyle={globalStyles.roundButton}
             />
           }
           {
@@ -186,6 +189,7 @@ const NewGame = ({ teams, currentTeamIndex, gameStarted, maxScoreReached, addTea
               title={createRandomTeams[language]}
               color='#0000cc'
               onPress={() => setRandomTeamDialog(true)}
+              buttonStyle={globalStyles.roundButton}
             />
           }
           {
@@ -195,6 +199,7 @@ const NewGame = ({ teams, currentTeamIndex, gameStarted, maxScoreReached, addTea
               title={buttonStart[language]}
               color='success'
               onPress={() => setPreStartDialog(true)}
+              buttonStyle={globalStyles.roundButton}
             />
           }
           {
@@ -203,6 +208,7 @@ const NewGame = ({ teams, currentTeamIndex, gameStarted, maxScoreReached, addTea
               title={headerTitle[language]}
               color='#0000cc'
               onPress={() => handleNewGame()}
+              buttonStyle={globalStyles.roundButton}
             />
           }
           {
@@ -212,6 +218,7 @@ const NewGame = ({ teams, currentTeamIndex, gameStarted, maxScoreReached, addTea
               title={newGameSameTeamsButton[language]}
               color='success'
               onPress={() => handleNewGameSameTeams()}
+              buttonStyle={globalStyles.roundButton}
             />
           }
         </View>

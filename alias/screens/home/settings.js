@@ -164,7 +164,7 @@ const styles = StyleSheet.create({
   },
   soundToggle: {
     position: 'absolute',
-    top: 18,
+    top: 8,
     right: 25,
   }
 });

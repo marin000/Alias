@@ -77,8 +77,8 @@ export const globalStyles = StyleSheet.create({
   screenTitle: {
     textAlign: 'center',
     fontSize: 30,
-    marginTop: 10,
-    color: 'white'
+    color: 'white',
+    marginBottom: 15
   },
   errorText: {
     color: 'crimson',
@@ -88,7 +88,7 @@ export const globalStyles = StyleSheet.create({
   },
   backArrow: {
     position: 'absolute',
-    marginTop: 20,
+    marginTop: 10,
     left: 10,
     color: 'white',
     zIndex: 1,
@@ -132,5 +132,9 @@ export const globalStyles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: '100%'
-  }
+  },
+  roundButton: {
+		borderRadius: 20,
+		overflow: 'hidden'
+	}
 });

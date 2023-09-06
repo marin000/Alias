@@ -249,6 +249,7 @@ const Profile = ({ navigation, userData, teams }) => {
                     title={buttonChangePass[language]}
                     color='#0000cc'
                     onPress={() => navigation.navigate('ChangePassword')}
+                    buttonStyle={globalStyles.roundButton}
                   />
                 </View>
                 <View style={styles.buttonLogout}>
@@ -256,6 +257,7 @@ const Profile = ({ navigation, userData, teams }) => {
                     title={buttonLogout[language]}
                     color='error'
                     onPress={handleLogout}
+                    buttonStyle={globalStyles.roundButton}
                   />
                 </View>
               </View>

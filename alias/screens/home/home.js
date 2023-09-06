@@ -104,7 +104,7 @@ const Home = ({ teams, userData, navigation }) => {
 									title={continueGame[language]}
 									color='#0000cc'
 									onPress={handleContinueGame}
-									buttonStyle={styles.button}
+									buttonStyle={globalStyles.roundButton}
 								/>
 							</View>
 						}
@@ -113,7 +113,7 @@ const Home = ({ teams, userData, navigation }) => {
 								title={newGame[language]}
 								color='#0000cc'
 								onPress={handleNewGame}
-								buttonStyle={styles.button}
+								buttonStyle={globalStyles.roundButton}
 							/>
 						</View>
 						<View style={styles.buttonContainer}>
@@ -121,7 +121,7 @@ const Home = ({ teams, userData, navigation }) => {
 								title={instructions[language]}
 								color='#0000cc'
 								onPress={() => navigation.navigate('HowToPlay')}
-								buttonStyle={styles.button}
+								buttonStyle={globalStyles.roundButton}
 							/>
 						</View>
 						<View style={styles.buttonContainer}>
@@ -129,7 +129,7 @@ const Home = ({ teams, userData, navigation }) => {
 								title={settings[language]}
 								color='#0000cc'
 								onPress={handleSettings}
-								buttonStyle={styles.button}
+								buttonStyle={globalStyles.roundButton}
 							/>
 						</View>
 						<View style={styles.buttonContainer}>
@@ -138,13 +138,13 @@ const Home = ({ teams, userData, navigation }) => {
 									title={profile[language]}
 									color='#0000cc'
 									onPress={() => navigation.navigate('Profile')}
-									buttonStyle={styles.button}
+									buttonStyle={globalStyles.roundButton}
 								/> :
 								<Button
 									title={login[language]}
 									color='#0000cc'
 									onPress={() => navigation.navigate('Login')}
-									buttonStyle={styles.button}
+									buttonStyle={globalStyles.roundButton}
 								/>
 							}
 						</View>
@@ -154,7 +154,7 @@ const Home = ({ teams, userData, navigation }) => {
 									title={statistics[language]}
 									color='#0000cc'
 									onPress={() => navigation.navigate('Statistics')}
-									buttonStyle={styles.button}
+									buttonStyle={globalStyles.roundButton}
 								/> : null
 							}
 						</View>
@@ -199,10 +199,6 @@ const styles = StyleSheet.create({
 	},
 	buttonContainer: {
 		marginTop: 15
-	},
-	button: {
-		borderRadius: 20,
-		overflow: 'hidden'
 	},
 	loadingContainer: {
 		...globalStyles.loadingContainer,
