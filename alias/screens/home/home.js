@@ -1,21 +1,29 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState, useCallback } from 'react';
 import { connect } from 'react-redux';
 import { deleteAllTeams, gameStartEnd, updateMaxScoreReached, updateTeamIndex, updateUser } from '../../redux/actions';
 import { useDispatch } from 'react-redux';
 import { getToken } from '../../utils/auth';
-import { View, StyleSheet, ImageBackground, ActivityIndicator } from 'react-native';
+import { View, StyleSheet, ImageBackground, ActivityIndicator, Image } from 'react-native';
 import { Button, Text } from '@rneui/themed';
 import { SettingsContext } from '../../utils/settings';
 import { home } from '../../constants/homeScreen';
 import backgroundImage from '../../assets/blurred-background.jpeg';
+import homeIcon from '../../assets/homeIcon.png';
 import api from '../../api/players';
 import { globalStyles } from '../../styles/global';
 import { BannerAd, BannerAdSize, TestIds } from 'react-native-google-mobile-ads';
+import { useFonts } from 'expo-font';
+import * as SplashScreen from 'expo-splash-screen';
+
+SplashScreen.preventAutoHideAsync();
 
 const Home = ({ teams, userData, navigation }) => {
 	const { language } = useContext(SettingsContext);
 	const { newGame, continueGame, instructions, settings, login, profile, statistics } = home;
 	const [loading, setLoading] = useState(true);
+	const [isLoaded] = useFonts({
+		"luckiestGuy-regular": require("../../assets/fonts/LuckiestGuy-Regular.ttf")
+	});
 	const dispatch = useDispatch();
 
 	useEffect(() => {
@@ -62,10 +70,25 @@ const Home = ({ teams, userData, navigation }) => {
 		navigation.navigate('Settings');
 	};
 
+	const handleOnLayout = useCallback(async () => {
+		if (isLoaded) {
+			await SplashScreen.hideAsync();
+		}
+	}, [isLoaded]);
+
+	if (!isLoaded) {
+		return null;
+	}
+
 	return (
-		<ImageBackground source={backgroundImage} style={styles.container} resizeMode={'cover'}>
+		<ImageBackground source={backgroundImage} style={styles.container} resizeMode={'cover'} onLayout={handleOnLayout}>
 			<View style={styles.header}>
 				<Text style={styles.headerText}>Alias</Text>
+				<Image
+					source={homeIcon}
+					style={styles.homeImg}
+					resizeMode='cover'
+				/>
 			</View>
 			{loading ?
 				(
@@ -76,55 +99,62 @@ const Home = ({ teams, userData, navigation }) => {
 					<View style={styles.options}>
 						{
 							teams.length > 0 &&
-							<View style={styles.button}>
+							<View style={styles.buttonContainer}>
 								<Button
 									title={continueGame[language]}
 									color='#0000cc'
 									onPress={handleContinueGame}
+									buttonStyle={styles.button}
 								/>
 							</View>
 						}
-						<View style={styles.button}>
+						<View style={styles.buttonContainer}>
 							<Button
 								title={newGame[language]}
 								color='#0000cc'
 								onPress={handleNewGame}
+								buttonStyle={styles.button}
 							/>
 						</View>
-						<View style={styles.button}>
+						<View style={styles.buttonContainer}>
 							<Button
 								title={instructions[language]}
 								color='#0000cc'
 								onPress={() => navigation.navigate('HowToPlay')}
+								buttonStyle={styles.button}
 							/>
 						</View>
-						<View style={styles.button}>
+						<View style={styles.buttonContainer}>
 							<Button
 								title={settings[language]}
 								color='#0000cc'
 								onPress={handleSettings}
+								buttonStyle={styles.button}
 							/>
 						</View>
-						<View style={styles.button}>
+						<View style={styles.buttonContainer}>
 							{userData ?
 								<Button
 									title={profile[language]}
 									color='#0000cc'
 									onPress={() => navigation.navigate('Profile')}
+									buttonStyle={styles.button}
 								/> :
 								<Button
 									title={login[language]}
 									color='#0000cc'
 									onPress={() => navigation.navigate('Login')}
+									buttonStyle={styles.button}
 								/>
 							}
 						</View>
-						<View style={styles.button}>
+						<View style={styles.buttonContainer}>
 							{userData ?
 								<Button
 									title={statistics[language]}
 									color='#0000cc'
 									onPress={() => navigation.navigate('Statistics')}
+									buttonStyle={styles.button}
 								/> : null
 							}
 						</View>
@@ -149,30 +179,45 @@ const styles = StyleSheet.create({
 		padding: 40
 	},
 	header: {
-		flex: 1
+		flex: 1,
+		alignItems: 'center'
 	},
 	headerText: {
 		fontSize: 100,
 		marginTop: 30,
-		color: 'yellow',
+		color: 'white',
+		fontFamily: 'luckiestGuy-regular',
+		textShadowColor: 'rgba(255, 255, 255, 0.75)',
+		textShadowOffset: { width: 2, height: 2 },
+		textShadowRadius: 10,
+		opacity: 0.9
 	},
 	options: {
 		flex: 1,
 		justifyContent: 'center',
 		bottom: 35
 	},
+	buttonContainer: {
+		marginTop: 15
+	},
 	button: {
-		marginTop: 20
+		borderRadius: 20,
+		overflow: 'hidden'
 	},
 	loadingContainer: {
 		...globalStyles.loadingContainer,
 		marginTop: '-100%'
 	},
 	banner: {
-    position: 'absolute', 
-    bottom: -70,            
-    alignSelf: 'center'
-  },
+		position: 'absolute',
+		bottom: -70,
+		alignSelf: 'center'
+	},
+	homeImg: {
+		height: '33%',
+		width: '45%',
+		marginTop: 15
+	}
 });
 
 Home.navigationOptions = {

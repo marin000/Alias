@@ -25,7 +25,7 @@ const showRewardedAd = () => {
   const unsubscribeEarned = rewarded.addAdEventListener(
     RewardedAdEventType.EARNED_REWARD,
     reward => {
-      console.log('User earned reward of ', reward);
+      console.log(reward);
     },
   );
   rewarded.load();
