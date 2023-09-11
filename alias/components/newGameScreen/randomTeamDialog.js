@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { ScrollView, View, StyleSheet } from 'react-native';
-import { Button, Dialog, Text } from '@rneui/themed';
+import { Button, Dialog, Text, Icon } from '@rneui/themed';
 import { Formik } from 'formik';
 import { TextInput } from 'react-native-gesture-handler';
 import { newGame } from '../../constants/newGameScreen';
 import { shufflePlayers, isFormValid, createRandomTeams } from '../../utils/helper';
 import { globalStyles } from '../../styles/global';
+import CustomDialogHeader from '../customDialogHeader';
 
 export default function RandomTeamDialog({ isVisible, onClose, language, onAddAllTeams, userData }) {
   const { playerInput, numberOfTeamsTxt, buttonGenerateRandom, buttonAddPlayer, buttonReset, buttonSaveTeam } = newGame;
@@ -38,7 +39,8 @@ export default function RandomTeamDialog({ isVisible, onClose, language, onAddAl
   }
 
   return (
-    <Dialog isVisible={isVisible} onBackdropPress={onClose}>
+    <Dialog overlayStyle={globalStyles.dialogContainer} isVisible={isVisible} onBackdropPress={onClose}>
+      <CustomDialogHeader onClose={onClose} />
       <ScrollView keyboardShouldPersistTaps='handled'>
         {!showTeamsDialog ?
           <Formik
@@ -68,27 +70,29 @@ export default function RandomTeamDialog({ isVisible, onClose, language, onAddAl
                     editable={!(index === 0 && userData)}
                   />
                 ))}
-                <View style={globalStyles.buttonsAddResetContainer}>
-                  <Button
-                    containerStyle={globalStyles.buttonAdd}
-                    title={buttonAddPlayer[language]}
-                    color='primary'
-                    onPress={() => {
-                      props.setFieldValue(`players.${props.values.players.length}`, '');
-                    }}
-                  />
-                  <Button
-                    containerStyle={globalStyles.buttonResetDel}
-                    title={buttonReset[language]}
-                    color='error'
-                    onPress={props.handleReset}
-                  />
-                </View>
+                <Button
+                  containerStyle={globalStyles.buttonSaveTeam}
+                  type='outline'
+                  title={buttonAddPlayer[language]}
+                  onPress={() => {
+                    props.setFieldValue(`players.${props.values.players.length}`, '');
+                  }}
+                  buttonStyle={globalStyles.smallRoundButton}
+                  icon={
+                    <Icon
+                      name="account-plus"
+                      type="material-community"
+                      size={24}
+                      style={globalStyles.addPlayerIcon}
+                      color='#2089dc'
+                    />
+                  }
+                />
                 <Button
                   containerStyle={globalStyles.buttonSaveTeam}
                   title={buttonGenerateRandom[language]}
-                  color='success'
                   onPress={props.handleSubmit}
+                  buttonStyle={globalStyles.smallRoundButton}
                 />
               </View>
             )}
@@ -102,20 +106,19 @@ export default function RandomTeamDialog({ isVisible, onClose, language, onAddAl
                 </Text>
               </View>
             ))}
-            <View style={globalStyles.buttonsAddResetContainer}>
-              <Button
-                containerStyle={globalStyles.buttonAdd}
-                title={buttonSaveTeam[language]}
-                color='success'
-                onPress={handleSaveNewTeams}
-              />
-              <Button
-                containerStyle={globalStyles.buttonResetDel}
-                title={buttonReset[language]}
-                color='error'
-                onPress={handleCreateNewTeamsAgain}
-              />
-            </View>
+            <Button
+              containerStyle={styles.buttonsSaveReset}
+              title={buttonSaveTeam[language]}
+              onPress={handleSaveNewTeams}
+              buttonStyle={globalStyles.roundButton}
+            />
+            <Button
+              containerStyle={styles.buttonsSaveReset}
+              type='outline'
+              title={buttonReset[language]}
+              onPress={handleCreateNewTeamsAgain}
+              buttonStyle={globalStyles.smallRoundButton}
+            />
           </View>
         }
       </ScrollView>
@@ -135,5 +138,8 @@ const styles = StyleSheet.create({
   playerNames: {
     textAlign: 'center',
     fontSize: 16
+  },
+  buttonsSaveReset: {
+    marginBottom: 15
   }
 });

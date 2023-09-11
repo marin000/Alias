@@ -4,7 +4,8 @@ export const globalStyles = StyleSheet.create({
   mainContainer: {
     flex: 1,
     padding: 20,
-    paddingTop: 30
+    paddingTop: 30,
+    backgroundColor: '#e1e8ee'
   },
   teamInput: {
     borderWidth: 4,
@@ -25,6 +26,10 @@ export const globalStyles = StyleSheet.create({
   label: {
     fontSize: 14,
     marginBottom: 5,
+  },
+  dialogContainer: {
+    borderRadius: 15,
+    elevation: 5
   },
   dialogButton: {
     alignSelf: 'center',
@@ -66,10 +71,12 @@ export const globalStyles = StyleSheet.create({
     marginRight: 10
   },
   buttonResetDel: {
-    flex: 1,
+    flex: 1
   },
   buttonSaveTeam: {
-    marginTop: 15
+    marginTop: 15,
+    borderRadius: 10,
+    overflow: 'hidden'
   },
   teamName: {
     fontWeight: 'normal'
@@ -77,13 +84,13 @@ export const globalStyles = StyleSheet.create({
   screenTitle: {
     textAlign: 'center',
     fontSize: 30,
-    color: 'white',
+    color: 'black',
     marginBottom: 15
   },
   errorText: {
     color: 'crimson',
     fontWeight: 'bold',
-    marginBottom: 5,
+    marginBottom: 7,
     textAlign: 'center'
   },
   backArrow: {
@@ -118,7 +125,7 @@ export const globalStyles = StyleSheet.create({
     borderRadius: 8,
     paddingVertical: 8,
     paddingHorizontal: 12,
-    marginBottom: 10,
+    marginBottom: 5,
   },
   entryInput: {
     flex: 1,
@@ -134,7 +141,19 @@ export const globalStyles = StyleSheet.create({
     marginTop: '100%'
   },
   roundButton: {
-		borderRadius: 20,
-		overflow: 'hidden'
-	}
+    borderRadius: 10,
+    overflow: 'hidden'
+  },
+  smallRoundButton: {
+    borderRadius: 10,
+    overflow: 'hidden'
+  },
+  addPlayerIcon: {
+    marginRight: 10
+  },
+  dialogHeader: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    marginBottom: 10,
+  }
 });

@@ -3,31 +3,17 @@ import { ScrollView, View, StyleSheet, Image } from 'react-native';
 import { Button, Dialog, Text } from '@rneui/themed';
 import { playGame } from '../../constants/playGameScreen';
 import { newGame } from '../../constants/newGameScreen';
-import { connect } from 'react-redux';
-import { deleteAllTeams, gameStartEnd, updateMaxScoreReached, updateTeamIndex } from '../../redux/actions';
-import { useDispatch } from 'react-redux';
 import { globalStyles } from '../../styles/global';
 import cupImage from '../../assets/cup.jpeg';
+import CustomDialogHeader from '../customDialogHeader';
 
-const WinnerDialog = ({ isVisible, onClose, language, winnerTeam }) => {
+export default function WinnerDialog({ isVisible, onClose, language, winnerTeam }) {
+  const { closeButton } = newGame;
   const { winner, finalScore } = playGame;
-  const { closeButton, headerTitle } = newGame;
-  const dispatch = useDispatch();
-
-  const handleCloseButton = () => {
-    onClose();
-  }
-
-  const handleNewGameButton = () => {
-    dispatch(deleteAllTeams());
-    dispatch(gameStartEnd(false));
-    dispatch(updateMaxScoreReached(false));
-    dispatch(updateTeamIndex(0));
-    onClose();
-  }
 
   return (
-    <Dialog isVisible={isVisible}>
+    <Dialog overlayStyle={globalStyles.dialogContainer} isVisible={isVisible}>
+      <CustomDialogHeader onClose={onClose} />
       <ScrollView keyboardShouldPersistTaps='handled'>
         <View style={styles.container}>
           <View style={styles.infoContainer}>
@@ -39,14 +25,8 @@ const WinnerDialog = ({ isVisible, onClose, language, winnerTeam }) => {
         <Button
           containerStyle={styles.dialogButton}
           title={closeButton[language]}
-          color='error'
-          onPress={handleCloseButton}
-        />
-        <Button
-          containerStyle={styles.dialogButton}
-          title={headerTitle[language]}
-          color='success'
-          onPress={handleNewGameButton}
+          onPress={onClose}
+          buttonStyle={globalStyles.roundButton}
         />
       </ScrollView>
     </Dialog>
@@ -66,23 +46,11 @@ const styles = StyleSheet.create({
     fontSize: 17
   },
   cupImage: {
-    width: 40,
+    width: 70,
     height: 70
   },
   dialogButton: {
-    alignSelf: 'center',
-    width: 300,
-    height: 60
+    ...globalStyles.dialogButton,
+    width: 200
   },
 });
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-    deleteAllTeams: () => dispatch(deleteAllTeams()),
-    gameStartEnd: () => dispatch(gameStartEnd(false)),
-    updateMaxScoreReached: () => dispatch(updateMaxScoreReached(false)),
-    updateTeamIndex: () => dispatch(updateTeamIndex(index))
-  };
-};
-
-export default connect(mapDispatchToProps)(WinnerDialog);

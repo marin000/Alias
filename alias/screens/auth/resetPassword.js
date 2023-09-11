@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react';
-import { View, StyleSheet, ImageBackground, TouchableOpacity, Alert } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import { Text, Card, Button } from '@rneui/themed';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { Formik } from 'formik';
@@ -7,7 +7,6 @@ import { SettingsContext } from '../../utils/settings';
 import { TextInput } from 'react-native-gesture-handler';
 import { resetPassword } from '../../constants/resetPasswordScreen';
 import api from '../../api/players'
-import backgroundImage from '../../assets/blurred-background.jpeg';
 import { globalStyles } from '../../styles/global';
 import { ResetPasswordSchema } from '../../utils/formValidator';
 
@@ -44,7 +43,7 @@ export default function ResetPassword({ navigation }) {
   };
 
   return (
-    <ImageBackground source={backgroundImage} style={globalStyles.mainContainer} resizeMode={'cover'}>
+    <View style={globalStyles.mainContainer} resizeMode={'cover'}>
       <View>
         <Text style={styles.title}>{title[language]}</Text>
         <Card>
@@ -91,7 +90,7 @@ export default function ResetPassword({ navigation }) {
           </Formik>
         </Card>
       </View>
-    </ImageBackground >
+    </View >
   );
 }
 
@@ -102,7 +101,7 @@ const styles = StyleSheet.create({
   },
   resetPassButton: {
     ...globalStyles.buttonSaveTeam,
-    marginTop: 25
+    marginTop: 10
   }
 });
 

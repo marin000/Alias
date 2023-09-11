@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { View, StyleSheet, ImageBackground, Alert } from 'react-native';
+import { View, StyleSheet, Alert } from 'react-native';
 import { Text, Button } from '@rneui/themed';
 import { connect } from 'react-redux';
 import {
@@ -17,7 +17,6 @@ import {
 import { useDispatch } from 'react-redux';
 import { SettingsContext } from '../../utils/settings';
 import { newGame } from '../../constants/newGameScreen';
-import backgroundImage from '../../assets/blurred-background.jpeg';
 import AddTeamDialog from '../../components/newGameScreen/addTeamDialog';
 import EditTeamDialog from '../../components/newGameScreen/editTeamDialog';
 import PreStartDialog from '../../components/newGameScreen/preStartDialog';
@@ -27,7 +26,7 @@ import BackButton from '../../components/backButton';
 import TeamList from '../../components/newGameScreen/teamList';
 import { globalStyles } from '../../styles/global';
 import api from '../../api/teams';
-import { showInterstitialAd } from '../../utils/adService';
+import { showRewardedAd } from '../../utils/adService';
 
 const NewGame = ({ teams, currentTeamIndex, gameStarted, maxScoreReached, addTeam, updateTeam, deleteTeam, gameStartEnd, resetPlayersScore, userData, navigation }) => {
   const { language, maxScore } = useContext(SettingsContext);
@@ -51,7 +50,10 @@ const NewGame = ({ teams, currentTeamIndex, gameStarted, maxScoreReached, addTea
   }
 
   const handleDeleteTeam = () => {
-    deleteTeam(selectedTeam);
+    if (userData.saveTeamResult) {
+      dispatch(updateUser({ ...userData, saveTeamResult: false }));
+    }
+    dispatch(deleteTeam(selectedTeam));
     setSelectedTeam(null);
     setEditTeamDialog(false);
   }
@@ -72,7 +74,7 @@ const NewGame = ({ teams, currentTeamIndex, gameStarted, maxScoreReached, addTea
     dispatch(gameStartEnd(false));
     dispatch(updateMaxScoreReached(false));
     dispatch(updateTeamIndex(0));
-    showInterstitialAd();
+    showRewardedAd();
   }
 
   const handleNewGameSameTeams = () => {
@@ -83,7 +85,7 @@ const NewGame = ({ teams, currentTeamIndex, gameStarted, maxScoreReached, addTea
     dispatch(updateMaxScoreReached(false));
     dispatch(updateTeamIndex(0));
     dispatch(resetPlayersScore());
-    showInterstitialAd();
+    showRewardedAd();
   }
 
   const handleSaveAsMyTeam = () => {
@@ -133,7 +135,7 @@ const NewGame = ({ teams, currentTeamIndex, gameStarted, maxScoreReached, addTea
   }
 
   return (
-    <ImageBackground source={backgroundImage} style={globalStyles.mainContainer} resizeMode={'cover'}>
+    <View style={globalStyles.mainContainer} resizeMode={'cover'}>
       {/* List of teams */}
       <View style={styles.containerData}>
         <View style={styles.teamList} >
@@ -157,7 +159,6 @@ const NewGame = ({ teams, currentTeamIndex, gameStarted, maxScoreReached, addTea
             teams.length >= 2 && userData && !userData.saveTeamResult && !gameStarted &&
             <Button
               title={saveAsMyTeam[language]}
-              color='#0000cc'
               onPress={() => handleSaveAsMyTeam()}
               buttonStyle={globalStyles.roundButton}
             />
@@ -167,7 +168,6 @@ const NewGame = ({ teams, currentTeamIndex, gameStarted, maxScoreReached, addTea
             teams.length === 0 && userData && userData.team &&
             <Button
               title={importMyTeam[language]}
-              color='#0000cc'
               onPress={() => handleImportMyTeam()}
               buttonStyle={globalStyles.roundButton}
             />
@@ -177,7 +177,6 @@ const NewGame = ({ teams, currentTeamIndex, gameStarted, maxScoreReached, addTea
             <Button
               containerStyle={styles.preGameButtons}
               title={newTeam[language]}
-              color='#0000cc'
               onPress={() => setAddTeamDialog(true)}
               buttonStyle={globalStyles.roundButton}
             />
@@ -187,7 +186,6 @@ const NewGame = ({ teams, currentTeamIndex, gameStarted, maxScoreReached, addTea
             <Button
               containerStyle={styles.preGameButtons}
               title={createRandomTeams[language]}
-              color='#0000cc'
               onPress={() => setRandomTeamDialog(true)}
               buttonStyle={globalStyles.roundButton}
             />
@@ -197,7 +195,7 @@ const NewGame = ({ teams, currentTeamIndex, gameStarted, maxScoreReached, addTea
             <Button
               containerStyle={globalStyles.buttonSaveTeam}
               title={buttonStart[language]}
-              color='success'
+              color='#439946'
               onPress={() => setPreStartDialog(true)}
               buttonStyle={globalStyles.roundButton}
             />
@@ -206,7 +204,6 @@ const NewGame = ({ teams, currentTeamIndex, gameStarted, maxScoreReached, addTea
             maxScoreReached && currentTeamIndex === 0 &&
             <Button
               title={headerTitle[language]}
-              color='#0000cc'
               onPress={() => handleNewGame()}
               buttonStyle={globalStyles.roundButton}
             />
@@ -215,8 +212,8 @@ const NewGame = ({ teams, currentTeamIndex, gameStarted, maxScoreReached, addTea
             maxScoreReached && currentTeamIndex === 0 &&
             <Button
               containerStyle={globalStyles.buttonSaveTeam}
+              type='outline'
               title={newGameSameTeamsButton[language]}
-              color='success'
               onPress={() => handleNewGameSameTeams()}
               buttonStyle={globalStyles.roundButton}
             />
@@ -282,7 +279,7 @@ const NewGame = ({ teams, currentTeamIndex, gameStarted, maxScoreReached, addTea
           />
         }
       </View>
-    </ImageBackground>
+    </View>
   );
 }
 
@@ -305,9 +302,9 @@ const styles = StyleSheet.create({
   },
   targetResult: {
     textAlign: 'center',
-    fontSize: 12,
-    color: 'white',
-    marginBottom: 10
+    fontSize: 14,
+    color: 'black',
+    marginBottom: 15
   },
   preGameButtons: {
     marginTop: 15

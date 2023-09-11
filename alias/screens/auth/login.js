@@ -9,7 +9,7 @@ import {
 } from '../../redux/actions';
 import { useDispatch } from 'react-redux';
 import { storeToken } from '../../utils/auth';
-import { View, StyleSheet, ImageBackground, TouchableOpacity, Alert } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import { Text, Card, Button } from '@rneui/themed';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { Formik } from 'formik';
@@ -17,7 +17,6 @@ import { TextInput } from 'react-native-gesture-handler';
 import { SettingsContext } from '../../utils/settings';
 import { login } from '../../constants/loginScreen';
 import { profile } from '../../constants/profileScreen';
-import backgroundImage from '../../assets/blurred-background.jpeg';
 import { globalStyles } from '../../styles/global';
 import LoginDivider from '../../components/customLoginDivider';
 import { LoginSchema } from '../../utils/formValidator';
@@ -83,7 +82,7 @@ const Login = ({ teams, navigation }) => {
   }
 
   return (
-    <ImageBackground source={backgroundImage} style={globalStyles.mainContainer} resizeMode={'cover'}>
+    <View style={globalStyles.mainContainer} resizeMode={'cover'}>
       <View>
         <BackButton onPress={() => navigation.navigate('Home')} />
         <Text style={styles.title}>{signIn[language]}</Text>
@@ -124,9 +123,9 @@ const Login = ({ teams, navigation }) => {
                   <Text style={styles.forgotPass}>{forgotPass[language]}</Text>
                 </TouchableOpacity>
                 <Button
-                  containerStyle={styles.signInButton}
                   title={signIn[language]}
                   onPress={props.handleSubmit}
+                  buttonStyle={styles.signInButton}
                 />
               </View>
             )}
@@ -140,7 +139,7 @@ const Login = ({ teams, navigation }) => {
           </View>
         </Card>
       </View>
-    </ImageBackground >
+    </View>
   );
 }
 
@@ -158,7 +157,7 @@ const styles = StyleSheet.create({
   },
   forgotPass: {
     fontSize: 14,
-    color: '#0066ff',
+    color: '#2089dc',
     fontWeight: 'bold'
   },
   registerContainer: {
@@ -175,7 +174,7 @@ const styles = StyleSheet.create({
     marginLeft: 5,
     fontSize: 14,
     fontWeight: 'bold',
-    color: '#0066ff',
+    color: '#2089dc',
   },
 });
 

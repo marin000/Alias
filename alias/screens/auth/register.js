@@ -1,5 +1,5 @@
-import React, { useContext, useState, useEffect } from 'react';
-import { View, StyleSheet, ImageBackground, TouchableOpacity } from 'react-native';
+import React, { useContext, useState } from 'react';
+import { View, StyleSheet, TouchableOpacity } from 'react-native';
 import { Text, Card, Button } from '@rneui/themed';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { Formik } from 'formik';
@@ -7,7 +7,6 @@ import { TextInput } from 'react-native-gesture-handler';
 import { SettingsContext } from '../../utils/settings';
 import { register } from '../../constants/registerScreen';
 import api from '../../api/players'
-import backgroundImage from '../../assets/blurred-background.jpeg';
 import { globalStyles } from '../../styles/global';
 import { RegisterSchema } from '../../utils/formValidator';
 import BackButton from '../../components/backButton';
@@ -63,7 +62,7 @@ export default function Register({ navigation }) {
   };
 
   return (
-    <ImageBackground source={backgroundImage} style={globalStyles.mainContainer} resizeMode={'cover'}>
+    <View style={globalStyles.mainContainer} resizeMode={'cover'}>
       <View>
         <BackButton onPress={() => navigation.goBack()} />
         <Text style={styles.title}>{registerTitle[language]}</Text>
@@ -132,7 +131,7 @@ export default function Register({ navigation }) {
           </Formik>
         </Card>
       </View>
-    </ImageBackground >
+    </View >
   );
 }
 
@@ -143,7 +142,7 @@ const styles = StyleSheet.create({
   },
   registerButton: {
     ...globalStyles.buttonSaveTeam,
-    marginTop: 25
+    marginTop: 10
   }
 });
 

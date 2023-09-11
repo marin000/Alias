@@ -3,11 +3,10 @@ import { connect } from 'react-redux';
 import { deleteAllTeams, gameStartEnd, updateMaxScoreReached, updateTeamIndex, updateUser } from '../../redux/actions';
 import { useDispatch } from 'react-redux';
 import { getToken } from '../../utils/auth';
-import { View, StyleSheet, ImageBackground, ActivityIndicator, Image } from 'react-native';
+import { View, StyleSheet, ActivityIndicator, Image } from 'react-native';
 import { Button, Text } from '@rneui/themed';
 import { SettingsContext } from '../../utils/settings';
 import { home } from '../../constants/homeScreen';
-import backgroundImage from '../../assets/blurred-background.jpeg';
 import homeIcon from '../../assets/homeIcon.png';
 import api from '../../api/players';
 import { globalStyles } from '../../styles/global';
@@ -81,7 +80,7 @@ const Home = ({ teams, userData, navigation }) => {
 	}
 
 	return (
-		<ImageBackground source={backgroundImage} style={styles.container} resizeMode={'cover'} onLayout={handleOnLayout}>
+		<View style={styles.container} resizeMode={'cover'} onLayout={handleOnLayout}>
 			<View style={styles.header}>
 				<Text style={styles.headerText}>Alias</Text>
 				<Image
@@ -102,7 +101,6 @@ const Home = ({ teams, userData, navigation }) => {
 							<View style={styles.buttonContainer}>
 								<Button
 									title={continueGame[language]}
-									color='#0000cc'
 									onPress={handleContinueGame}
 									buttonStyle={globalStyles.roundButton}
 								/>
@@ -111,7 +109,6 @@ const Home = ({ teams, userData, navigation }) => {
 						<View style={styles.buttonContainer}>
 							<Button
 								title={newGame[language]}
-								color='#0000cc'
 								onPress={handleNewGame}
 								buttonStyle={globalStyles.roundButton}
 							/>
@@ -119,7 +116,6 @@ const Home = ({ teams, userData, navigation }) => {
 						<View style={styles.buttonContainer}>
 							<Button
 								title={instructions[language]}
-								color='#0000cc'
 								onPress={() => navigation.navigate('HowToPlay')}
 								buttonStyle={globalStyles.roundButton}
 							/>
@@ -127,7 +123,6 @@ const Home = ({ teams, userData, navigation }) => {
 						<View style={styles.buttonContainer}>
 							<Button
 								title={settings[language]}
-								color='#0000cc'
 								onPress={handleSettings}
 								buttonStyle={globalStyles.roundButton}
 							/>
@@ -136,13 +131,11 @@ const Home = ({ teams, userData, navigation }) => {
 							{userData ?
 								<Button
 									title={profile[language]}
-									color='#0000cc'
 									onPress={() => navigation.navigate('Profile')}
 									buttonStyle={globalStyles.roundButton}
 								/> :
 								<Button
 									title={login[language]}
-									color='#0000cc'
 									onPress={() => navigation.navigate('Login')}
 									buttonStyle={globalStyles.roundButton}
 								/>
@@ -152,7 +145,6 @@ const Home = ({ teams, userData, navigation }) => {
 							{userData ?
 								<Button
 									title={statistics[language]}
-									color='#0000cc'
 									onPress={() => navigation.navigate('Statistics')}
 									buttonStyle={globalStyles.roundButton}
 								/> : null
@@ -169,13 +161,13 @@ const Home = ({ teams, userData, navigation }) => {
 						</View>
 					</View>
 				)}
-		</ImageBackground>
+		</View>
 	);
 }
 
 const styles = StyleSheet.create({
 	container: {
-		flex: 1,
+		...globalStyles.mainContainer,
 		padding: 40
 	},
 	header: {
@@ -185,7 +177,7 @@ const styles = StyleSheet.create({
 	headerText: {
 		fontSize: 100,
 		marginTop: 30,
-		color: 'white',
+		color: 'black',
 		fontFamily: 'luckiestGuy-regular',
 		textShadowColor: 'rgba(255, 255, 255, 0.75)',
 		textShadowOffset: { width: 2, height: 2 },

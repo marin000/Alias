@@ -72,7 +72,7 @@ const isFormValid = (numberOfTeams, players, language) => {
   const { alertTeamNumber, alertMinTeamNumber, alertPlayerUnique } = newGame;
   const filteredPlayers = players.filter(player => player.trim() !== '');
 
-  if (numberOfTeams < 2) {
+  if (!numberOfTeams || numberOfTeams < 2) {
     Alert.alert(alertMinTeamNumber[language]);
     return;
   }
@@ -221,9 +221,14 @@ const playSound = async (soundType, soundPermission) => {
         sound = (await Audio.Sound.createAsync(require('../assets/sounds/soundOn.mp3'))).sound;
         await sound.playAsync();
         break;
+      case 'lastSecPlay':
+        sound = (await Audio.Sound.createAsync(require('../assets/sounds/clock-10-sec.wav'))).sound;
+        await sound.playAsync();
+        break;
       default:
         break;
     }
+    return sound;
   } catch (error) {
     console.log(error);
   }

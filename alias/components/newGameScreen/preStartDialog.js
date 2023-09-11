@@ -4,6 +4,7 @@ import { Button, Dialog, Text, Icon } from '@rneui/themed';
 import { playGame } from '../../constants/playGameScreen';
 import { newGame } from '../../constants/newGameScreen';
 import { globalStyles } from '../../styles/global';
+import CustomDialogHeader from '../customDialogHeader';
 
 export default function PreStartDialog({ isVisible, onClose, startGame, language, currentTeam }) {
   const { team, explains } = playGame;
@@ -15,10 +16,8 @@ export default function PreStartDialog({ isVisible, onClose, startGame, language
   }
 
   return (
-    <Dialog
-      isVisible={isVisible}
-      onBackdropPress={onClose}
-    >
+    <Dialog overlayStyle={globalStyles.dialogContainer} isVisible={isVisible} onBackdropPress={onClose}>
+      <CustomDialogHeader onClose={onClose}/>
       <View style={globalStyles.dialogTitleContainer}>
         <Text style={globalStyles.dialogTitle}>
          {team[language]}: <Text style={globalStyles.teamName}>{currentTeam.name}</Text>
@@ -33,8 +32,9 @@ export default function PreStartDialog({ isVisible, onClose, startGame, language
       <Button
         containerStyle={globalStyles.dialogButton}
         title={startGameButton[language]}
-        color='success'
+        color='#439946'
         onPress={handleStartGame}
+        buttonStyle={globalStyles.smallRoundButton}
       />
     </Dialog>
   );

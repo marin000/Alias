@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react';
-import { View, StyleSheet, ImageBackground, TouchableOpacity, Alert } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import { Text, Card, Button } from '@rneui/themed';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { connect } from 'react-redux';
@@ -11,7 +11,6 @@ import { SettingsContext } from '../../utils/settings';
 import { TextInput } from 'react-native-gesture-handler';
 import { changePassword } from '../../constants/changePasswordScreen';
 import api from '../../api/players'
-import backgroundImage from '../../assets/blurred-background.jpeg';
 import { globalStyles } from '../../styles/global';
 import { ChangePasswordSchema } from '../../utils/formValidator';
 import BackButton from '../../components/backButton';
@@ -69,7 +68,7 @@ const ChangePassword = ({ userData, navigation }) => {
   };
 
   return (
-    <ImageBackground source={backgroundImage} style={globalStyles.mainContainer} resizeMode={'cover'}>
+    <View style={globalStyles.mainContainer} resizeMode={'cover'}>
       <View>
         <BackButton onPress={() => navigation.navigate('Profile')} />
         <Text style={styles.title}>{title[language]}</Text>
@@ -130,7 +129,7 @@ const ChangePassword = ({ userData, navigation }) => {
           </Formik>
         </Card>
       </View>
-    </ImageBackground >
+    </View>
   );
 }
 
@@ -141,7 +140,7 @@ const styles = StyleSheet.create({
   },
   changePassButton: {
     ...globalStyles.buttonSaveTeam,
-    marginTop: 25
+    marginTop: 10
   }
 });
 

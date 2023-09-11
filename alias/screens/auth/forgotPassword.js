@@ -1,12 +1,11 @@
 import React, { useContext, useState } from 'react';
-import { View, StyleSheet, ImageBackground, Alert } from 'react-native';
+import { View, StyleSheet, Alert } from 'react-native';
 import { Text, Card, Button } from '@rneui/themed';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { Formik } from 'formik';
 import { TextInput } from 'react-native-gesture-handler';
 import { SettingsContext } from '../../utils/settings';
 import { forgotPassword } from '../../constants/forgotPasswordScreen';
-import backgroundImage from '../../assets/blurred-background.jpeg';
 import { globalStyles } from '../../styles/global';
 import { ForgotPasswordSchema } from '../../utils/formValidator';
 import BackButton from '../../components/backButton';
@@ -40,7 +39,7 @@ export default function ForgotPassword({ navigation }) {
   }
 
   return (
-    <ImageBackground source={backgroundImage} style={globalStyles.mainContainer} resizeMode={'cover'}>
+    <View style={globalStyles.mainContainer} resizeMode={'cover'}>
       <View>
         <BackButton onPress={() => navigation.goBack()} />
         <Text style={styles.title}>{title[language]}</Text>
@@ -75,7 +74,7 @@ export default function ForgotPassword({ navigation }) {
           </Formik>
         </Card>
       </View>
-    </ImageBackground >
+    </View >
   );
 }
 
@@ -87,7 +86,7 @@ const styles = StyleSheet.create({
   subtitle: {
     textAlign: 'center',
     fontSize: 15,
-    color: 'white',
+    color: 'black',
     marginBottom: 10
   },
   signInButton: {

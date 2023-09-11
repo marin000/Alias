@@ -64,9 +64,7 @@ export default function EndRoundDialog({ isVisible, onClose, language, currentTe
   };
 
   return (
-    <Dialog
-      isVisible={isVisible}
-    >
+    <Dialog overlayStyle={globalStyles.dialogContainer} isVisible={isVisible}>
       <ScrollView keyboardShouldPersistTaps='handled'>
         <View style={globalStyles.dialogTitleContainer}>
           <Text style={globalStyles.dialogTitle}>
@@ -88,8 +86,8 @@ export default function EndRoundDialog({ isVisible, onClose, language, currentTe
         <Button
           containerStyle={globalStyles.dialogButton}
           title={gameTimer > 0 ? dialogContinueButton[language] : dialogNextButton[language]}
-          color='success'
           onPress={handleNextButton}
+          buttonStyle={globalStyles.smallRoundButton}
         />
       </ScrollView>
     </Dialog>

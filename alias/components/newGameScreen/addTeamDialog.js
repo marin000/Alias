@@ -1,5 +1,5 @@
 import React from 'react';
-import { ScrollView, View } from 'react-native';
+import { ScrollView, View, TouchableHighlight } from 'react-native';
 import { Button, Dialog, Text } from '@rneui/themed';
 import { Formik } from 'formik';
 import { TextInput } from 'react-native-gesture-handler';
@@ -7,9 +7,11 @@ import { validateTeamInput } from '../../utils/helper';
 import { newGame } from '../../constants/newGameScreen';
 import shortid from 'shortid';
 import { globalStyles } from '../../styles/global';
+import { Icon } from '@rneui/base';
+import CustomDialogHeader from '../customDialogHeader';
 
 export default function AddTeamDialog({ isVisible, onClose, teams, language, onAddTeam, userData }) {
-  const { teamInput, playerInput, buttonSaveTeam, buttonAddPlayer, buttonReset } = newGame;
+  const { teamInput, playerInput, buttonSaveTeam, buttonAddPlayer } = newGame;
 
   const handleAddNewTeam = (values) => {
     if (!validateTeamInput(teams, values, language)) {
@@ -30,7 +32,7 @@ export default function AddTeamDialog({ isVisible, onClose, teams, language, onA
       name: values.teamName,
       players: playersArray,
       score: 0,
-      myTeam: userData?.name === playersArray[0]?.name 
+      myTeam: userData?.name === playersArray[0]?.name
     };
 
     if (userData && teams.length === 0) {
@@ -42,7 +44,8 @@ export default function AddTeamDialog({ isVisible, onClose, teams, language, onA
   }
 
   return (
-    <Dialog isVisible={isVisible} onBackdropPress={onClose}>
+    <Dialog overlayStyle={globalStyles.dialogContainer} isVisible={isVisible} onBackdropPress={onClose}>
+      <CustomDialogHeader onClose={onClose} />
       <ScrollView keyboardShouldPersistTaps='handled'>
         <Formik
           initialValues={{ teamName: '', players: userData && teams.length === 0 ? [userData.name] : [] }}
@@ -69,27 +72,29 @@ export default function AddTeamDialog({ isVisible, onClose, teams, language, onA
                   editable={!(index === 0 && userData && teams.length === 0)}
                 />
               ))}
-              <View style={globalStyles.buttonsAddResetContainer}>
-                <Button
-                  containerStyle={globalStyles.buttonAdd}
-                  title={buttonAddPlayer[language]}
-                  color='primary'
-                  onPress={() => {
-                    props.setFieldValue(`players.${props.values.players.length}`, '');
-                  }}
-                />
-                <Button
-                  containerStyle={globalStyles.buttonResetDel}
-                  title={buttonReset[language]}
-                  color='error'
-                  onPress={props.handleReset}
-                />
-              </View>
+              <Button
+                containerStyle={globalStyles.buttonSaveTeam}
+                type='outline'
+                title={buttonAddPlayer[language]}
+                onPress={() => {
+                  props.setFieldValue(`players.${props.values.players.length}`, '');
+                }}
+                buttonStyle={globalStyles.smallRoundButton}
+                icon={
+                  <Icon
+                    name="account-plus"
+                    type="material-community"
+                    size={24}
+                    style={globalStyles.addPlayerIcon}
+                    color='#2089dc'
+                  />
+                }
+              />
               <Button
                 containerStyle={globalStyles.buttonSaveTeam}
                 title={buttonSaveTeam[language]}
-                color='success'
                 onPress={props.handleSubmit}
+                buttonStyle={globalStyles.smallRoundButton}
               />
             </View>
           )}

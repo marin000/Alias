@@ -1,10 +1,9 @@
 import React, { useContext, useState } from 'react';
-import { View, StyleSheet, ImageBackground, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, TouchableOpacity } from 'react-native';
 import { Text, Card, CheckBox, Image, Slider, Icon } from '@rneui/themed';
 import { SettingsContext } from '../../utils/settings';
 import { playSound } from '../../utils/helper';
 import { settings } from '../../constants/settingsScreen';
-import backgroundImage from '../../assets/blurred-background.jpeg';
 import { globalStyles } from '../../styles/global';
 import BackButton from '../../components/backButton';
 import croFlag from '../../assets/cro-flag.png';
@@ -40,7 +39,7 @@ export default function Settings({ navigation }) {
   }
 
   return (
-    <ImageBackground source={backgroundImage} style={globalStyles.mainContainer} resizeMode={'cover'}>
+    <View style={globalStyles.mainContainer} resizeMode={'cover'}>
       <View>
         <BackButton onPress={() => navigation.goBack()} />
         <Text style={globalStyles.screenTitle}>{title[language]}</Text>
@@ -128,7 +127,7 @@ export default function Settings({ navigation }) {
           </View>
         </Card>
       </View>
-    </ImageBackground>
+    </View>
   );
 }
 

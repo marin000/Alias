@@ -4,6 +4,7 @@ import { Button, Dialog, Text, Icon, Divider } from '@rneui/themed';
 import { playGame } from '../../constants/playGameScreen';
 import { newGame } from '../../constants/newGameScreen';
 import { globalStyles } from '../../styles/global';
+import CustomDialogHeader from '../customDialogHeader';
 
 export default function ShowTeamResultDialog({ isVisible, onClose, language, selectedTeam }) {
   const { team } = playGame;
@@ -19,10 +20,8 @@ export default function ShowTeamResultDialog({ isVisible, onClose, language, sel
   };
 
   return (
-    <Dialog
-      isVisible={isVisible}
-      onBackdropPress={onClose}
-    >
+    <Dialog overlayStyle={globalStyles.dialogContainer} isVisible={isVisible} onBackdropPress={onClose}>
+      <CustomDialogHeader onClose={onClose} />
       <View style={globalStyles.dialogTitleContainer}>
         <Text style={globalStyles.dialogTitle}>
           {team[language]}: <Text style={globalStyles.teamName}>{selectedTeam ? selectedTeam.name : ''}</Text>
@@ -43,7 +42,6 @@ export default function ShowTeamResultDialog({ isVisible, onClose, language, sel
                     name={openPlayerStats[player.name] ? 'chevron-up' : 'chevron-down'}
                     type="material-community"
                     size={24}
-                    color={'#6e88a1'}
                   />
                 </View>
                 {openPlayerStats[player.name] && (
@@ -58,12 +56,13 @@ export default function ShowTeamResultDialog({ isVisible, onClose, language, sel
           </View>
         )) : null
       }
-
       <Button
         containerStyle={globalStyles.dialogButton}
+        type='outline'
         title={closeButton[language]}
-        color='error'
         onPress={() => onClose()}
+        buttonStyle={{ ...globalStyles.smallRoundButton, borderColor: 'red' }}
+        titleStyle={{ color: 'red' }}
       />
     </Dialog>
   );

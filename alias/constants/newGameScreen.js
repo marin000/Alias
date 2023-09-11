@@ -16,23 +16,23 @@ export const newGame = {
 		en: 'Team Name'
 	},
 	playerInput: {
-		hr: 'Igrac',
+		hr: 'Igrač',
 		en: 'Player'
 	},
 	buttonSaveTeam: {
-		hr: 'Sacuvaj',
+		hr: 'Spremi',
 		en: 'Save'
 	},
 	buttonAddPlayer: {
-		hr: 'Dodaj igraca',
+		hr: 'Dodaj igrača',
 		en: 'Add player'
 	},
 	buttonReset: {
-		hr: 'Ponisti',
-		en: 'Reset'
+		hr: 'Kreiraj ponovo',
+		en: 'Create again'
 	},
 	buttonDelete: {
-		hr: 'Izbrisi tim',
+		hr: 'Izbriši tim',
 		en: 'Delete team'
 	},
 	buttonStart: {
@@ -44,11 +44,11 @@ export const newGame = {
 		en: 'Team name is required!'
 	},
 	alertTeamName: {
-		hr: 'Tim s ovim imenom vec postoji!',
+		hr: 'Tim s ovim imenom već postoji!',
 		en: 'Team with this name already exists!'
 	},
 	alertPlayer: {
-		hr: 'Potrebna su najmanje 2 igraca!',
+		hr: 'Potrebna su najmanje 2 igrača!',
 		en: 'At least 2 players are required!'
 	},
 	alertPlayerUnique: {
@@ -72,7 +72,7 @@ export const newGame = {
 		en: 'Close'
 	},
 	targetResultTxt: {
-		hr: 'Krajnji rezultat',
+		hr: 'Ciljni rezultat',
 		en: 'Target result'
 	},
 	newGameSameTeamsButton: {

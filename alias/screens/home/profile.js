@@ -12,7 +12,6 @@ import { removeToken } from '../../utils/auth';
 import {
   View,
   StyleSheet,
-  ImageBackground,
   TouchableWithoutFeedback,
   ScrollView,
   Keyboard,
@@ -23,7 +22,6 @@ import { SettingsContext } from '../../utils/settings';
 import { profile } from '../../constants/profileScreen';
 import { register } from '../../constants/registerScreen';
 import { RegisterSchema } from '../../utils/formValidator';
-import backgroundImage from '../../assets/blurred-background.jpeg';
 import BackButton from '../../components/backButton';
 import * as ImagePicker from 'expo-image-picker';
 import { uploadImage } from '../../utils/helper';
@@ -180,7 +178,7 @@ const Profile = ({ navigation, userData, teams }) => {
   }
 
   return (
-    <ImageBackground source={backgroundImage} style={globalStyles.mainContainer} resizeMode={'cover'} >
+    <View style={globalStyles.mainContainer} resizeMode={'cover'} >
       <ScrollView>
         {userData && (
           <TouchableWithoutFeedback onPress={editEmailFlag || editNameFlag ? handleBackdropPress : null}>
@@ -247,7 +245,6 @@ const Profile = ({ navigation, userData, teams }) => {
                 <View>
                   <Button
                     title={buttonChangePass[language]}
-                    color='#0000cc'
                     onPress={() => navigation.navigate('ChangePassword')}
                     buttonStyle={globalStyles.roundButton}
                   />
@@ -255,9 +252,10 @@ const Profile = ({ navigation, userData, teams }) => {
                 <View style={styles.buttonLogout}>
                   <Button
                     title={buttonLogout[language]}
-                    color='error'
+                    type='outline'
                     onPress={handleLogout}
-                    buttonStyle={globalStyles.roundButton}
+                    buttonStyle={{ ...globalStyles.roundButton, borderColor: 'red' }}
+                    titleStyle={{ color: 'red' }}
                   />
                 </View>
               </View>
@@ -265,7 +263,7 @@ const Profile = ({ navigation, userData, teams }) => {
           </TouchableWithoutFeedback>
         )}
       </ScrollView>
-    </ImageBackground>
+    </View>
   );
 }
 
@@ -276,7 +274,8 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     marginHorizontal: 15,
-    marginTop: 80
+    marginTop: 40,
+    marginBottom: 15
   },
   buttonLogout: {
     marginTop: 20

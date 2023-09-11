@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
     borderRadius: 60,
   },
   uploadText: {
-    color: 'white',
+    color: 'black',
     fontSize: 16,
     marginTop: 10,
     textDecorationLine: 'underline',

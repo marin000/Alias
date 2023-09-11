@@ -14,10 +14,7 @@ export default function PlayersResultDialog({ isVisible, onClose, data, language
   };
 
   return (
-    <Dialog
-      isVisible={isVisible}
-      onBackdropPress={onClose}
-    >
+    <Dialog overlayStyle={globalStyles.dialogContainer} isVisible={isVisible} onBackdropPress={onClose}>
       <View>
         <View style={styles.buttonsContainer}>
           {teamResults.map((team, index) => (
@@ -26,7 +23,7 @@ export default function PlayersResultDialog({ isVisible, onClose, data, language
               containerStyle={styles.button}
               title={team.name}
               onPress={() => handleTeamButtonClick(team)}
-              color={selectedTeam.name === team.name ? 'primary' : '#d9d9d9'}
+              color={selectedTeam.name === team.name ? '#2089dc' : '#d9d9d9'}
             />
           ))}
         </View>

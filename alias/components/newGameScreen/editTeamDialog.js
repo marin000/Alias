@@ -1,11 +1,12 @@
 import React from 'react';
 import { ScrollView, View } from 'react-native';
-import { Button, Dialog, Text } from '@rneui/themed';
+import { Button, Dialog, Text, Icon } from '@rneui/themed';
 import { Formik } from 'formik';
 import { TextInput } from 'react-native-gesture-handler';
 import { validateTeamInput } from '../../utils/helper';
 import { newGame } from '../../constants/newGameScreen';
 import { globalStyles } from '../../styles/global';
+import CustomDialogHeader from '../customDialogHeader';
 
 export default function EditTeamDialog({ isVisible, onClose, teams, selectedTeam, myTeamEditing, language, onDeleteTeam, onUpdateTeam, userData }) {
   const { teamInput, playerInput, buttonSaveTeam, buttonAddPlayer, buttonDelete } = newGame;
@@ -38,10 +39,8 @@ export default function EditTeamDialog({ isVisible, onClose, teams, selectedTeam
   }
 
   return (
-    <Dialog
-      isVisible={isVisible}
-      onBackdropPress={onClose}
-    >
+    <Dialog overlayStyle={globalStyles.dialogContainer} isVisible={isVisible} onBackdropPress={onClose}>
+      <CustomDialogHeader onClose={onClose} />
       <ScrollView keyboardShouldPersistTaps='handled'>
         <Formik
           initialValues={{
@@ -79,25 +78,28 @@ export default function EditTeamDialog({ isVisible, onClose, teams, selectedTeam
                 {!myTeamEditing &&
                   <Button
                     containerStyle={globalStyles.buttonAdd}
+                    type='outline'
                     title={buttonAddPlayer[language]}
-                    color='primary'
                     onPress={() => {
                       props.setFieldValue(`players.${props.values.players.length}`, '');
                     }}
+                    buttonStyle={globalStyles.smallRoundButton}
                   />}
                 <Button
                   containerStyle={globalStyles.buttonResetDel}
+                  type='outline'
                   title={buttonDelete[language]}
-                  color='error'
                   onPress={() => onDeleteTeam()}
+                  buttonStyle={{...globalStyles.smallRoundButton, borderColor: 'red'}}
+                  titleStyle={{color: 'red'}}
                 />
               </View>
               {!myTeamEditing &&
                 <Button
                   containerStyle={globalStyles.buttonSaveTeam}
                   title={buttonSaveTeam[language]}
-                  color='success'
                   onPress={props.handleSubmit}
+                  buttonStyle={globalStyles.smallRoundButton}
                 />
               }
             </View>

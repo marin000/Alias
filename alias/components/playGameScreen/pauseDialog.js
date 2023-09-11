@@ -12,9 +12,7 @@ export default function PauseDialog({ isVisible, onClose, language, currentTeam,
   }
 
   return (
-    <Dialog
-      isVisible={isVisible}
-    >
+    <Dialog overlayStyle={globalStyles.dialogContainer} isVisible={isVisible}>
       <ScrollView keyboardShouldPersistTaps='handled'>
         <View style={globalStyles.dialogTitleContainer}>
           <Text style={globalStyles.dialogTitle}>
@@ -32,8 +30,8 @@ export default function PauseDialog({ isVisible, onClose, language, currentTeam,
         <Button
           containerStyle={globalStyles.dialogButton}
           title={dialogContinueButton[language]}
-          color='success'
           onPress={handleNextButton}
+          buttonStyle={globalStyles.smallRoundButton}
         />
       </ScrollView>
     </Dialog>

@@ -1,11 +1,10 @@
 import React from 'react';
 import { ScrollView, View, TouchableHighlight, StyleSheet } from 'react-native';
-import { ListItem, Text } from '@rneui/themed';
-import { LinearGradient } from 'expo-linear-gradient';
+import { Text, Icon } from '@rneui/themed';
 import { newGame } from '../../constants/newGameScreen';
 
 const TeamList = ({ teams, gameStarted, showTeamResult, language, handleTeamToEdit }) => {
-  const { score } = newGame; 
+  const { score } = newGame;
 
   return (
     <ScrollView>
@@ -18,34 +17,28 @@ const TeamList = ({ teams, gameStarted, showTeamResult, language, handleTeamToEd
             onPress={() => gameStarted ? showTeamResult(team) : handleTeamToEdit(team)}
             underlayColor="transparent"
           >
-            <ListItem
-              style={styles.team}
-              linearGradientProps={{
-                colors: ['#FF9800', '#F44336'],
-                start: { x: 1, y: 0 },
-                end: { x: 0.2, y: 0 },
-              }}
-              ViewComponent={LinearGradient}
-            >
+            <View style={styles.teamContainer}>
               {
                 gameStarted &&
                 <View style={styles.orderNumberCircle}>
                   <Text style={styles.orderNumber}>{index + 1}</Text>
                 </View>
               }
-              <ListItem.Content>
-                <ListItem.Title style={{ color: 'white', fontWeight: 'bold' }}>
-                  {team.name}
-                </ListItem.Title>
+              <View style={styles.teamInfo}>
+                <Text style={styles.teamName}>{team.name}</Text>
                 {
                   gameStarted &&
-                  <ListItem.Subtitle style={{ color: 'white', fontWeight: 'bold' }}>
+                  <Text style={styles.teamScore}>
                     {score[language]} {team.score}
-                  </ListItem.Subtitle>
+                  </Text>
                 }
-              </ListItem.Content>
-              <ListItem.Chevron color="white" />
-            </ListItem>
+              </View>
+              <Icon
+                name={gameStarted ? 'information-outline' : 'pencil'}
+                type="material-community"
+                size={26}
+              />
+            </View>
           </TouchableHighlight>
         )) : null}
     </ScrollView>
@@ -53,20 +46,43 @@ const TeamList = ({ teams, gameStarted, showTeamResult, language, handleTeamToEd
 };
 
 const styles = StyleSheet.create({
-  team: {
-    marginBottom: 10
+  teamContainer: {
+    backgroundColor: 'white',
+    borderRadius: 15,
+    elevation: 5,
+    padding: 10,
+    marginBottom: 10,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between'
+  },
+  teamName: {
+    color: 'black',
+    fontSize: 17,
+    fontWeight: 'bold'
+  },
+  teamInfo: {
+    flexDirection: 'column',
+    alignItems: 'flex-start',
+    flex: 1,
+    marginLeft: 20
+  },
+  teamScore: {
+    fontSize: 14,
+    color: 'black'
   },
   orderNumberCircle: {
     width: 20,
     height: 20,
     borderRadius: 30,
-    backgroundColor: 'white',
+    backgroundColor: 'silver',
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
   },
   orderNumber: {
-    fontWeight: 'bold'
+    fontWeight: 'bold',
+    color: 'black'
   }
 });
 

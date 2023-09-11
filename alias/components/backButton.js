@@ -9,7 +9,7 @@ export default function BackButton({ onPress }) {
       <Icon
         name="arrow-left"
         size={24}
-        color='white'
+        color='black'
       />
     </TouchableOpacity>
   );

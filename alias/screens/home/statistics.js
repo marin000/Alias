@@ -1,11 +1,10 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { connect } from 'react-redux';
-import { View, StyleSheet, ImageBackground, FlatList, TouchableHighlight, ActivityIndicator } from 'react-native';
+import { View, StyleSheet, FlatList, TouchableHighlight, ActivityIndicator } from 'react-native';
 import { Text } from '@rneui/themed';
 import { SettingsContext } from '../../utils/settings';
 import { statistics } from '../../constants/statisticsScreen';
 import { globalStyles } from '../../styles/global';
-import backgroundImage from '../../assets/blurred-background.jpeg';
 import BackButton from '../../components/backButton';
 import apiResults from '../../api/results';
 import TeamResult from '../../components/statisticsScreen.js/teamResult';
@@ -55,7 +54,7 @@ const Statistics = ({ userData, navigation }) => {
 	};
 
 	return (
-		<ImageBackground source={backgroundImage} style={globalStyles.mainContainer} resizeMode={'cover'}>
+		<View style={globalStyles.mainContainer} resizeMode={'cover'}>
 			<View>
 				<BackButton onPress={() => navigation.goBack()} />
 				<Text style={globalStyles.screenTitle}>{title[language]}</Text>
@@ -98,24 +97,18 @@ const Statistics = ({ userData, navigation }) => {
 					</View>
 				)}
 			</View>
-		</ImageBackground>
+		</View>
 	);
 }
 
 const styles = StyleSheet.create({
 	resultContainer: {
-		marginTop: 30
+		marginTop: 30,
+		marginBottom: 110
 	},
 	card: {
 		backgroundColor: 'white',
 		borderRadius: 15,
-		shadowColor: '#000',
-		shadowOffset: {
-			width: 0,
-			height: 2,
-		},
-		shadowOpacity: 0.25,
-		shadowRadius: 3.84,
 		elevation: 5,
 		padding: 10,
 		marginBottom: 20

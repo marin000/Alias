@@ -8,8 +8,11 @@ import { Provider } from 'react-redux';
 const theme = createTheme({
 	components: {
 		colors: {
-			primary: 'blue',
+			primary: '#2089dc',
 		},
+		Button: {
+			color: '#2089dc'
+		}
 	},
 });
 

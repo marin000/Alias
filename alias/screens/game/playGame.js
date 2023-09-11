@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect } from 'react';
-import { View, StyleSheet, ImageBackground, BackHandler } from 'react-native';
+import { View, StyleSheet, BackHandler } from 'react-native';
 import { Text, Button, Icon } from '@rneui/themed';
 import { connect } from 'react-redux';
 import { updateTeam, updateTeamIndex, updatePlayerExplains, updateMaxScoreReached, addOldWords } from '../../redux/actions';
@@ -7,12 +7,11 @@ import { useDispatch } from 'react-redux';
 import { SettingsContext } from '../../utils/settings';
 import { getRandomWord, teamWithHighestScore, updatePlayerTeamStatsDB, getWords, playSound } from '../../utils/helper';
 import { playGame } from '../../constants/playGameScreen';
-import backgroundImage from '../../assets/blurred-background.jpeg';
 import EndRoundDialog from '../../components/playGameScreen/endRoundDialog';
 import WinnerDialog from '../../components/playGameScreen/winnerDialog';
 import PauseDialog from '../../components/playGameScreen/pauseDialog';
 import { globalStyles } from '../../styles/global';
-import { showRewardedAd } from '../../utils/adService';
+import { showInterstitialAd } from '../../utils/adService';
 
 const PlayGame = ({ teams, currentTeamIndex, maxScoreReached, oldWords, updateTeam, userData, navigation }) => {
   const { language, timer, maxScore, gameSound } = useContext(SettingsContext);
@@ -53,6 +52,9 @@ const PlayGame = ({ teams, currentTeamIndex, maxScoreReached, oldWords, updateTe
     const backHandler = BackHandler.addEventListener('hardwareBackPress', handleBackButton);
 
     if (gameTimer > 0 && !paused) {
+      if (gameTimer === 10) {
+        playSound('lastSecPlay', gameSound);
+      }
       interval = setInterval(() => {
         setGameTimer((prevTimer) => prevTimer - 1);
       }, 1000);
@@ -68,7 +70,7 @@ const PlayGame = ({ teams, currentTeamIndex, maxScoreReached, oldWords, updateTe
   }, [gameTimer, paused]);
 
   const handleSave = async () => {
-    playSound('correct', gameSound);
+    await playSound('correct', gameSound);
     setCurrentWord((prevWord) => {
       const newWord = getRandomWord(gameWordList);
       setOldWordsArr((prevWords) => [...prevWords, prevWord]);
@@ -79,7 +81,7 @@ const PlayGame = ({ teams, currentTeamIndex, maxScoreReached, oldWords, updateTe
   };
 
   const handleSkip = async () => {
-    playSound('wrong', gameSound);
+    await playSound('wrong', gameSound);
     setSkippedWords((prevWords) => [...prevWords, currentWord]);
     setCurrentWord((prevWord) => {
       const newWord = getRandomWord(gameWordList);
@@ -127,7 +129,7 @@ const PlayGame = ({ teams, currentTeamIndex, maxScoreReached, oldWords, updateTe
         updatePlayerTeamStatsDB(highestScoreTeam, updatedTeams, userData, dispatch);
       }
     } else {
-      showRewardedAd();
+      showInterstitialAd();
       setEndDialog(false);
       navigation.navigate('NewGame');
     }
@@ -144,13 +146,13 @@ const PlayGame = ({ teams, currentTeamIndex, maxScoreReached, oldWords, updateTe
   }
 
   const handleCloseWinnerDialog = () => {
-    showRewardedAd();
+    showInterstitialAd();
     setWinnerDialog(false);
     navigation.navigate('NewGame');
   }
 
   return (
-    <ImageBackground source={backgroundImage} style={styles.container} resizeMode={'cover'}>
+    <View style={styles.container} resizeMode={'cover'}>
       <View style={styles.teamInfo}>
         <Text style={styles.teamNameText}>{currentTeam.name}</Text>
       </View>
@@ -161,13 +163,15 @@ const PlayGame = ({ teams, currentTeamIndex, maxScoreReached, oldWords, updateTe
         <View style={styles.skippedAnswersContainer}>
           <Text style={styles.skippedAnswersText}>{skippedAnswersTxt[language]}: {skippedAnswers}</Text>
         </View>
-        <Button
-          radius={'sm'}
-          type="solid"
-          onPress={() => handlePauseButton()}
-        >
-          <Icon name="pause" color="white" />
-        </Button>
+        {gameTimer > 10 &&
+          <Button
+            radius={'sm'}
+            type="solid"
+            onPress={() => handlePauseButton()}
+          >
+            <Icon name="pause" color="white" />
+          </Button>
+        }
       </View>
       <Text style={styles.word}>{currentWord}</Text>
       <View style={styles.timerContainer}>
@@ -177,16 +181,18 @@ const PlayGame = ({ teams, currentTeamIndex, maxScoreReached, oldWords, updateTe
         <Button
           containerStyle={styles.buttonSkip}
           title={buttonSkip[language]}
-          color='error'
+          color='#ff3d33'
           size='lg'
           onPress={handleSkip}
+          buttonStyle={globalStyles.roundButton}
         />
         <Button
           containerStyle={styles.buttonSave}
           title={buttonSave[language]}
-          color='success'
+          color='#439946'
           size='lg'
           onPress={handleSave}
+          buttonStyle={globalStyles.roundButton}
         />
       </View>
       {/* End round dialog */}
@@ -216,7 +222,7 @@ const PlayGame = ({ teams, currentTeamIndex, maxScoreReached, oldWords, updateTe
         language={language}
         winnerTeam={winnerTeam}
       />
-    </ImageBackground>
+    </View>
   )
 }
 
@@ -262,7 +268,7 @@ const styles = StyleSheet.create({
   teamNameText: {
     fontSize: 30,
     fontWeight: 'bold',
-    color: 'white'
+    color: 'black'
   },
   answersContainer: {
     flexDirection: 'row',
@@ -275,14 +281,14 @@ const styles = StyleSheet.create({
   },
   correctAnswersText: {
     fontSize: 20,
-    color: 'white'
+    color: 'black'
   },
   skippedAnswersContainer: {
     paddingRight: 15
   },
   skippedAnswersText: {
     fontSize: 20,
-    color: 'white'
+    color: 'black'
   }
 });
 

@@ -1,10 +1,9 @@
 import React, { useContext, useState, useRef, useEffect } from 'react';
-import { View, StyleSheet, ImageBackground, Alert } from 'react-native';
+import { View, StyleSheet, Alert } from 'react-native';
 import { Text, Card, Button } from '@rneui/themed';
 import { TextInput } from 'react-native-gesture-handler';
 import { SettingsContext } from '../../utils/settings';
 import { enterPin } from '../../constants/enterPinScreen';
-import backgroundImage from '../../assets/blurred-background.jpeg';
 import { globalStyles } from '../../styles/global';
 import BackButton from '../../components/backButton';
 import api from '../../api/players';
@@ -71,7 +70,7 @@ export default function EnterPin({ navigation }) {
   }
 
   return (
-    <ImageBackground source={backgroundImage} style={globalStyles.mainContainer} resizeMode={'cover'}>
+    <View style={globalStyles.mainContainer} resizeMode={'cover'}>
       <View>
         <BackButton onPress={() => navigation.goBack()} />
         <Text style={styles.title}>{title[language]}</Text>
@@ -105,7 +104,7 @@ export default function EnterPin({ navigation }) {
           </View>
         </Card>
       </View>
-    </ImageBackground >
+    </View >
   );
 }
 
@@ -135,7 +134,7 @@ const styles = StyleSheet.create({
   timerText: {
     textAlign: 'center',
     fontSize: 20,
-    color: 'white',
+    color: 'black',
     marginBottom: 10
   }
 });
