@@ -78,6 +78,13 @@ const resultsLogger = createLogger({
   transports: loggerTransports
 })
 
+const ratingsLogger = createLogger({
+  levels: customLevels.levels,
+  defaultMeta: { component: 'ratings' },
+  format: loggerFormat,
+  transports: loggerTransports
+})
+
 const simpleFormat = printf(({ level, message, timestamp }) => {
   return `${timestamp} ${level}: ${message}`
 })
@@ -101,5 +108,6 @@ module.exports = {
   simpleLogger: simpleLogger,
   logsLogger: logsLogger,
   emailLogger: emailLogger,
-  resultsLogger: resultsLogger
+  resultsLogger: resultsLogger,
+  ratingsLogger: ratingsLogger
 }

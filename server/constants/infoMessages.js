@@ -16,5 +16,7 @@ module.exports = {
   NO_PLAYER_EXISTS: "Player doesn't exists",
   NEW_RESULT: 'New result created.',
   GET_RESULTS: 'Successfully get all results.',
-  DELETE_RESULT: 'Result deleted successfully.'
+  DELETE_RESULT: 'Result deleted successfully.',
+  NEW_RATING: 'New rating created.',
+  GET_RATINGS: 'Successfully get all ratings.'
 }
