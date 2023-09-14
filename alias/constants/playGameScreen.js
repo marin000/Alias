@@ -38,5 +38,21 @@ export const playGame = {
 	winner: {
 		hr: 'Pobjednik:',
 		en: 'Winner:'
+	},
+	rateGame: {
+		hr: 'Ocijenite Igru',
+		en: 'Rate Game'
+	},
+	sendButton: {
+		hr: 'Pošalji',
+		en: 'Send'
+	},
+	commentTxt: {
+		hr: 'Ostavite komentar',
+		en: 'Leave a comment'
+	},
+	ratingFeedbackTxt: {
+		hr: 'Zahvaljujemo se na povratnim informacijama.',
+		en: 'Thank you for your feedback.'
 	}
 }

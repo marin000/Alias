@@ -6,10 +6,11 @@ import { newGame } from '../../constants/newGameScreen';
 import { globalStyles } from '../../styles/global';
 import cupImage from '../../assets/cup.jpeg';
 import CustomDialogHeader from '../customDialogHeader';
+import { Icon } from '@rneui/base';
 
-export default function WinnerDialog({ isVisible, onClose, language, winnerTeam }) {
+export default function WinnerDialog({ isVisible, onClose, handleRateGame, language, winnerTeam }) {
   const { closeButton } = newGame;
-  const { winner, finalScore } = playGame;
+  const { winner, finalScore, rateGame } = playGame;
 
   return (
     <Dialog overlayStyle={globalStyles.dialogContainer} isVisible={isVisible}>
@@ -27,6 +28,22 @@ export default function WinnerDialog({ isVisible, onClose, language, winnerTeam 
           title={closeButton[language]}
           onPress={onClose}
           buttonStyle={globalStyles.roundButton}
+        />
+        <Button
+          containerStyle={styles.ratingDialogButton}
+          type='outline'
+          title={rateGame[language]}
+          onPress={handleRateGame}
+          buttonStyle={globalStyles.roundButton}
+          icon={
+            <Icon
+              name="star-shooting"
+              type="material-community"
+              size={24}
+              style={globalStyles.addPlayerIcon}
+              color='#2089dc'
+            />
+          }
         />
       </ScrollView>
     </Dialog>
@@ -53,4 +70,9 @@ const styles = StyleSheet.create({
     ...globalStyles.dialogButton,
     width: 200
   },
+  ratingDialogButton: {
+    ...globalStyles.dialogButton,
+    width: 200,
+    marginTop: 0
+  }
 });

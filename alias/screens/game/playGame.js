@@ -10,6 +10,7 @@ import { playGame } from '../../constants/playGameScreen';
 import EndRoundDialog from '../../components/playGameScreen/endRoundDialog';
 import WinnerDialog from '../../components/playGameScreen/winnerDialog';
 import PauseDialog from '../../components/playGameScreen/pauseDialog';
+import RatingDialog from '../../components/playGameScreen/ratingDialog';
 import { globalStyles } from '../../styles/global';
 import { showInterstitialAd } from '../../utils/adService';
 
@@ -25,6 +26,7 @@ const PlayGame = ({ teams, currentTeamIndex, maxScoreReached, oldWords, updateTe
   const [endDialog, setEndDialog] = useState(false);
   const [paused, setPaused] = useState(false);
   const [winnerDialog, setWinnerDialog] = useState(false);
+  const [ratingDialog, setRatingDialog] = useState(false);
   const [winnerTeam, setWinnerTeam] = useState('');
   const [oldWordsArr, setOldWordsArr] = useState([]);
   const [skippedWords, setSkippedWords] = useState([]);
@@ -146,8 +148,17 @@ const PlayGame = ({ teams, currentTeamIndex, maxScoreReached, oldWords, updateTe
   }
 
   const handleCloseWinnerDialog = () => {
-    showInterstitialAd();
     setWinnerDialog(false);
+    navigation.navigate('NewGame');
+  }
+
+  const handleOpenRatingDialog = () => {
+    setWinnerDialog(false);
+    setRatingDialog(true);
+  }
+
+  const handleCloseRatingDialog = () => {
+    setRatingDialog(false);
     navigation.navigate('NewGame');
   }
 
@@ -219,8 +230,15 @@ const PlayGame = ({ teams, currentTeamIndex, maxScoreReached, oldWords, updateTe
       <WinnerDialog
         isVisible={winnerDialog}
         onClose={handleCloseWinnerDialog}
+        handleRateGame={handleOpenRatingDialog}
         language={language}
         winnerTeam={winnerTeam}
+      />
+      {/* Rating Dialog */}
+      <RatingDialog
+        isVisible={ratingDialog}
+        onClose={handleCloseRatingDialog}
+        language={language}
       />
     </View>
   )

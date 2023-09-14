@@ -24,7 +24,6 @@ const Home = ({ teams, userData, navigation }) => {
 		"luckiestGuy-regular": require("../../assets/fonts/LuckiestGuy-Regular.ttf")
 	});
 	const dispatch = useDispatch();
-
 	useEffect(() => {
 		const checkToken = async () => {
 			try {
@@ -42,6 +41,7 @@ const Home = ({ teams, userData, navigation }) => {
 						})
 						.catch((err) => {
 							console.log(err.response.data);
+							setLoading(false);
 						});
 				} else {
 					setLoading(false);
