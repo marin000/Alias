@@ -155,5 +155,9 @@ export const globalStyles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'flex-end',
     marginBottom: 10,
+  },
+  cardContainer: {
+    borderRadius: 15,
+    elevation: 5
   }
 });

@@ -1,5 +1,5 @@
-import React, { useContext, useState } from 'react';
-import { View, StyleSheet, Alert } from 'react-native';
+import React, { useContext, useState, useEffect } from 'react';
+import { View, StyleSheet, Alert, BackHandler } from 'react-native';
 import { Text, Card, Button } from '@rneui/themed';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { Formik } from 'formik';
@@ -15,6 +15,17 @@ export default function ForgotPassword({ navigation }) {
   const { language } = useContext(SettingsContext);
   const { title, subtitle, emailPlaceholder, invalidEmail, sendEmailButton, sentEmailAlert } = forgotPassword;
   const [invalidEmailError, setInvalidEmailError] = useState('');
+
+  const handleBackButton = () => {
+    navigation.goBack();
+    return true;
+  };
+  useEffect(() => {
+    BackHandler.addEventListener('hardwareBackPress', handleBackButton);
+    return () => {
+      BackHandler.removeEventListener('hardwareBackPress', handleBackButton);
+    };
+  }, [handleBackButton]);
 
   const handleResetPassword = (values) => {
     setInvalidEmailError('');
@@ -44,7 +55,7 @@ export default function ForgotPassword({ navigation }) {
         <BackButton onPress={() => navigation.goBack()} />
         <Text style={styles.title}>{title[language]}</Text>
         <Text style={styles.subtitle}>{subtitle[language]}</Text>
-        <Card>
+        <Card containerStyle={globalStyles.cardContainer}>
           <Formik
             initialValues={{ email: '' }}
             validationSchema={ForgotPasswordSchema(language)}

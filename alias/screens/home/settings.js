@@ -50,7 +50,7 @@ export default function Settings({ navigation }) {
             size={30}
           />
         </TouchableOpacity>
-        <Card>
+        <Card containerStyle={globalStyles.cardContainer}>
           <View style={styles.radioContainer}>
             <View style={styles.radio}>
               <Image

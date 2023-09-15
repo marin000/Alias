@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import {
   updateUser,
@@ -9,7 +9,7 @@ import {
 } from '../../redux/actions';
 import { useDispatch } from 'react-redux';
 import { storeToken } from '../../utils/auth';
-import { View, StyleSheet, TouchableOpacity, Alert } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, Alert, BackHandler } from 'react-native';
 import { Text, Card, Button } from '@rneui/themed';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { Formik } from 'formik';
@@ -31,6 +31,17 @@ const Login = ({ teams, navigation }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [invalidLoginError, setInvalidLoginError] = useState('');
   const dispatch = useDispatch();
+
+  const handleBackButton = () => {
+    navigation.navigate('Home');
+    return true;
+  };
+  useEffect(() => {
+    BackHandler.addEventListener('hardwareBackPress', handleBackButton);
+    return () => {
+      BackHandler.removeEventListener('hardwareBackPress', handleBackButton);
+    };
+  }, [handleBackButton]);
 
   const togglePasswordVisibility = () => {
     setShowPassword((prevShowPassword) => !prevShowPassword);
@@ -86,7 +97,7 @@ const Login = ({ teams, navigation }) => {
       <View>
         <BackButton onPress={() => navigation.navigate('Home')} />
         <Text style={styles.title}>{signIn[language]}</Text>
-        <Card>
+        <Card containerStyle={globalStyles.cardContainer}>
           <Formik
             initialValues={{ email: '', password: '' }}
             validationSchema={LoginSchema(language)}

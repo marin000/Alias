@@ -1,5 +1,5 @@
-import React, { useContext, useState } from 'react';
-import { View, StyleSheet, TouchableOpacity } from 'react-native';
+import React, { useContext, useState, useEffect } from 'react';
+import { View, StyleSheet, TouchableOpacity, BackHandler } from 'react-native';
 import { Text, Card, Button } from '@rneui/themed';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { Formik } from 'formik';
@@ -26,6 +26,17 @@ export default function Register({ navigation }) {
   const [showRepeatPassword, setShowRepeatPassword] = useState(false);
   const [duplicateEmailError, setDuplicateEmailError] = useState('');
   const [duplicateNameError, setDuplicateNameError] = useState('');
+
+  const handleBackButton = () => {
+    navigation.goBack();
+    return true;
+  };
+  useEffect(() => {
+    BackHandler.addEventListener('hardwareBackPress', handleBackButton);
+    return () => {
+      BackHandler.removeEventListener('hardwareBackPress', handleBackButton);
+    };
+  }, [handleBackButton]);
 
   const togglePasswordVisibility = () => {
     setShowPassword((prevShowPassword) => !prevShowPassword);
@@ -66,7 +77,7 @@ export default function Register({ navigation }) {
       <View>
         <BackButton onPress={() => navigation.goBack()} />
         <Text style={styles.title}>{registerTitle[language]}</Text>
-        <Card>
+        <Card containerStyle={globalStyles.cardContainer}>
           <Formik
             initialValues={{ name: '', email: '', password: '', repeatPassword: '' }}
             validationSchema={RegisterSchema(language)}

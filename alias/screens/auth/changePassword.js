@@ -1,5 +1,5 @@
-import React, { useState, useContext } from 'react';
-import { View, StyleSheet, TouchableOpacity, Alert } from 'react-native';
+import React, { useState, useContext, useEffect } from 'react';
+import { View, StyleSheet, TouchableOpacity, Alert, BackHandler } from 'react-native';
 import { Text, Card, Button } from '@rneui/themed';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { connect } from 'react-redux';
@@ -29,6 +29,17 @@ const ChangePassword = ({ userData, navigation }) => {
   const [showRepeatPassword, setShowRepeatPassword] = useState(false);
   const [invalidCurrentPass, setInvalidCurrentPass] = useState('');
   const dispatch = useDispatch();
+
+  const handleBackButton = () => {
+    navigation.navigate('Profile');
+    return true;
+  };
+  useEffect(() => {
+    BackHandler.addEventListener('hardwareBackPress', handleBackButton);
+    return () => {
+      BackHandler.removeEventListener('hardwareBackPress', handleBackButton);
+    };
+  }, [handleBackButton]);
 
   const toggleCurrentPasswordVisibility = () => {
     setShowCurrentPassword((prevShowCurrentPassword) => !prevShowCurrentPassword);
@@ -72,7 +83,7 @@ const ChangePassword = ({ userData, navigation }) => {
       <View>
         <BackButton onPress={() => navigation.navigate('Profile')} />
         <Text style={styles.title}>{title[language]}</Text>
-        <Card>
+        <Card containerStyle={globalStyles.cardContainer}>
           <Formik
             initialValues={{ oldPassword: '', password: '', repeatPassword: '' }}
             validationSchema={ChangePasswordSchema(language)}

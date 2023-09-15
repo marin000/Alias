@@ -269,6 +269,7 @@ const Profile = ({ navigation, userData, teams }) => {
 
 const styles = StyleSheet.create({
   card: {
+    ...globalStyles.cardContainer,
     padding: 30,
     marginTop: 30
   },

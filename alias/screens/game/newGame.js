@@ -1,5 +1,5 @@
-import React, { useContext, useState } from 'react';
-import { View, StyleSheet, Alert } from 'react-native';
+import React, { useContext, useState, useEffect } from 'react';
+import { View, StyleSheet, Alert, BackHandler } from 'react-native';
 import { Text, Button } from '@rneui/themed';
 import { connect } from 'react-redux';
 import {
@@ -38,6 +38,17 @@ const NewGame = ({ teams, currentTeamIndex, gameStarted, maxScoreReached, addTea
   const [showTeamResultDialog, setShowTeamResultDialog] = useState(false);
   const [randomTeamDialog, setRandomTeamDialog] = useState(false);
   const dispatch = useDispatch();
+
+  const handleBackButton = () => {
+    navigation.navigate('Home');
+    return true; 
+  };
+  useEffect(() => {
+    BackHandler.addEventListener('hardwareBackPress', handleBackButton);
+    return () => {
+      BackHandler.removeEventListener('hardwareBackPress', handleBackButton);
+    };
+  }, [handleBackButton]);
 
   const handleTeamToEdit = (team) => {
     setSelectedTeam(team);

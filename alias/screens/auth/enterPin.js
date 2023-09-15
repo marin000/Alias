@@ -1,5 +1,5 @@
 import React, { useContext, useState, useRef, useEffect } from 'react';
-import { View, StyleSheet, Alert } from 'react-native';
+import { View, StyleSheet, Alert, BackHandler } from 'react-native';
 import { Text, Card, Button } from '@rneui/themed';
 import { TextInput } from 'react-native-gesture-handler';
 import { SettingsContext } from '../../utils/settings';
@@ -19,6 +19,10 @@ export default function EnterPin({ navigation }) {
   const playerEmail = navigation.getParam('email');
 
   useEffect(() => {
+    const handleBackButton = () => {
+      return true;
+    };
+    const backHandler = BackHandler.addEventListener('hardwareBackPress', handleBackButton);
     const timer = setInterval(() => {
       if (remainingTime > 0) {
         setRemainingTime(remainingTime - 1);
@@ -30,6 +34,7 @@ export default function EnterPin({ navigation }) {
 
     return () => {
       clearInterval(timer);
+      backHandler.remove();
     };
   }, [remainingTime]);
 
@@ -72,7 +77,6 @@ export default function EnterPin({ navigation }) {
   return (
     <View style={globalStyles.mainContainer} resizeMode={'cover'}>
       <View>
-        <BackButton onPress={() => navigation.goBack()} />
         <Text style={styles.title}>{title[language]}</Text>
         <Text style={styles.timerText}>
           {remainingTime > 0 ?
@@ -80,7 +84,7 @@ export default function EnterPin({ navigation }) {
             : timerExpiredTxt[language]
           }
         </Text>
-        <Card>
+        <Card containerStyle={globalStyles.cardContainer}>
           <View style={globalStyles.form}>
             <View style={styles.pinContainer}>
               {pinDigits.map((digit, index) => (

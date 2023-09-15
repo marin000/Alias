@@ -14,7 +14,7 @@ export default function HowToPlay({ navigation }) {
 			<View>
 				<BackButton onPress={() => navigation.goBack()} />
 				<Text style={globalStyles.screenTitle}>{title[language]}</Text>
-				<Card>
+				<Card containerStyle={globalStyles.cardContainer}>
 					<Text style={styles.instructions}>{instructions[language]}</Text>
 				</Card>
 			</View>

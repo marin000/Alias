@@ -1,5 +1,5 @@
-import React, { useState, useContext } from 'react';
-import { View, StyleSheet, TouchableOpacity, Alert } from 'react-native';
+import React, { useState, useContext, useEffect } from 'react';
+import { View, StyleSheet, TouchableOpacity, Alert, BackHandler } from 'react-native';
 import { Text, Card, Button } from '@rneui/themed';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { Formik } from 'formik';
@@ -16,6 +16,16 @@ export default function ResetPassword({ navigation }) {
   const [showPassword, setShowPassword] = useState(false);
   const [showRepeatPassword, setShowRepeatPassword] = useState(false);
   const playerEmail = navigation.getParam('email');
+
+  useEffect(() => {
+    const handleBackButton = () => {
+      return true;
+    };
+    const backHandler = BackHandler.addEventListener('hardwareBackPress', handleBackButton);
+    return () => {
+      backHandler.remove();
+    };
+  }, []);
 
   const togglePasswordVisibility = () => {
     setShowPassword((prevShowPassword) => !prevShowPassword);
@@ -46,7 +56,7 @@ export default function ResetPassword({ navigation }) {
     <View style={globalStyles.mainContainer} resizeMode={'cover'}>
       <View>
         <Text style={styles.title}>{title[language]}</Text>
-        <Card>
+        <Card containerStyle={globalStyles.cardContainer}>
           <Formik
             initialValues={{ password: '', repeatPassword: '' }}
             validationSchema={ResetPasswordSchema(language)}
