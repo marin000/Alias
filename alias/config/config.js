@@ -1,12 +1,15 @@
-import { CLOUDINARY_NAME, CLOUDINARY_FETCH_URL, CLOUDINARY_UPLOAD_PRESET } from '@env'
+import { CLOUDINARY_NAME, CLOUDINARY_FETCH_URL, CLOUDINARY_UPLOAD_PRESET, ADMIN_EMAIL } from '@env'
 import { errorMsg } from '../constants/errorMessages';
 
 const checkEnvVariables = () => {
-  const { missingCloudinaryName, 
-    missingCloudinaryFetchUrl, 
-    missingCloudinaryUploadPreset } = errorMsg;
+  const { missingCloudinaryName,
+    missingCloudinaryFetchUrl,
+    missingCloudinaryUploadPreset,
+    missingAdminEmail } = errorMsg;
 
-  if (!CLOUDINARY_NAME) {
+  if (!ADMIN_EMAIL) {
+    throw new Error(missingAdminEmail)
+  } else if (!CLOUDINARY_NAME) {
     throw new Error(missingCloudinaryName);
   } else if (!CLOUDINARY_UPLOAD_PRESET) {
     throw new Error(missingCloudinaryUploadPreset);
@@ -18,7 +21,8 @@ const checkEnvVariables = () => {
 const config = {
   cloudinaryName: CLOUDINARY_NAME,
   cloudinaryUploadPreset: CLOUDINARY_UPLOAD_PRESET,
-  cloudinaryFetchUrl: CLOUDINARY_FETCH_URL
+  cloudinaryFetchUrl: CLOUDINARY_FETCH_URL,
+  adminEmail: ADMIN_EMAIL
 };
 
 checkEnvVariables();

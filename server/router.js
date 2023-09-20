@@ -1,4 +1,5 @@
 const express = require('express')
+const { checkInvitation } = require('./service/apiSecurity')
 const playerController = require('./controllers/players')
 const teamController = require('./controllers/teams')
 const logController = require('./controllers/logs')
@@ -10,6 +11,8 @@ const teamValidator = require('./validators/teamsValidator')
 const logerValidator = require('./validators/loggerValidator')
 const resultValidator = require('./validators/resultValidator')
 const router = express.Router()
+
+router.use(checkInvitation())
 
 router.post('/api/player', playerValidator.validate('create'), playerController.create)
 router.post('/api/player/login', playerController.getPlayer)

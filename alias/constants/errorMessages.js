@@ -5,5 +5,6 @@ export const errorMsg = {
   ipInfo: 'Error fetching IP info:',
   missingCloudinaryName: 'Missing cloudinary name',
   missingCloudinaryFetchUrl: 'Missing cloudinary fetch url',
-  missingCloudinaryUploadPreset: 'Missing cloudinary upload preset'
+  missingCloudinaryUploadPreset: 'Missing cloudinary upload preset',
+  missingAdminEmail: 'Missing admin email',
 }
