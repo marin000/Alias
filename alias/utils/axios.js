@@ -1,14 +1,12 @@
-import { Platform } from 'react-native';
 import axios from 'axios';
-
-const baseURL =
-  Platform.OS === 'android' ? 'http://172.16.100.151:3000' : 'http://localhost:3000';
+import config from '../config/config';
 
 const instance = axios.create({
-  baseURL,
+  baseURL: config.backendServer,
   timeout: 5000,
   headers: {
     'Content-Type': 'application/json',
+    'Invitation': config.adminEmail
   },
 });
 
