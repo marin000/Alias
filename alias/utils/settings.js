@@ -1,5 +1,6 @@
 import React, { createContext, useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { errorMsg } from '../constants/errorMessages';
 
 export const SettingsContext = createContext();
 
@@ -8,6 +9,12 @@ export const SettingsProvider = ({ children }) => {
 	const [timer, setTimer] = useState('60');
 	const [maxScore, setMaxScore] = useState('60');
 	const [gameSound, setGameSound] = useState(true);
+	const {
+		retrievingSettings,
+		updatingGameSound,
+		updatingLanguage,
+		updatingMaxScore,
+		updatingTimer } = errorMsg;
 
 	useEffect(() => {
 		const retrieveSettings = async () => {
@@ -29,7 +36,7 @@ export const SettingsProvider = ({ children }) => {
 					setGameSound(storedGameSound);
 				}
 			} catch (error) {
-				console.log('Error retrieving settings from AsyncStorage:', error);
+				console.log(retrievingSettings, error);
 			}
 		};
 		retrieveSettings();
@@ -40,7 +47,7 @@ export const SettingsProvider = ({ children }) => {
 			setLanguage(newLanguage);
 			await AsyncStorage.setItem('language', newLanguage);
 		} catch (error) {
-			console.log('Error updating language in AsyncStorage:', error);
+			console.log(updatingLanguage, error);
 		}
 	};
 
@@ -49,7 +56,7 @@ export const SettingsProvider = ({ children }) => {
 			setTimer(newTimer);
 			await AsyncStorage.setItem('timer', newTimer);
 		} catch (error) {
-			console.log('Error updating timer in AsyncStorage:', error);
+			console.log(updatingTimer, error);
 		}
 	};
 
@@ -58,7 +65,7 @@ export const SettingsProvider = ({ children }) => {
 			setMaxScore(newMaxScore);
 			await AsyncStorage.setItem('maxScore', newMaxScore);
 		} catch (error) {
-			console.log('Error updating maxScore in AsyncStorage:', error);
+			console.log(updatingMaxScore, error);
 		}
 	};
 
@@ -67,7 +74,7 @@ export const SettingsProvider = ({ children }) => {
 			setGameSound(newSound);
 			await AsyncStorage.setItem('gameSound', newSound.toString());
 		} catch (error) {
-			console.log('Error updating game sound in AsyncStorage:', error);
+			console.log(updatingGameSound, error);
 		}
 	};
 
