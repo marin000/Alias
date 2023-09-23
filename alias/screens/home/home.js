@@ -43,11 +43,11 @@ const Home = ({ teams, userData, navigation }) => {
 							console.log(err.response.data);
 							setLoading(false);
 						});
-				} else {
-					setLoading(false);
 				}
+				setLoading(false);
 			} catch (error) {
 				console.log(error);
+				setLoading(false);
 			}
 		};
 		checkToken();

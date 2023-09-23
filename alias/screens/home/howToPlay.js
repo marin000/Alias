@@ -8,7 +8,7 @@ import BackButton from '../../components/backButton';
 
 export default function HowToPlay({ navigation }) {
 	const { language } = useContext(SettingsContext);
-	const { title, instructions } = howToPlay;
+	const { title, instructions, logedInInstructions } = howToPlay;
 	return (
 		<View style={globalStyles.mainContainer} resizeMode={'cover'}>
 			<View>
@@ -16,6 +16,7 @@ export default function HowToPlay({ navigation }) {
 				<Text style={globalStyles.screenTitle}>{title[language]}</Text>
 				<Card containerStyle={globalStyles.cardContainer}>
 					<Text style={styles.instructions}>{instructions[language]}</Text>
+					<Text style={styles.instructions}>{logedInInstructions[language]}</Text>
 				</Card>
 			</View>
 		</View>
@@ -24,7 +25,8 @@ export default function HowToPlay({ navigation }) {
 
 const styles = StyleSheet.create({
 	instructions: {
-		fontSize: 18
+		fontSize: 18,
+		marginBottom: 20
 	}
 });
 
