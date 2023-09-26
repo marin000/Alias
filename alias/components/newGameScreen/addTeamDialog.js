@@ -1,5 +1,5 @@
 import React from 'react';
-import { ScrollView, View, TouchableHighlight } from 'react-native';
+import { ScrollView, View } from 'react-native';
 import { Button, Dialog, Text } from '@rneui/themed';
 import { Formik } from 'formik';
 import { TextInput } from 'react-native-gesture-handler';
@@ -70,6 +70,7 @@ export default function AddTeamDialog({ isVisible, onClose, teams, language, onA
                   onChangeText={props.handleChange(`players.${index}`)}
                   value={player}
                   editable={!(index === 0 && userData && teams.length === 0)}
+                  autoFocus={true}
                 />
               ))}
               <Button

@@ -68,6 +68,7 @@ export default function RandomTeamDialog({ isVisible, onClose, language, onAddAl
                     onChangeText={props.handleChange(`players.${index}`)}
                     value={player}
                     editable={!(index === 0 && userData)}
+                    autoFocus={true}
                   />
                 ))}
                 <Button

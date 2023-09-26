@@ -5,7 +5,6 @@ import { TextInput } from 'react-native-gesture-handler';
 import { SettingsContext } from '../../utils/settings';
 import { enterPin } from '../../constants/enterPinScreen';
 import { globalStyles } from '../../styles/global';
-import BackButton from '../../components/backButton';
 import api from '../../api/players';
 
 export default function EnterPin({ navigation }) {

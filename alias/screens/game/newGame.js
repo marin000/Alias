@@ -61,7 +61,7 @@ const NewGame = ({ teams, currentTeamIndex, gameStarted, maxScoreReached, addTea
   }
 
   const handleDeleteTeam = () => {
-    if (userData.saveTeamResult) {
+    if (userData && userData.saveTeamResult) {
       dispatch(updateUser({ ...userData, saveTeamResult: false }));
     }
     dispatch(deleteTeam(selectedTeam));
