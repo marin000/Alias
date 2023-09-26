@@ -12,6 +12,7 @@ import WinnerDialog from '../../components/playGameScreen/winnerDialog';
 import PauseDialog from '../../components/playGameScreen/pauseDialog';
 import RatingDialog from '../../components/playGameScreen/ratingDialog';
 import { globalStyles } from '../../styles/global';
+import _ from 'lodash';
 import { showInterstitialAd } from '../../utils/adService';
 
 const PlayGame = ({ teams, currentTeamIndex, maxScoreReached, oldWords, updateTeam, userData, navigation }) => {
@@ -30,6 +31,7 @@ const PlayGame = ({ teams, currentTeamIndex, maxScoreReached, oldWords, updateTe
   const [winnerTeam, setWinnerTeam] = useState('');
   const [oldWordsArr, setOldWordsArr] = useState([]);
   const [skippedWords, setSkippedWords] = useState([]);
+  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
 
   const dispatch = useDispatch();
   let gameWordList = getWords(language, oldWords);
@@ -71,29 +73,39 @@ const PlayGame = ({ teams, currentTeamIndex, maxScoreReached, oldWords, updateTe
     };
   }, [gameTimer, paused]);
 
-  const handleSave = async () => {
-    await playSound('correct', gameSound);
-    setCurrentWord((prevWord) => {
-      const newWord = getRandomWord(gameWordList);
-      setOldWordsArr((prevWords) => [...prevWords, prevWord]);
-      gameWordList = gameWordList.filter((word) => word !== newWord);
-      return newWord;
-    });
-    setCorrectAnswers(correctAnswers + 1);
-  };
+  const playSoundDebounced = _.debounce(async (soundName) => {
+    setIsButtonDisabled(false);
+    await playSound(soundName, gameSound);
+  }, 400);
+
+  const handleSave = () => {
+    if (!isButtonDisabled) {
+      setIsButtonDisabled(true);
+      playSoundDebounced('correct');
+      setCurrentWord((prevWord) => {
+        const newWord = getRandomWord(gameWordList);
+        setOldWordsArr((prevWords) => [...prevWords, prevWord]);
+        gameWordList = gameWordList.filter((word) => word !== newWord);
+        return newWord;
+      });
+      setCorrectAnswers(correctAnswers + 1);
+    }
+  }
 
   const handleSkip = async () => {
-    await playSound('wrong', gameSound);
-    setSkippedWords((prevWords) => [...prevWords, currentWord]);
-    setCurrentWord((prevWord) => {
-      const newWord = getRandomWord(gameWordList);
-      setOldWordsArr((prevWords) => [...prevWords, prevWord]);
-      gameWordList = gameWordList.filter((word) => word !== newWord);
-      return newWord;
-    });
-    setSkippedAnswers(skippedAnswers + 1);
-  };
-
+    if (!isButtonDisabled) {
+      setIsButtonDisabled(true);
+      playSoundDebounced('wrong');
+      setSkippedWords((prevWords) => [...prevWords, currentWord]);
+      setCurrentWord((prevWord) => {
+        const newWord = getRandomWord(gameWordList);
+        setOldWordsArr((prevWords) => [...prevWords, prevWord]);
+        gameWordList = gameWordList.filter((word) => word !== newWord);
+        return newWord;
+      });
+      setSkippedAnswers(skippedAnswers + 1);
+    }
+  }
   const handleCloseEndDialog = (selectedWordsCount, unselectedWordsCount) => {
     let maxScoreFlag = false;
     const newScore = currentTeam.score + selectedWordsCount - unselectedWordsCount;
@@ -195,6 +207,9 @@ const PlayGame = ({ teams, currentTeamIndex, maxScoreReached, oldWords, updateTe
           color='#ff3d33'
           size='lg'
           onPress={handleSkip}
+          disabled={isButtonDisabled}
+          disabledStyle={{ backgroundColor: '#ff3d33' }}
+          disabledTitleStyle={{ color: 'white' }}
           buttonStyle={globalStyles.roundButton}
         />
         <Button
@@ -203,6 +218,9 @@ const PlayGame = ({ teams, currentTeamIndex, maxScoreReached, oldWords, updateTe
           color='#439946'
           size='lg'
           onPress={handleSave}
+          disabled={isButtonDisabled}
+          disabledStyle={{ backgroundColor: '#439946' }}
+          disabledTitleStyle={{ color: 'white' }}
           buttonStyle={globalStyles.roundButton}
         />
       </View>
