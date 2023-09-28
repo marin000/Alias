@@ -211,24 +211,25 @@ const playSound = async (soundType, soundPermission) => {
     switch (soundType) {
       case 'correct':
         sound = (await Audio.Sound.createAsync(require('../assets/sounds/correct.wav'))).sound;
-        await sound.playAsync();
         break;
       case 'wrong':
         sound = (await Audio.Sound.createAsync(require('../assets/sounds/wrong.mp3'))).sound;
-        await sound.playAsync();
         break;
       case 'turnOnOff':
         sound = (await Audio.Sound.createAsync(require('../assets/sounds/soundOn.mp3'))).sound;
-        await sound.playAsync();
         break;
       case 'lastSecPlay':
         sound = (await Audio.Sound.createAsync(require('../assets/sounds/clock-10-sec.wav'))).sound;
-        await sound.playAsync();
         break;
       default:
         break;
     }
-    return sound;
+    await sound.playAsync();
+    let status = await sound.getStatusAsync();
+    while (status.isPlaying) {
+      status = await sound.getStatusAsync();
+    }
+    sound.unloadAsync();
   } catch (error) {
     console.log(error);
   }

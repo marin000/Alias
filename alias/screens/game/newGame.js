@@ -30,7 +30,7 @@ import { showRewardedAd } from '../../utils/adService';
 
 const NewGame = ({ teams, currentTeamIndex, gameStarted, maxScoreReached, addTeam, updateTeam, deleteTeam, gameStartEnd, resetPlayersScore, userData, navigation }) => {
   const { language, maxScore } = useContext(SettingsContext);
-  const { title, newTeam, buttonStart, targetResultTxt, headerTitle, newGameSameTeamsButton, createRandomTeams, saveAsMyTeam, saveAsMyTeamAlert, importMyTeam } = newGame;
+  const { title, newTeam, buttonStart, buttonContinue, targetResultTxt, headerTitle, newGameSameTeamsButton, createRandomTeams, saveAsMyTeam, saveAsMyTeamAlert, importMyTeam } = newGame;
   const [addTeamDialog, setAddTeamDialog] = useState(false);
   const [selectedTeam, setSelectedTeam] = useState(null);
   const [editTeamDialog, setEditTeamDialog] = useState(false);
@@ -205,7 +205,7 @@ const NewGame = ({ teams, currentTeamIndex, gameStarted, maxScoreReached, addTea
             teams.length >= 2 && (!maxScoreReached || (maxScoreReached && currentTeamIndex !== 0)) &&
             <Button
               containerStyle={globalStyles.buttonSaveTeam}
-              title={buttonStart[language]}
+              title={gameStarted ? buttonContinue[language] : buttonStart[language]}
               color='#439946'
               onPress={() => setPreStartDialog(true)}
               buttonStyle={globalStyles.roundButton}

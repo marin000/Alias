@@ -73,10 +73,10 @@ const PlayGame = ({ teams, currentTeamIndex, maxScoreReached, oldWords, updateTe
     };
   }, [gameTimer, paused]);
 
-  const playSoundDebounced = _.debounce(async (soundName) => {
+  const playSoundDebounced = _.debounce((soundName) => {
     setIsButtonDisabled(false);
-    await playSound(soundName, gameSound);
-  }, 400);
+    playSound(soundName, gameSound);
+  }, 270);
 
   const handleSave = () => {
     if (!isButtonDisabled) {

@@ -39,6 +39,10 @@ export const newGame = {
 		hr: 'Pokreni Igru',
 		en: 'Start Game'
 	},
+	buttonContinue: {
+		hr: 'Nastavi',
+		en: 'Continue'
+	},
 	alertTeam: {
 		hr: 'Ime tima je obavezno!',
 		en: 'Team name is required!'
