@@ -32,7 +32,7 @@ export const playGame = {
 		en: 'Continue'
 	},
 	explains: {
-		hr: 'Objasnjava:',
+		hr: 'Objašnjava:',
 		en: 'Explains:'
 	},
 	winner: {

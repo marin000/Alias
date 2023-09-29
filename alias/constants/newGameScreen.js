@@ -8,11 +8,11 @@ export const newGame = {
 		en: 'Teams'
 	},
 	newTeam: {
-		hr: 'Novi Tim',
+		hr: 'Novi tim',
 		en: 'New Team'
 	},
 	teamInput: {
-		hr: 'Ime Tima',
+		hr: 'Ime tima',
 		en: 'Team Name'
 	},
 	playerInput: {
