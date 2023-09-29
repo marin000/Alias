@@ -193,9 +193,9 @@ const getWords = (language, oldWords) => {
   try {
     switch (language) {
       case 'hr':
-        return require('../assets/words/hr.json').filter(word => !oldWords.includes(word));
+        return require('../assets/words/hr.json').filter(word => !oldWords.some(oldWord => oldWord.toLowerCase() === word.toLowerCase()));
       case 'en':
-        return require('../assets/words/en.json').filter(word => !oldWords.includes(word));
+        return require('../assets/words/en.json').filter(word => !oldWords.some(oldWord => oldWord.toLowerCase() === word.toLowerCase()));
       default:
         break;
     }
