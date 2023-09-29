@@ -15,6 +15,10 @@ export const globalStyles = StyleSheet.create({
     borderRadius: 6,
     marginBottom: 18
   },
+  playerInputContainer: {
+    flexDirection: 'row',
+    alignItems: 'center'
+  },
   playerInput: {
     borderWidth: 1,
     borderColor: '#ddd',

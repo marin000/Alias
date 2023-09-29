@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ScrollView, View, StyleSheet } from 'react-native';
+import { ScrollView, View, StyleSheet, TouchableOpacity } from 'react-native';
 import { Button, Dialog, Text, Icon } from '@rneui/themed';
 import { Formik } from 'formik';
 import { TextInput } from 'react-native-gesture-handler';
@@ -36,15 +36,16 @@ export default function RandomTeamDialog({ isVisible, onClose, language, onAddAl
   const handleCreateNewTeamsAgain = () => {
     setRandomTeams([]);
     setShowTeamsDialog(false);
+    onClose();
   }
 
   return (
     <Dialog overlayStyle={globalStyles.dialogContainer} isVisible={isVisible} onBackdropPress={onClose}>
-      <CustomDialogHeader onClose={onClose} />
+      <CustomDialogHeader onClose={showTeamsDialog ? handleCreateNewTeamsAgain : onClose} />
       <ScrollView keyboardShouldPersistTaps='handled'>
         {!showTeamsDialog ?
           <Formik
-            initialValues={{ numberOfTeams: '', players: userData ? [userData.name] : [] }}
+            initialValues={{ numberOfTeams: '', players: userData ? [userData.name, '', '', ''] : ['', '', '', ''] }}
             onSubmit={handleGenerateRandomTeams}
           >
             {(props) => (
@@ -61,22 +62,38 @@ export default function RandomTeamDialog({ isVisible, onClose, language, onAddAl
                   maxLength={2}
                 />
                 {props.values.players.map((player, index) => (
-                  <TextInput
-                    key={index}
-                    style={globalStyles.playerInput}
-                    placeholder={`${playerInput[language]} ${index + 1}`}
-                    onChangeText={props.handleChange(`players.${index}`)}
-                    value={player}
-                    editable={!(index === 0 && userData)}
-                    autoFocus={true}
-                  />
+                  <View style={globalStyles.playerInputContainer} key={index}>
+                    <TextInput
+                      style={index > 3 ? { ...globalStyles.playerInput, width: '90%' } : { ...globalStyles.playerInput, width: '100%' }}
+                      placeholder={`${playerInput[language]} ${index + 1}`}
+                      onChangeText={props.handleChange(`players.${index}`)}
+                      value={player}
+                      editable={!(index === 0 && userData)}
+                      autoFocus={true}
+                    />
+                    {index > 3 &&
+                      <TouchableOpacity
+                        onPress={() => {
+                          const updatedPlayers = [...props.values.players];
+                          updatedPlayers.splice(index, 1);
+                          props.setFieldValue('players', updatedPlayers);
+                        }}
+                        style={{ marginLeft: 10 }}
+                      >
+                        <Text style={{ color: 'red' }}>X</Text>
+                      </TouchableOpacity>
+                    }
+                  </View>
                 ))}
                 <Button
                   containerStyle={globalStyles.buttonSaveTeam}
                   type='outline'
                   title={buttonAddPlayer[language]}
                   onPress={() => {
-                    props.setFieldValue(`players.${props.values.players.length}`, '');
+                    const allPlayersInputs = props.values.players.every(player => player.trim() !== '');
+                    if (allPlayersInputs) {
+                      props.setFieldValue(`players.${props.values.players.length}`, '');
+                    }
                   }}
                   buttonStyle={globalStyles.smallRoundButton}
                   icon={
