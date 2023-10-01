@@ -107,7 +107,7 @@ export default function Settings({ navigation }) {
               onValueChange={setMaxScore}
               maximumValue={150}
               minimumValue={20}
-              step={10}
+              step={5}
               allowTouchTrack
               trackStyle={{ height: 5, backgroundColor: 'transparent' }}
               thumbStyle={{ height: 20, width: 20, backgroundColor: 'transparent' }}
