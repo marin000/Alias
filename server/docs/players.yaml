@@ -1,0 +1,323 @@
+components:
+  schemas:
+    Players:
+      type: object
+      required:
+        - name
+        - email
+      properties:
+        id:
+          type: string
+          description: The auto-generated id of the player
+        name:
+          type: string
+          description: The player name
+        email:
+          type: string
+          description: The player email
+        password: 
+          type: string
+          description: The player password
+        country: 
+          type: string
+          description: The player country
+      example:
+        name: John
+        email: john@gmail.com
+        password: John123.
+        country: Croatia
+
+info:
+  title: "Player API"
+  description: "API for managing players"
+
+tags:
+  name: Players
+  description: Endpoints for managing players
+
+schemes:
+  - "http"
+  - "https"
+
+parameters:
+  InvitationHeader:
+    name: Invitation
+    in: header
+    description: Authorization header for the request
+    required: true
+    schema:
+      type: string
+
+paths: 
+  /api/player: 
+    post: 
+      summary: Create a new player
+      parameters:
+        - $ref: '#/parameters/InvitationHeader'
+      tags: [Players]
+      requestBody:
+          required: true
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Players'
+      responses:
+        201:
+          description: New player created.
+          schema:
+            $ref: "#/components/schemas/Players"
+        400:
+          description: Problem with name input
+        403:
+          description: Already exists
+        500:
+          description: An error occurred while processing the request on the server
+
+    put: 
+      summary: Update player
+      tags:
+        - Players
+      parameters:
+        - $ref: '#/parameters/InvitationHeader'
+      requestBody:
+        description: >
+          Player information to update. Include the player's ID in the request body.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Players'
+            example:
+              id: "player_id_here"
+              email: "newemail@example.com"
+              name: "New Name"
+              image:
+                newImage: "new_image_url"
+                oldImage: "old_image_url"
+              password:
+                oldPassword: "old_password"
+                newPassword: "new_password"
+              gamesPlayed: 10
+              gamesWin: 5
+              gamesLost: 5
+      responses:
+        200:
+          description: Player updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Players"
+        400:
+          description: Invalid request parameters
+        401:
+          description: Invalid current password
+        403:
+          description: Access forbidden
+        404:
+          description: Player not found
+        500:
+          description: An error occurred while processing the request on the server
+
+  /api/player/all: 
+    get:
+      summary: Fetch all players
+      parameters:
+        - $ref: '#/parameters/InvitationHeader'
+      tags: [Players]
+      responses:
+        200:
+          description: Successfully get all players.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Players'
+        500:
+          description: An error occurred while processing the request on the server
+
+  /api/player/login:
+    post: 
+      summary: Get player by email and password
+      parameters:
+        - $ref: '#/parameters/InvitationHeader'
+      tags:
+          [Players]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  description: The player's email
+                password:
+                  type: string
+                  description: The player's password
+              example:
+                email: john@gmail.com
+                password: John123.
+      responses:
+        200:
+          description: Successfully get player.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  player:
+                    $ref: "#/components/schemas/Players"
+                  token:
+                    type: string
+                    description: Authentication token
+                example:
+                  player: 
+                    _id: "dsahasdk3279y233"
+                    name: "John"
+                    email: "john@gmail.com"
+                    password: "$2b$10$hbadfnj13.FUs.dfbhka31/l5.fjna13"
+                    country: "Croatia"
+                    gamesPlayed: 19
+                    gamesWin: 11
+                    gamesLost: 8
+                  token: "asdbkasndjl3913-31NjI4NTQzNSwiZXhwIjoxNjk2NjMxMDM1"
+        401:
+          description: Invalid email or password.
+        500:
+          description: An error occurred while processing the request on the server
+    
+    get: 
+      summary: Get player by token
+      
+      parameters:
+        - $ref: '#/parameters/InvitationHeader'
+        - name: Authorization
+          in: header
+          description: JWT token for authentication
+          required: true
+          schema:
+            type: string
+      tags:
+        - Players
+      responses:
+        200:
+          description: Successfully get player.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Players'
+        401:
+          description: No token provided
+        404:
+          description: Player not found
+        500:
+          description: An error occurred while processing the request on the server
+
+  paths:
+  /api/player/{id}:
+    delete:
+      summary: Delete a player
+      parameters:
+        - $ref: '#/parameters/InvitationHeader'
+        - name: id
+          in: path
+          description: ID of the player to delete
+          required: true
+          schema:
+            type: string
+      tags:
+        - Players
+      responses:
+        204:
+          description: Player deleted successfully
+        403:
+          description: Invalid ID format
+        404:
+          description: Player not found
+        500:
+          description: An error occurred while processing the request on the server
+
+  /api/player/pin:
+    post:
+      summary: Validate PIN for a player
+      parameters:
+        - $ref: '#/parameters/InvitationHeader'
+      tags:
+        - Players
+      requestBody:
+        description: Player email and PIN for validation
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  description: The player's email
+                pin:
+                  type: string
+                  description: The PIN to validate
+              example:
+                email: john@example.com
+                pin: 1234
+      responses:
+        200:
+          description: Valid pin
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Success message
+                example:
+                  message: Valid pin
+        401:
+          description: Invalid email, invalid PIN, or expired PIN
+        500:
+          description: An error occurred while processing the request on the server
+
+  /api/player/resetPassword:
+    post:
+      summary: Reset player's password
+      parameters:
+        - $ref: '#/parameters/InvitationHeader'
+      tags:
+        - Players
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  description: The player's email
+                password:
+                  type: string
+                  description: The new password
+              example:
+                email: john@example.com
+                password: NewPassword123!
+      responses:
+        200:
+          description: Player's password updated successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Success message
+                example:
+                  message: Player's password updated successfully.
+        404:
+          description: Player not found
+        500:
+          description: Internal server error

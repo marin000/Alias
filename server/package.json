@@ -21,6 +21,8 @@
     "mongodb": "^4.1.4",
     "mongoose": "^6.0.13",
     "nodemailer": "^6.9.4",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.0",
     "winston": "^3.10.0",
     "winston-mongodb": "^5.1.1"
   },

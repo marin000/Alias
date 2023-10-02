@@ -208,10 +208,11 @@ async function getPlayerByToken(req, res) {
       .populate('team')
 
     if (!player) {
-      playersLogger.info(infoMessages.GET_PLAYER)
+      playersLogger.error(errorMessages.NO_PLAYER)
       return res.status(404)
         .json({ message: errorMessages.NO_PLAYER })
     }
+    playersLogger.info(infoMessages.GET_PLAYER)
     res.json(player)
   } catch (error) {
     playersLogger.error(error.message, { metadata: error.stack })
