@@ -9,7 +9,7 @@ const create = async(req, res, next) => {
     const newRating = Ratings({ stars, comment })
     const savedRating = await newRating.save()
 
-    ratingsLogger.info(infoMessages.NEW_TEAM)
+    ratingsLogger.info(infoMessages.NEW_RATING)
     res.status(201)
       .send(savedRating)
   } catch (error) {

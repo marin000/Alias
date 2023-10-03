@@ -1,0 +1,52 @@
+info:
+  title: "Email API"
+  description: "API for managing email"
+
+tags:
+  - name: Email
+    description: Endpoints for managing email
+
+schemes:
+  - "http"
+  - "https"
+
+parameters:
+  InvitationHeader:
+    name: Invitation
+    in: header
+    description: Authorization header for the request
+    required: true
+    schema:
+      type: string
+
+paths:
+  /api/email:
+    post:
+      summary: Send reset link to player's email
+      tags:
+        - Email
+      parameters:
+        - $ref: '#/parameters/InvitationHeader'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  description: The player's email
+                language:
+                  type: string
+                  description: The preferred language for the email (optional)
+              example:
+                email: "john@example.com"
+                language: "en"
+      responses:
+        201:
+          description: Email sent
+        401:
+          description: Invalid email
+        500:
+          description: An error occurred while processing the request on the server

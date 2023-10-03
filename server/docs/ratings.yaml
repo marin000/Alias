@@ -1,0 +1,89 @@
+components:
+  schemas:
+    Ratings:
+      type: object
+      properties:
+        stars:
+          type: number
+          description: The rating in stars (required)
+        comment:
+          type: string
+          description: Optional comment related to the rating
+      required:
+        - stars
+      example:
+        stars: 4
+        comment: "Great experience, highly recommended"
+
+info:
+  title: "Ratings API"
+  description: "API for managing ratings"
+
+tags:
+  name: Ratings
+  description: Endpoints for managing ratings
+
+schemes:
+  - "http"
+  - "https"
+
+parameters:
+  InvitationHeader:
+    name: Invitation
+    in: header
+    description: Authorization header for the request
+    required: true
+    schema:
+      type: string
+
+paths:
+  /api/rating:
+    post:
+      summary: Create a new rating
+      parameters:
+        - $ref: '#/parameters/InvitationHeader'
+      tags:
+        [Ratings]
+      requestBody:
+        description: Rating information to create a new rating.
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                stars:
+                  type: number
+                  description: The rating in stars (required)
+                comment:
+                  type: string
+                  description: Optional comment related to the rating
+              example:
+                stars: 4
+                comment: "Great experience, highly recommended"
+      responses:
+        201:
+          description: New rating created.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Ratings"
+        500:
+          description: An error occurred while processing the request on the server
+
+    get: 
+      summary: Fetch all ratings
+      parameters:
+        - $ref: '#/parameters/InvitationHeader'
+      tags: [Ratings]
+      responses:
+        200:
+          description: Successfully get all ratings.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Ratings'
+        500:
+          description: An error occurred while processing the request on the server
