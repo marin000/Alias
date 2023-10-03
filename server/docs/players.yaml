@@ -215,7 +215,6 @@ paths:
         500:
           description: An error occurred while processing the request on the server
 
-  paths:
   /api/player/{id}:
     delete:
       summary: Delete a player
