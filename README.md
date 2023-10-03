@@ -24,3 +24,6 @@ For alias (frontend):
 ```bash
 npm start
 ```
+
+#Alias API
+You can use swagger for routes on http://localhost:3000/api-docs/#
