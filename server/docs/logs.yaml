@@ -1,0 +1,98 @@
+components:
+  schemas:
+    Logs:
+      type: object
+      properties:
+        timestamp:
+          type: string
+          description: The timestamp of the log entry
+        meta:
+          type: object
+          properties:
+            component:
+              type: string
+              description: The component associated with the log entry
+            timestamp:
+              type: string
+              description: Additional timestamp (if needed)
+          description: Additional metadata related to the log entry
+        level:
+          type: string
+          description: The log level (e.g., info, error, debug)
+        message:
+          type: string
+          description: The log message
+      example:
+        timestamp: "2023-10-03T14:30:00.000Z"
+        meta:
+          component: "Players"
+          timestamp: "2023-10-03T14:30:00.000Z"
+        level: "info"
+        message: "Player logged in successfully"
+
+info:
+  title: "Logs API"
+  description: "API for managing logs"
+
+tags:
+  name: Logs
+  description: Endpoints for managing logs
+
+schemes:
+  - "http"
+  - "https"
+
+parameters:
+  InvitationHeader:
+    name: Invitation
+    in: header
+    description: Authorization header for the request
+    required: true
+    schema:
+      type: string
+
+paths: 
+  /api/logs:
+    post: 
+      summary: Fetch all logs
+      parameters:
+        - $ref: '#/parameters/InvitationHeader'
+      tags:
+        - Logs
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                level:
+                  type: string
+                  description: The log level to filter by
+                message:
+                  type: string
+                  description: The log message to filter by
+                count:
+                  type: integer
+                  description: The number of log entries to retrieve
+                sort:
+                  type: string
+                  description: Sort order (asc/desc)
+              example:
+                level: "info"
+                message: "User logged in"
+                count: 10
+                sort: "asc"
+      responses:
+        200:
+          description: Successfully get all logs.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Logs'
+        403:
+          description: Bad request - validation failed
+        500:
+          description: An error occurred while processing the request on the server

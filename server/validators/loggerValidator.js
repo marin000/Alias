@@ -12,7 +12,7 @@ exports.validate = (method) => {
         body('level', message.LEVEL)
           .isIn(['fatal', 'error', 'warn', 'info', 'debug', 'trace']),
         body('message', message.MESSAGE)
-          .isAlpha()
+          .matches(/^[a-zA-Z .,'-]+$/, 'i')
       ]
     }
   }

@@ -1,0 +1,208 @@
+components:
+  schemas:
+    PlayerResult:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The player's name
+        scoreExplains:
+          type: number
+          description: The score for explaining
+        scoreGuess:
+          type: number
+          description: The score for guessing
+      example:
+        name: "Player1"
+        scoreExplains: 10
+        scoreGuess: 15
+
+    TeamResult:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The team's name
+        score:
+          type: number
+          description: The team's score
+        players:
+          type: array
+          description: Array of player results
+          items:
+            $ref: "#/components/schemas/PlayerResult"
+      example:
+        name: "TeamA"
+        score: 100
+        players:
+          - name: "Player1"
+            scoreExplains: 10
+            scoreGuess: 15
+          - name: "Player2"
+            scoreExplains: 8
+            scoreGuess: 12
+
+    MainResult:
+      type: object
+      properties:
+        playerId:
+          type: string
+          description: The ID of the player
+        winnerTeam:
+          type: string
+          description: The name of the winning team
+        teamResults:
+          type: array
+          description: Array of team results
+          items:
+            $ref: "#/components/schemas/TeamResult"
+      example:
+        playerId: "player_id_here"
+        winnerTeam: "TeamA"
+        teamResults:
+          - name: "TeamA"
+            score: 100
+            players:
+              - name: "Player1"
+                scoreExplains: 10
+                scoreGuess: 15
+              - name: "Player2"
+                scoreExplains: 8
+                scoreGuess: 12
+          - name: "TeamB"
+            score: 80
+            players:
+              - name: "Player3"
+                scoreExplains: 12
+                scoreGuess: 10
+              - name: "Player4"
+                scoreExplains: 7
+                scoreGuess: 9
+
+info:
+  title: "Results API"
+  description: "API for managing results"
+
+tags:
+  name: Results
+  description: Endpoints for managing results
+
+schemes:
+  - "http"
+  - "https"
+
+parameters:
+  InvitationHeader:
+    name: Invitation
+    in: header
+    description: Authorization header for the request
+    required: true
+    schema:
+      type: string
+
+paths: 
+  /api/result: 
+    post:
+      summary: Create a new result
+      parameters:
+        - $ref: '#/parameters/InvitationHeader'
+      tags:
+        - Results
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                playerId:
+                  type: string
+                  description: The ID of the player
+                winnerTeam:
+                  type: string
+                  description: The name of the winning team
+                teamResults:
+                  type: array
+                  description: Array of team results
+                  items:
+                    $ref: "#/components/schemas/MainResult"
+              example:
+                playerId: "player_id_here"
+                winnerTeam: "TeamA"
+                teamResults:
+                  - name: "TeamA"
+                    score: 100
+                    players:
+                      - name: "Player1"
+                        scoreExplains: 10
+                        scoreGuess: 15
+                      - name: "Player2"
+                        scoreExplains: 8
+                        scoreGuess: 12
+                  - name: "TeamB"
+                    score: 80
+                    players:
+                      - name: "Player3"
+                        scoreExplains: 12
+                        scoreGuess: 10
+                      - name: "Player4"
+                        scoreExplains: 7
+                        scoreGuess: 9
+      responses:
+        201:
+          description: New result created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MainResult"
+        403:
+          description: Bad request - validation failed
+        500:
+          description: An error occurred while processing the request on the server
+
+  /api/result/{id}:
+    get:
+      summary: Fetch results for a player
+      parameters:
+        - $ref: '#/parameters/InvitationHeader'
+        - name: id
+          in: path
+          description: ID of the player to fetch results for
+          required: true
+          schema:
+            type: string
+      tags:
+        - Results
+      responses:
+        200:
+          description: Successfully get all results
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/MainResult"
+        403:
+          description: Bad request - validation failed
+        500:
+          description: An error occurred while processing the request on the server
+    
+    delete: 
+      summary: Delete a result
+      parameters:
+        - $ref: '#/parameters/InvitationHeader'
+        - name: id
+          in: path
+          description: ID of the result to delete
+          required: true
+          schema:
+            type: string
+      tags:
+        - Results
+      responses:
+        204:
+          description: Result deleted successfully
+        403:
+          description: Bad request - validation failed
+        500:
+          description: An error occurred while processing the request on the server

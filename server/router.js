@@ -32,7 +32,7 @@ router.post('/api/result', resultValidator.validate('create'), resultController.
 router.get('/api/result/:id', resultValidator.validate('validateGetDelete'), resultController.fetch)
 router.delete('/api/result/:id', resultValidator.validate('validateGetDelete'), resultController.deleteResult)
 
-router.post('/logs', logerValidator.validate('logValidate'), logController.getLogs)
+router.post('/api/logs', logerValidator.validate('logValidate'), logController.getLogs)
 
 router.post('/api/email', emailController.sendResetLink)
 
