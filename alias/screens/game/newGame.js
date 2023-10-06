@@ -16,6 +16,7 @@ import {
 } from '../../redux/actions';
 import { useDispatch } from 'react-redux';
 import { SettingsContext } from '../../utils/settings';
+import { getWords } from '../../utils/helper';
 import { newGame } from '../../constants/newGameScreen';
 import AddTeamDialog from '../../components/newGameScreen/addTeamDialog';
 import EditTeamDialog from '../../components/newGameScreen/editTeamDialog';
@@ -28,7 +29,7 @@ import { globalStyles } from '../../styles/global';
 import api from '../../api/teams';
 import { showRewardedAd } from '../../utils/adService';
 
-const NewGame = ({ teams, currentTeamIndex, gameStarted, maxScoreReached, addTeam, updateTeam, deleteTeam, gameStartEnd, resetPlayersScore, userData, navigation }) => {
+const NewGame = ({ teams, currentTeamIndex, gameStarted, maxScoreReached, addTeam, updateTeam, deleteTeam, gameStartEnd, resetPlayersScore, userData, oldWords, navigation }) => {
   const { language, maxScore } = useContext(SettingsContext);
   const { title, newTeam, buttonStart, buttonContinue, targetResultTxt, headerTitle, newGameSameTeamsButton, createRandomTeams, saveAsMyTeam, saveAsMyTeamAlert, importMyTeam } = newGame;
   const [addTeamDialog, setAddTeamDialog] = useState(false);
@@ -37,7 +38,17 @@ const NewGame = ({ teams, currentTeamIndex, gameStarted, maxScoreReached, addTea
   const [preStartDialog, setPreStartDialog] = useState(false);
   const [showTeamResultDialog, setShowTeamResultDialog] = useState(false);
   const [randomTeamDialog, setRandomTeamDialog] = useState(false);
+  const [wordsFetched, setWordsFetched] = useState(false);
+  const [words, setWords] = useState([]);
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (!wordsFetched) {
+      const fetchedWords = getWords(language, oldWords);
+      setWords(fetchedWords);
+      setWordsFetched(true);
+    }
+  }, [language, oldWords, wordsFetched]);
 
   const handleBackButton = () => {
     navigation.navigate('Home');
@@ -72,7 +83,7 @@ const NewGame = ({ teams, currentTeamIndex, gameStarted, maxScoreReached, addTea
   const startGame = () => {
     setPreStartDialog(false);
     dispatch(gameStartEnd(true));
-    navigation.navigate('PlayGame');
+    navigation.navigate('PlayGame', { words });
   }
 
   const showTeamResult = (team) => {
@@ -331,7 +342,8 @@ const mapStateToProps = (state) => ({
   currentTeamIndex: state.gameReducer.currentTeamIndex,
   gameStarted: state.gameReducer.gameStarted,
   maxScoreReached: state.gameReducer.maxScoreReached,
-  userData: state.userReducer.userData
+  userData: state.userReducer.userData,
+  oldWords: state.gameReducer.oldWords
 });
 
 const mapDispatchToProps = {

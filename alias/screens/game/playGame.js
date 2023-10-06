@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import { updateTeam, updateTeamIndex, updatePlayerExplains, updateMaxScoreReached, addOldWords } from '../../redux/actions';
 import { useDispatch } from 'react-redux';
 import { SettingsContext } from '../../utils/settings';
-import { getRandomWord, teamWithHighestScore, updatePlayerTeamStatsDB, getWords, playSound } from '../../utils/helper';
+import { getRandomWord, teamWithHighestScore, updatePlayerTeamStatsDB, playSound } from '../../utils/helper';
 import { playGame } from '../../constants/playGameScreen';
 import EndRoundDialog from '../../components/playGameScreen/endRoundDialog';
 import WinnerDialog from '../../components/playGameScreen/winnerDialog';
@@ -15,7 +15,7 @@ import RatingDialog from '../../components/playGameScreen/ratingDialog';
 import { globalStyles } from '../../styles/global';
 import { showInterstitialAd } from '../../utils/adService';
 
-const PlayGame = ({ teams, currentTeamIndex, maxScoreReached, oldWords, updateTeam, userData, navigation }) => {
+const PlayGame = ({ teams, currentTeamIndex, maxScoreReached, updateTeam, userData, navigation }) => {
   const { language, timer, maxScore, gameSound } = useContext(SettingsContext);
   const { buttonSave, buttonSkip, correctAnswersTxt, skippedAnswersTxt } = playGame;
   const [gameTimer, setGameTimer] = useState(timer);
@@ -34,7 +34,7 @@ const PlayGame = ({ teams, currentTeamIndex, maxScoreReached, oldWords, updateTe
 
   useKeepAwake();
   const dispatch = useDispatch();
-  let gameWordList = getWords(language, oldWords);
+  let gameWordList = navigation.getParam('words');
 
   useEffect(() => {
     setCurrentWord((prevWord) => {
@@ -320,7 +320,6 @@ const mapStateToProps = (state) => ({
   teams: state.teamReducer.teams,
   currentTeamIndex: state.gameReducer.currentTeamIndex,
   maxScoreReached: state.gameReducer.maxScoreReached,
-  oldWords: state.gameReducer.oldWords,
   userData: state.userReducer.userData
 });
 
