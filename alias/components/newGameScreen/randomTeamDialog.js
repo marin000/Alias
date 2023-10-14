@@ -60,6 +60,7 @@ export default function RandomTeamDialog({ isVisible, onClose, language, onAddAl
                   onChangeText={props.handleChange('numberOfTeams')}
                   value={props.values.numberOfTeams}
                   maxLength={2}
+                  autoFocus={true}
                 />
                 {props.values.players.map((player, index) => (
                   <View style={globalStyles.playerInputContainer} key={index}>
@@ -69,7 +70,7 @@ export default function RandomTeamDialog({ isVisible, onClose, language, onAddAl
                       onChangeText={props.handleChange(`players.${index}`)}
                       value={player}
                       editable={!(index === 0 && userData)}
-                      autoFocus={true}
+                      autoFocus={index > 3}
                     />
                     {index > 3 &&
                       <TouchableOpacity

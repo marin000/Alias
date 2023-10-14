@@ -1,13 +1,11 @@
 import { InterstitialAd, AdEventType, TestIds, RewardedAd, RewardedAdEventType } from 'react-native-google-mobile-ads';
 
 const interstitial = InterstitialAd.createForAdRequest(TestIds.INTERSTITIAL, {
-  requestNonPersonalizedAdsOnly: true,
-  keywords: ['sport'],
+  requestNonPersonalizedAdsOnly: true
 });
 
 const rewarded = RewardedAd.createForAdRequest(TestIds.REWARDED, {
-  requestNonPersonalizedAdsOnly: true,
-  keywords: ['sport'],
+  requestNonPersonalizedAdsOnly: true
 });
 
 const showInterstitialAd = () => {
@@ -34,7 +32,6 @@ const showRewardedAd = () => {
     unsubscribeEarned();
   };
 }
-
 
 export {
   showInterstitialAd,

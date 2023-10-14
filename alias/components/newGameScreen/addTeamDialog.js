@@ -61,6 +61,7 @@ export default function AddTeamDialog({ isVisible, onClose, teams, language, onA
                 placeholder={teamInput[language]}
                 onChangeText={props.handleChange('teamName')}
                 value={props.values.teamName}
+                autoFocus={true}
               />
               {props.values.players.map((player, index) => (
                 <View style={globalStyles.playerInputContainer} key={index}>
@@ -70,7 +71,7 @@ export default function AddTeamDialog({ isVisible, onClose, teams, language, onA
                     onChangeText={props.handleChange(`players.${index}`)}
                     value={player}
                     editable={!(index === 0 && userData && teams.length === 0)}
-                    autoFocus={true}
+                    autoFocus={index > 1}
                   />
                   {index > 1 &&
                     <TouchableOpacity
