@@ -12,18 +12,22 @@ import api from '../../api/players';
 import { globalStyles } from '../../styles/global';
 import { BannerAd, BannerAdSize, TestIds } from 'react-native-google-mobile-ads';
 import { useFonts } from 'expo-font';
+import ChooseLanguage from './chooseLanguage';
 import * as SplashScreen from 'expo-splash-screen';
 
-SplashScreen.preventAutoHideAsync();
-
 const Home = ({ teams, userData, navigation }) => {
-	const { language } = useContext(SettingsContext);
+	const { language, hasShownChooseLanguage } = useContext(SettingsContext);
 	const { newGame, continueGame, instructions, settings, login, profile, statistics } = home;
 	const [loading, setLoading] = useState(true);
+	const [chooseLanguageFlag, setChooseLanguageFlag] = useState(hasShownChooseLanguage);
 	const [isLoaded] = useFonts({
 		"luckiestGuy-regular": require("../../assets/fonts/LuckiestGuy-Regular.ttf")
 	});
 	const dispatch = useDispatch();
+
+	if(hasShownChooseLanguage) {
+		SplashScreen.preventAutoHideAsync();
+	}
 	useEffect(() => {
 		const checkToken = async () => {
 			try {
@@ -75,8 +79,18 @@ const Home = ({ teams, userData, navigation }) => {
 		}
 	}, [isLoaded]);
 
+	const handleLanguageUpdate = () => {
+    setChooseLanguageFlag(!chooseLanguageFlag);
+  }
+
 	if (!isLoaded) {
 		return null;
+	}
+
+	if(!chooseLanguageFlag) {
+		return (
+      <ChooseLanguage onLanguageUpdate={handleLanguageUpdate} />
+		)
 	}
 
 	return (

@@ -9,6 +9,7 @@ export const SettingsProvider = ({ children }) => {
 	const [timer, setTimer] = useState('60');
 	const [maxScore, setMaxScore] = useState('60');
 	const [gameSound, setGameSound] = useState(true);
+	const [hasShownChooseLanguage, setHasShownChooseLanguage] = useState(false);
 	const {
 		retrievingSettings,
 		updatingGameSound,
@@ -34,6 +35,10 @@ export const SettingsProvider = ({ children }) => {
 				const storedGameSound = await AsyncStorage.getItem('gameSound');
 				if (storedGameSound) {
 					setGameSound(storedGameSound);
+				}
+				const storedHasShownChooseLanguage = await AsyncStorage.getItem('hasShownChooseLanguage');
+				if (storedHasShownChooseLanguage) {
+					setHasShownChooseLanguage(storedHasShownChooseLanguage);
 				}
 			} catch (error) {
 				console.log(retrievingSettings, error);
@@ -79,7 +84,7 @@ export const SettingsProvider = ({ children }) => {
 	};
 
 	return (
-		<SettingsContext.Provider value={{ language, updateLanguage, timer, updateTimer, maxScore, updateMaxScore, gameSound, updateGameSound }}>
+		<SettingsContext.Provider value={{ language, updateLanguage, timer, updateTimer, maxScore, updateMaxScore, gameSound, updateGameSound, hasShownChooseLanguage }}>
 			{children}
 		</SettingsContext.Provider>
 	);
