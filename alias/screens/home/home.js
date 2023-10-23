@@ -11,6 +11,7 @@ import homeIcon from '../../assets/homeIcon.png';
 import api from '../../api/players';
 import { globalStyles } from '../../styles/global';
 import { BannerAd, BannerAdSize, TestIds } from 'react-native-google-mobile-ads';
+import config from '../../config/config';
 import { useFonts } from 'expo-font';
 import ChooseLanguage from './chooseLanguage';
 import * as SplashScreen from 'expo-splash-screen';
@@ -166,7 +167,7 @@ const Home = ({ teams, userData, navigation }) => {
 						</View>
 						<View style={styles.banner}>
 							<BannerAd
-								unitId={TestIds.BANNER}
+								unitId={__DEV__ ? TestIds.BANNER : config.banner}
 								size={BannerAdSize.FULL_BANNER}
 								requestOptions={{
 									requestNonPersonalizedAdsOnly: true,

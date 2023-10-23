@@ -1,10 +1,14 @@
 import { InterstitialAd, AdEventType, TestIds, RewardedAd, RewardedAdEventType } from 'react-native-google-mobile-ads';
-
-const interstitial = InterstitialAd.createForAdRequest(TestIds.INTERSTITIAL, {
+import config from '../config/config';
+const { intAdd, reward } = config;
+ 
+const interstitialId = __DEV__ ? TestIds.INTERSTITIAL : intAdd;
+const interstitial = InterstitialAd.createForAdRequest(interstitialId, {
   requestNonPersonalizedAdsOnly: true
 });
 
-const rewarded = RewardedAd.createForAdRequest(TestIds.REWARDED, {
+const rewardId = __DEV__ ? TestIds.REWARDED : reward;
+const rewarded = RewardedAd.createForAdRequest(rewardId, {
   requestNonPersonalizedAdsOnly: true
 });
 
