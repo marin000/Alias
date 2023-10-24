@@ -167,7 +167,7 @@ const Home = ({ teams, userData, navigation }) => {
 						</View>
 						<View style={styles.banner}>
 							<BannerAd
-								unitId={__DEV__ ? TestIds.BANNER : config.banner}
+								unitId={__DEV__ ? TestIds.BANNER : String(config.banner)}
 								size={BannerAdSize.FULL_BANNER}
 								requestOptions={{
 									requestNonPersonalizedAdsOnly: true,

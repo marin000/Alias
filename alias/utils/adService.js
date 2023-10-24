@@ -2,12 +2,12 @@ import { InterstitialAd, AdEventType, TestIds, RewardedAd, RewardedAdEventType }
 import config from '../config/config';
 const { intAdd, reward } = config;
  
-const interstitialId = __DEV__ ? TestIds.INTERSTITIAL : intAdd;
+const interstitialId = __DEV__ ? TestIds.INTERSTITIAL : String(intAdd);
 const interstitial = InterstitialAd.createForAdRequest(interstitialId, {
   requestNonPersonalizedAdsOnly: true
 });
 
-const rewardId = __DEV__ ? TestIds.REWARDED : reward;
+const rewardId = __DEV__ ? TestIds.REWARDED : String(reward);
 const rewarded = RewardedAd.createForAdRequest(rewardId, {
   requestNonPersonalizedAdsOnly: true
 });
