@@ -9,13 +9,14 @@ export const SettingsProvider = ({ children }) => {
 	const [timer, setTimer] = useState('60');
 	const [maxScore, setMaxScore] = useState('60');
 	const [gameSound, setGameSound] = useState(true);
-	const [hasShownChooseLanguage, setHasShownChooseLanguage] = useState(false);
+	const [hasShownChooseLanguage, setHasShownChooseLanguage] = useState(null);
 	const {
 		retrievingSettings,
 		updatingGameSound,
 		updatingLanguage,
 		updatingMaxScore,
-		updatingTimer } = errorMsg;
+		updatingTimer,
+		updatingShowLanguage } = errorMsg;
 
 	useEffect(() => {
 		const retrieveSettings = async () => {
@@ -56,6 +57,15 @@ export const SettingsProvider = ({ children }) => {
 		}
 	};
 
+	const updateShownChooseLanguage = async () => {
+		try {
+			setHasShownChooseLanguage(true);
+			await AsyncStorage.setItem('hasShownChooseLanguage', String(true));
+		} catch (error) {
+			console.log(updatingShowLanguage, error);
+		}
+	};
+
 	const updateTimer = async (newTimer) => {
 		try {
 			setTimer(newTimer);
@@ -84,7 +94,7 @@ export const SettingsProvider = ({ children }) => {
 	};
 
 	return (
-		<SettingsContext.Provider value={{ language, updateLanguage, timer, updateTimer, maxScore, updateMaxScore, gameSound, updateGameSound, hasShownChooseLanguage }}>
+		<SettingsContext.Provider value={{ language, updateLanguage, timer, updateTimer, maxScore, updateMaxScore, gameSound, updateGameSound, hasShownChooseLanguage, updateShownChooseLanguage }}>
 			{children}
 		</SettingsContext.Provider>
 	);

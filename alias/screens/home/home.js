@@ -75,7 +75,7 @@ const Home = ({ teams, userData, navigation }) => {
 	};
 
 	const handleOnLayout = useCallback(async () => {
-		if (isLoaded) {
+		if (isLoaded && hasShownChooseLanguage !== null) {
 			await SplashScreen.hideAsync();
 		}
 	}, [isLoaded]);
@@ -88,7 +88,7 @@ const Home = ({ teams, userData, navigation }) => {
 		return null;
 	}
 
-	if(!chooseLanguageFlag) {
+	if(!hasShownChooseLanguage) {
 		return (
       <ChooseLanguage onLanguageUpdate={handleLanguageUpdate} />
 		)

@@ -12,5 +12,6 @@ export const errorMsg = {
   updatingLanguage: 'Error updating language in AsyncStorage:',
   updatingTimer: 'Error updating timer in AsyncStorage:',
   updatingMaxScore: 'Error updating maxScore in AsyncStorage:',
-  updatingGameSound: 'Error updating game sound in AsyncStorage:'
+  updatingGameSound: 'Error updating game sound in AsyncStorage:',
+  updatingShowLanguage: 'Error updating show language screen in AsyncStorage:',
 }

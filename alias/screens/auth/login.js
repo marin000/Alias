@@ -9,7 +9,7 @@ import {
 } from '../../redux/actions';
 import { useDispatch } from 'react-redux';
 import { storeToken } from '../../utils/auth';
-import { View, StyleSheet, TouchableOpacity, Alert, BackHandler } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, Alert, BackHandler, ActivityIndicator } from 'react-native';
 import { Text, Card, Button } from '@rneui/themed';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { Formik } from 'formik';
@@ -30,6 +30,7 @@ const Login = ({ teams, navigation }) => {
   const { alertConfirmation, alertLogOutTxt, alertCancelTxt, alertContinueTxt } = profile;
   const [showPassword, setShowPassword] = useState(false);
   const [invalidLoginError, setInvalidLoginError] = useState('');
+  const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
 
   const handleBackButton = () => {
@@ -48,6 +49,7 @@ const Login = ({ teams, navigation }) => {
   };
 
   const loginAndRedirect = async (email, password) => {
+    setLoading(true);
     const credentials = { email, password };
     const country = await getCountryFromIP();
     api.getPlayer(credentials)
@@ -58,11 +60,13 @@ const Login = ({ teams, navigation }) => {
         }
         dispatch(updateUser(player));
         storeToken(token);
+        setLoading(false);
         navigation.navigate('Home');
       })
       .catch((err) => {
         setInvalidLoginError(invalidCredentials[language]);
         console.log(err.response.data);
+        setLoading(false);
       });
   }
 
@@ -97,58 +101,64 @@ const Login = ({ teams, navigation }) => {
       <View>
         <BackButton onPress={() => navigation.navigate('Home')} />
         <Text style={styles.title}>{signIn[language]}</Text>
-        <Card containerStyle={globalStyles.cardContainer}>
-          <Formik
-            initialValues={{ email: '', password: '' }}
-            validationSchema={LoginSchema(language)}
-            onSubmit={handleLogin}
-          >
-            {(props) => (
-              <View style={globalStyles.form}>
-                <View style={globalStyles.entryInputContainer}>
-                  <TextInput
-                    style={globalStyles.entryInput}
-                    placeholder={emailPlaceholder[language]}
-                    keyboardType='email-address'
-                    autoCapitalize='none'
-                    onChangeText={props.handleChange('email')}
-                    value={props.values.email}
-                  />
-                  <Icon name="email-outline" size={24} color="black" style={styles.icon} />
-                </View>
-                <Text style={globalStyles.errorText}>{props.touched.email && props.errors.email}</Text>
-                <View style={globalStyles.entryInputContainer}>
-                  <TextInput
-                    style={globalStyles.entryInput}
-                    placeholder={passwordPlaceholder[language]}
-                    secureTextEntry={!showPassword}
-                    onChangeText={props.handleChange('password')}
-                    value={props.values.password}
-                  />
-                  <TouchableOpacity style={styles.icon} onPress={togglePasswordVisibility}>
-                    <Icon name={showPassword ? 'eye-off' : 'eye'} size={24} color="black" />
-                  </TouchableOpacity>
-                </View>
-                <Text style={globalStyles.errorText}>{props.touched.password && props.errors.password}{invalidLoginError}</Text>
-                <TouchableOpacity onPress={() => navigation.navigate('ForgotPassword')}>
-                  <Text style={styles.forgotPass}>{forgotPass[language]}</Text>
-                </TouchableOpacity>
-                <Button
-                  title={signIn[language]}
-                  onPress={props.handleSubmit}
-                  buttonStyle={styles.signInButton}
-                />
-              </View>
-            )}
-          </Formik>
-          <LoginDivider text={dividerTxt[language]} />
-          <View style={styles.registerContainer}>
-            <Text style={styles.registerText}>{newToAlias[language]}</Text>
-            <TouchableOpacity onPress={() => navigation.navigate('Register')}>
-              <Text style={styles.registerLink}>{registerTxt[language]}</Text>
-            </TouchableOpacity>
+        {loading ? (
+          <View style={globalStyles.loadingContainer}>
+            <ActivityIndicator size={80} color="#0000ff" />
           </View>
-        </Card>
+        ) : (
+          <Card containerStyle={globalStyles.cardContainer}>
+            <Formik
+              initialValues={{ email: '', password: '' }}
+              validationSchema={LoginSchema(language)}
+              onSubmit={handleLogin}
+            >
+              {(props) => (
+                <View style={globalStyles.form}>
+                  <View style={globalStyles.entryInputContainer}>
+                    <TextInput
+                      style={globalStyles.entryInput}
+                      placeholder={emailPlaceholder[language]}
+                      keyboardType='email-address'
+                      autoCapitalize='none'
+                      onChangeText={props.handleChange('email')}
+                      value={props.values.email}
+                    />
+                    <Icon name="email-outline" size={24} color="black" style={styles.icon} />
+                  </View>
+                  <Text style={globalStyles.errorText}>{props.touched.email && props.errors.email}</Text>
+                  <View style={globalStyles.entryInputContainer}>
+                    <TextInput
+                      style={globalStyles.entryInput}
+                      placeholder={passwordPlaceholder[language]}
+                      secureTextEntry={!showPassword}
+                      onChangeText={props.handleChange('password')}
+                      value={props.values.password}
+                    />
+                    <TouchableOpacity style={styles.icon} onPress={togglePasswordVisibility}>
+                      <Icon name={showPassword ? 'eye-off' : 'eye'} size={24} color="black" />
+                    </TouchableOpacity>
+                  </View>
+                  <Text style={globalStyles.errorText}>{props.touched.password && props.errors.password}{invalidLoginError}</Text>
+                  <TouchableOpacity onPress={() => navigation.navigate('ForgotPassword')}>
+                    <Text style={styles.forgotPass}>{forgotPass[language]}</Text>
+                  </TouchableOpacity>
+                  <Button
+                    title={signIn[language]}
+                    onPress={props.handleSubmit}
+                    buttonStyle={styles.signInButton}
+                  />
+                </View>
+              )}
+            </Formik>
+            <LoginDivider text={dividerTxt[language]} />
+            <View style={styles.registerContainer}>
+              <Text style={styles.registerText}>{newToAlias[language]}</Text>
+              <TouchableOpacity onPress={() => navigation.navigate('Register')}>
+                <Text style={styles.registerLink}>{registerTxt[language]}</Text>
+              </TouchableOpacity>
+            </View>
+          </Card>
+        )}
       </View>
     </View>
   );

@@ -6,7 +6,7 @@ import { globalStyles } from '../../styles/global';
 
 export default function ChooseLanguage({ onLanguageUpdate }) {
   const [language, setLanguage] = useState('');
-  const { updateLanguage } = useContext(SettingsContext);
+  const { updateLanguage, updateShownChooseLanguage } = useContext(SettingsContext);
   const title = 'Choose language';
   const languages = [
     { id: 'en', name: 'English' },
@@ -15,6 +15,7 @@ export default function ChooseLanguage({ onLanguageUpdate }) {
 
   const handleSetLanguage = () => {
     updateLanguage(language);
+    updateShownChooseLanguage();
     onLanguageUpdate();
   }
 
