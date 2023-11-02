@@ -1,18 +1,18 @@
 export const playGame = {
 	buttonSave: {
-		hr: 'Tocno',
+		hr: 'Točno',
 		en: 'Correct'
 	},
 	buttonSkip: {
-		hr: 'Preskoci',
+		hr: 'Preskoči',
 		en: 'Skip'
 	},
 	correctAnswersTxt: {
-		hr: 'Tocnih',
+		hr: 'Točnih',
 		en: 'Correct'
 	},
 	skippedAnswersTxt: {
-		hr: 'Preskocenih',
+		hr: 'Preskočenih',
 		en: 'Skipped'
 	},
 	team: {
