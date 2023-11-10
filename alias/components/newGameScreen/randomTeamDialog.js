@@ -36,11 +36,10 @@ export default function RandomTeamDialog({ isVisible, onClose, language, onAddAl
   const handleCreateNewTeamsAgain = () => {
     setRandomTeams([]);
     setShowTeamsDialog(false);
-    onClose();
   }
 
   return (
-    <Dialog overlayStyle={globalStyles.dialogContainer} isVisible={isVisible} onBackdropPress={onClose}>
+    <Dialog overlayStyle={globalStyles.dialogContainer} isVisible={isVisible}>
       <CustomDialogHeader onClose={showTeamsDialog ? handleCreateNewTeamsAgain : onClose} />
       <ScrollView keyboardShouldPersistTaps='handled'>
         {!showTeamsDialog ?

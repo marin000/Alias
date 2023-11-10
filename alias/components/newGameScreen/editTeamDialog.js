@@ -39,7 +39,7 @@ export default function EditTeamDialog({ isVisible, onClose, teams, selectedTeam
   }
 
   return (
-    <Dialog overlayStyle={globalStyles.dialogContainer} isVisible={isVisible} onBackdropPress={onClose}>
+    <Dialog overlayStyle={globalStyles.dialogContainer} isVisible={isVisible}>
       <CustomDialogHeader onClose={onClose} />
       <ScrollView keyboardShouldPersistTaps='handled'>
         <Formik

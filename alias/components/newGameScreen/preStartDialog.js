@@ -16,7 +16,7 @@ export default function PreStartDialog({ isVisible, onClose, startGame, language
   }
 
   return (
-    <Dialog overlayStyle={globalStyles.dialogContainer} isVisible={isVisible} onBackdropPress={onClose}>
+    <Dialog overlayStyle={globalStyles.dialogContainer} isVisible={isVisible}>
       <CustomDialogHeader onClose={onClose}/>
       <View style={globalStyles.dialogTitleContainer}>
         <Text style={globalStyles.dialogTitle}>
