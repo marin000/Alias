@@ -40,8 +40,8 @@ export const playGame = {
 		en: 'Winner:'
 	},
 	rateGame: {
-		hr: 'Ocijenite Igru',
-		en: 'Rate Game'
+		hr: 'Ocijenite igru',
+		en: 'Rate game'
 	},
 	sendButton: {
 		hr: 'Pošalji',

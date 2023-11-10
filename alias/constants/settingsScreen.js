@@ -1,6 +1,6 @@
 export const settings = {
 	title: {
-		hr: 'Postavke Igre',
+		hr: 'Postavke igre',
 		en: 'Settings'
 	},
 	roundTime: {

@@ -1,7 +1,7 @@
 export const home = {
 	newGame: {
-		hr: 'Nova Igra',
-		en: 'New Game'
+		hr: 'Nova igra',
+		en: 'New game'
 	},
 	continueGame: {
 		hr: 'Nastavi',
@@ -26,5 +26,13 @@ export const home = {
 	statistics: {
 		hr: 'Statistika',
 		en: 'Statistics'
+	},
+	chooseLanguageTitle: {
+		hr: 'Izaberi jezik',
+		en: 'Choose language'
+	},
+	chooseLanguageButton: {
+		hr: 'Spremi',
+		en: 'Save'
 	}
 };

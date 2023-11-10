@@ -9,11 +9,11 @@ export const newGame = {
 	},
 	newTeam: {
 		hr: 'Novi tim',
-		en: 'New Team'
+		en: 'New team'
 	},
 	teamInput: {
 		hr: 'Ime tima',
-		en: 'Team Name'
+		en: 'Team name'
 	},
 	playerInput: {
 		hr: 'Igrač',
@@ -36,8 +36,8 @@ export const newGame = {
 		en: 'Delete team'
 	},
 	buttonStart: {
-		hr: 'Pokreni Igru',
-		en: 'Start Game'
+		hr: 'Pokreni igru',
+		en: 'Start game'
 	},
 	buttonContinue: {
 		hr: 'Nastavi',
@@ -80,8 +80,8 @@ export const newGame = {
 		en: 'Target result'
 	},
 	newGameSameTeamsButton: {
-		hr: 'Nova Igra (isti timovi)',
-		en: 'New Game (same teams)'
+		hr: 'Nova igra (isti timovi)',
+		en: 'New game (same teams)'
 	},
 	createRandomTeams: {
 		hr: 'Kreirajte nasumične timove',
@@ -128,7 +128,7 @@ export const newGame = {
 		en: 'You have successfully saved your team!'
 	},
 	importMyTeam: {
-		hr: 'Uvezi Moj Tim',
-		en: 'Import My Team'
+		hr: 'Uvezi moj tim',
+		en: 'Import my team'
 	}
 }

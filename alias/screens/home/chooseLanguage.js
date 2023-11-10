@@ -3,11 +3,12 @@ import { View, StyleSheet, TouchableHighlight } from 'react-native';
 import { Text, Card, Button } from '@rneui/themed';
 import { SettingsContext } from '../../utils/settings';
 import { globalStyles } from '../../styles/global';
+import { home } from '../../constants/homeScreen';
 
 export default function ChooseLanguage({ onLanguageUpdate }) {
   const [language, setLanguage] = useState('');
   const { updateLanguage, updateShownChooseLanguage } = useContext(SettingsContext);
-  const title = 'Choose language';
+  const { chooseLanguageTitle, chooseLanguageButton } = home;
   const languages = [
     { id: 'en', name: 'English' },
     { id: 'hr', name: 'Hrvatski' }
@@ -29,7 +30,7 @@ export default function ChooseLanguage({ onLanguageUpdate }) {
   return (
     <View style={globalStyles.mainContainer} resizeMode={'cover'}>
       <View>
-        <Text style={globalStyles.screenTitle}>{title}</Text>
+        <Text style={globalStyles.screenTitle}>{language ? chooseLanguageTitle[language] : chooseLanguageTitle['en']}</Text>
         <Card containerStyle={globalStyles.cardContainer}>
           {languages.map((language) => (
             <TouchableHighlight
@@ -44,9 +45,10 @@ export default function ChooseLanguage({ onLanguageUpdate }) {
           ))}
           <Button
             containerStyle={styles.buttonSubmit}
-            title='Submit'
+            title={language ? chooseLanguageButton[language] : chooseLanguageButton['en']}
             onPress={handleSetLanguage}
             buttonStyle={globalStyles.roundButton}
+            disabled={!language}
           />
         </Card>
       </View>

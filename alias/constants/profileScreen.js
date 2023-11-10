@@ -1,23 +1,23 @@
 export const profile = {
 	playedTxt: {
-		hr: 'Odigranih Igara: ',
-		en: 'Games Played: '
+		hr: 'Odigranih igara: ',
+		en: 'Games played: '
 	},
   wonTxt: {
-    hr: 'Ukupno Pobjeda: ',
-    en: 'Games Won: '
+    hr: 'Ukupno pobjeda: ',
+    en: 'Games won: '
   },
   lostTxt: {
-    hr: 'Ukupno Poraza: ',
-    en: 'Games Lost: '
+    hr: 'Ukupno poraza: ',
+    en: 'Games lost: '
   },
   cameraAccess: {
     hr: 'Potrebna je dozvola za pristup kameri!',
     en: 'Permission to access camera roll is required!'
   },
   uploadPic: {
-    hr: 'Postavi Profilnu Sliku',
-    en: 'Upload Profile Picture'
+    hr: 'Postavi profilnu sliku',
+    en: 'Upload profile picture'
   },
   buttonChangePass: {
     hr: 'Promjeni lozinku',
