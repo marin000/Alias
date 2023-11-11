@@ -1,14 +1,39 @@
 import React from 'react';
-import { ScrollView, View, StyleSheet } from 'react-native';
+import { ScrollView, View, StyleSheet, Alert } from 'react-native';
 import { Button, Dialog, Text } from '@rneui/themed';
 import { playGame } from '../../constants/playGameScreen';
 import { globalStyles } from '../../styles/global';
 
-export default function PauseDialog({ isVisible, onClose, language, currentTeam, correctAnswers, skippedAnswers }) {
-  const { correctAnswersTxt, skippedAnswersTxt, team, dialogContinueButton } = playGame;
+export default function PauseDialog({ isVisible, onClose, onExitRound, language, currentTeam, correctAnswers, skippedAnswers }) {
+  const { correctAnswersTxt,
+    skippedAnswersTxt,
+    team,
+    dialogContinueButton,
+    pauseExitButton,
+    pauseAlertConfirmation,
+    pauseAlertTxt,
+    alertYesTxt,
+    alertNoTxt } = playGame;
 
   const handleNextButton = () => {
     onClose();
+  }
+
+  const handleExitRoundButton = () => {
+    Alert.alert(
+      pauseAlertConfirmation[language],
+      pauseAlertTxt[language],
+      [
+        {
+          text: alertNoTxt[language],
+          style: 'cancel'
+        },
+        {
+          text: alertYesTxt[language],
+          onPress: () => {
+            onExitRound();
+          },
+        },]);
   }
 
   return (
@@ -32,6 +57,14 @@ export default function PauseDialog({ isVisible, onClose, language, currentTeam,
           title={dialogContinueButton[language]}
           onPress={handleNextButton}
           buttonStyle={globalStyles.smallRoundButton}
+        />
+        <Button
+          containerStyle={{ ...globalStyles.dialogButton, marginTop: -3 }}
+          type='outline'
+          title={pauseExitButton[language]}
+          onPress={handleExitRoundButton}
+          buttonStyle={{ ...globalStyles.smallRoundButton, borderColor: 'red' }}
+          titleStyle={{ color: 'red' }}
         />
       </ScrollView>
     </Dialog>

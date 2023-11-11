@@ -54,5 +54,25 @@ export const playGame = {
 	ratingFeedbackTxt: {
 		hr: 'Zahvaljujemo se na povratnim informacijama.',
 		en: 'Thank you for your feedback.'
-	}
+	},
+	pauseExitButton: {
+		hr: 'Izađi',
+		en: 'Exit'
+	},
+	pauseAlertConfirmation: {
+    hr: 'Potvrda',
+    en: 'Confirmation'
+  },
+  pauseAlertTxt: {
+    hr: 'Da li stvarno želite izaći iz ove runde?',
+    en: 'Do you really want to exit this round?'
+  },
+	alertNoTxt: {
+    hr: 'NE',
+    en: 'NO'
+  },
+  alertYesTxt: {
+    hr: 'DA',
+    en: 'YES'
+  }
 }

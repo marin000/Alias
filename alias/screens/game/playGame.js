@@ -24,6 +24,7 @@ const PlayGame = ({ teams, currentTeamIndex, maxScoreReached, updateTeam, userDa
   const [correctAnswers, setCorrectAnswers] = useState(0);
   const [skippedAnswers, setSkippedAnswers] = useState(0);
   const [pauseDialog, setPauseDialog] = useState(false);
+  const [isPauseButtonDisabled, setIsPauseButtonDisabled] = useState(false);
   const [endDialog, setEndDialog] = useState(false);
   const [paused, setPaused] = useState(false);
   const [winnerDialog, setWinnerDialog] = useState(false);
@@ -139,14 +140,27 @@ const PlayGame = ({ teams, currentTeamIndex, maxScoreReached, updateTeam, userDa
     }
   }
 
+  const handleExitRound = () => {
+    dispatch(addOldWords(oldWordsArr));
+    setPauseDialog(false);
+    showInterstitialAd();
+    navigation.navigate('NewGame');
+  }
+
   const handleClosePauseDialog = () => {
     setPauseDialog(false);
     setPaused(false);
+    setTimeout(() => {
+      setIsPauseButtonDisabled(false);
+    }, 1000);
   }
 
   const handlePauseButton = () => {
-    setPauseDialog(true);
-    setPaused(true);
+    if (!isPauseButtonDisabled) {
+      setIsPauseButtonDisabled(true);
+      setPauseDialog(true);
+      setPaused(true);
+    }
   }
 
   const handleCloseWinnerDialog = () => {
@@ -223,6 +237,7 @@ const PlayGame = ({ teams, currentTeamIndex, maxScoreReached, updateTeam, userDa
       <PauseDialog
         isVisible={pauseDialog}
         onClose={handleClosePauseDialog}
+        onExitRound={handleExitRound}
         language={language}
         currentTeam={currentTeam}
         correctAnswers={correctAnswers}
