@@ -2,7 +2,7 @@
   "expo": {
     "name": "Alias",
     "slug": "alias",
-    "version": "1.0.0",
+    "version": "1.2.1",
     "platforms": [
       "ios",
       "android",
@@ -31,7 +31,7 @@
         "backgroundColor": "#ffffff"
       },
       "package": "com.marin.alias",
-      "versionCode": 1
+      "versionCode": 3
     },
     "web": {
       "favicon": "./assets/favicon.png"

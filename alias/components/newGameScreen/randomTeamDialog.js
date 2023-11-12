@@ -12,6 +12,7 @@ export default function RandomTeamDialog({ isVisible, onClose, language, onAddAl
   const { playerInput, numberOfTeamsTxt, buttonGenerateRandom, buttonAddPlayer, buttonReset, buttonSaveTeam } = newGame;
   const [showTeamsDialog, setShowTeamsDialog] = useState(false);
   const [randomTeams, setRandomTeams] = useState([]);
+  const [minPlayerInputs, setMinPlayerInputs] = useState(4); // min default
 
   const handleGenerateRandomTeams = (values) => {
     const playersArray = values.players
@@ -44,7 +45,7 @@ export default function RandomTeamDialog({ isVisible, onClose, language, onAddAl
       <ScrollView keyboardShouldPersistTaps='handled'>
         {!showTeamsDialog ?
           <Formik
-            initialValues={{ numberOfTeams: '', players: userData ? [userData.name, '', '', ''] : ['', '', '', ''] }}
+            initialValues={{ numberOfTeams: '', players: userData ? [userData.name] : [] }}
             onSubmit={handleGenerateRandomTeams}
           >
             {(props) => (
@@ -56,7 +57,13 @@ export default function RandomTeamDialog({ isVisible, onClose, language, onAddAl
                   style={globalStyles.teamInput}
                   keyboardType='numeric'
                   placeholder={numberOfTeamsTxt[language]}
-                  onChangeText={props.handleChange('numberOfTeams')}
+                  onChangeText={(value) => {
+                    props.setFieldValue('numberOfTeams', value);
+                    value && value > 1 ? setMinPlayerInputs(value * 2) : setMinPlayerInputs(4);
+                    const existingPlayers = props.values.players.filter(player => player.trim() !== '');
+                    const updatedPlayers = existingPlayers.concat(Array.from({ length: value * 2 - existingPlayers.length }, () => ''));
+                    props.setFieldValue('players', updatedPlayers);
+                  }}
                   value={props.values.numberOfTeams}
                   maxLength={2}
                   autoFocus={true}
@@ -64,14 +71,14 @@ export default function RandomTeamDialog({ isVisible, onClose, language, onAddAl
                 {props.values.players.map((player, index) => (
                   <View style={globalStyles.playerInputContainer} key={index}>
                     <TextInput
-                      style={index > 3 ? { ...globalStyles.playerInput, width: '90%' } : { ...globalStyles.playerInput, width: '100%' }}
+                      style={index >= minPlayerInputs ? { ...globalStyles.playerInput, width: '90%' } : { ...globalStyles.playerInput, width: '100%' }}
                       placeholder={`${playerInput[language]} ${index + 1}`}
                       onChangeText={props.handleChange(`players.${index}`)}
                       value={player}
                       editable={!(index === 0 && userData)}
                       autoFocus={index > 3}
                     />
-                    {index > 3 &&
+                    {index >= minPlayerInputs &&
                       <TouchableOpacity
                         onPress={() => {
                           const updatedPlayers = [...props.values.players];

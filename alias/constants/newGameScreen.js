@@ -103,6 +103,10 @@ export const newGame = {
 		hr: 'Minimalni broj timova je 2', 
 		en: 'Minimum number of teams is 2'
 	},
+	alertPlayersNumDiff: {
+		hr: 'Svaki tim mora imati isti broj igrača ili se razlikovati za 1',
+		en: 'Each team must have the same number of players or differ by 1'
+	},
 	teamTxt: {
 		hr: 'Tim',
 		en: 'Team'

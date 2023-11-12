@@ -12,7 +12,7 @@ import apiTeam from '../api/teams';
 import apiResult from '../api/results';
 
 const validateTeamInput = (teams, values, language) => {
-  const { alertPlayer, alertTeam, alertTeamName, alertPlayerUnique } = newGame;
+  const { alertPlayer, alertTeam, alertTeamName, alertPlayerUnique, alertPlayersNumDiff } = newGame;
   const players = values.players.filter(player => player.trim() !== '');
 
   if (values.teamName.length === 0) {
@@ -31,6 +31,17 @@ const validateTeamInput = (teams, values, language) => {
     Alert.alert(alertTeamName[language]);
     return;
   }
+  if (teams.length > 1) {
+    let validationFailed = false;
+    teams.forEach(team => {
+      if (Math.abs(players.length - team.players.length) > 1) {
+        Alert.alert(alertPlayersNumDiff[language]);
+        validationFailed = true;
+      }
+    });
+    if (validationFailed) return
+  }
+
   return true;
 }
 
